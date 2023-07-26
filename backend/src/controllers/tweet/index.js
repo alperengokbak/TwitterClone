@@ -3,7 +3,7 @@ import {
   getTweet,
   getTweetById1,
   postTweet,
-  deletePost,
+  deleteTweet,
 } from "../../queries/tweet/queries.js";
 
 export const getTweets = (req, res) => {
@@ -16,16 +16,16 @@ export const getTweets = (req, res) => {
 export const getTweetById = (req, res) => {
   const id = parseInt(req.params.id);
   pool.query(getTweetById1, [id], (error, results) => {
-    if (error) throw error;
+    if (error) res.status(500).send("Defined tweet not found!");
     res.status(200).json(results.rows);
   });
 };
 
 export const postTweets = (req, res) => {
-  const { user_id, content, creation_date, retweets } = req.body;
+  const { user_id, content, likes, retweets } = req.body;
   pool.query(
     postTweet,
-    [user_id, content, creation_date, retweets],
+    [user_id, content, likes, retweets],
     (error, result) => {
       if (error) throw error;
       res.status(201).send("Posted A New Tweet Successfully!");
@@ -33,32 +33,23 @@ export const postTweets = (req, res) => {
   );
 };
 
-export const removePost = (req, res) => {
+export const removeTweet = (req, res) => {
   const id = parseInt(req.params.id);
-  pool.query(getTweetById, [id], (error, results) => {
-    if (error) throw error;
-    if (results.rows.length) {
-      pool.query(deletePost, [id], (error, results) => {
-        if (error) throw error;
-        res.status(200).send("Post deleted successfully.");
-      });
+  pool.query(getTweetById1, [id], (error, results) => {
+    if (error) {
+      res.status(500).send("Internal server error.");
     } else {
-      res.status(404).send("Post not found.");
+      if (results.rows.length) {
+        pool.query(deleteTweet, [id], (error, results) => {
+          if (error) {
+            res.status(500).send("Error deleting the tweet.");
+          } else {
+            res.status(200).send("Tweet deleted successfully.");
+          }
+        });
+      } else {
+        res.status(404).send("Tweet not found.");
+      }
     }
-  });
-};
-
-export const updateTweet = (req, res) => {
-  const id = parseInt(req.params.id);
-  const { name, email, age, dob } = req.body;
-
-  pool.query(getTweetById, [id], (error, results) => {
-    const noStudentFound = !results.rows.length;
-    if (noStudentFound) res.send("Student does not exist in the database.");
-  });
-
-  pool.query(updatingStudent, [name, email, age, dob, id], (error, results) => {
-    if (error) throw error;
-    res.status(200).send("Student updated successfully.");
   });
 };

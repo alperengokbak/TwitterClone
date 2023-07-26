@@ -1,12 +1,19 @@
-import express from "express";
-import routes from "./src/routes/tweet/index.js";
+import {
+  express,
+  tweetRoutes,
+  /* userRoutes,
+  retweetRoutes,
+  likeRoutes,
+  commentRoutes,
+  followRoutes, */
+} from "./imports.js";
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-app.use("/api", routes);
+app.use("/api", tweetRoutes);
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
 
