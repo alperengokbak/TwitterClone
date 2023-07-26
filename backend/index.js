@@ -1,14 +1,14 @@
 import express from "express";
-import routes from "./src/routes";
+import routes from "./src/routes/tweet/index.js";
 
 const app = express();
 const port = 3000;
 
-app.use(express.json);
+app.use(express.json());
 
 app.use("/api", routes);
 
-app.listen(port, () => console.log(`app listening on port ${port}`));
+app.listen(port, () => console.log(`App listening on port ${port}`));
 
 /* 
 psql -U postgres --> to login PostgreSQL
