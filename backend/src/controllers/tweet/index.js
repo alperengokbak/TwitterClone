@@ -4,7 +4,7 @@ import {
   getTweetById1,
   postTweet,
   deleteTweet,
-} from "../../queries/tweet/queries.js";
+} from "../../queries/tweet/index.js";
 
 export const getTweets = (req, res) => {
   pool.query(getTweet, (error, results) => {

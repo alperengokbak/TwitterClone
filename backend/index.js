@@ -1,8 +1,8 @@
 import {
   express,
   tweetRoutes,
-  /* userRoutes,
-  retweetRoutes,
+  userRoutes,
+  /*retweetRoutes,
   likeRoutes,
   commentRoutes,
   followRoutes, */
@@ -13,6 +13,7 @@ const port = 3000;
 
 app.use(express.json());
 
+app.use("/api", userRoutes);
 app.use("/api", tweetRoutes);
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
