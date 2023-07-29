@@ -1,13 +1,12 @@
 import { useState } from "react";
+import Sidebar from "./Sidebar";
 
 function App() {
   return (
     <>
-      <div>
-        {/* Sidebar */}
-        {/* Main Content */}
-        {/* Widgets */}
-      </div>
+      <Sidebar />
+      {/* Main Content */}
+      {/* Widgets */}
     </>
   );
 }
