@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
-export const sidebarTheme = createTheme({
+
+export const SidebarTheme = createTheme({
   palette: {
     primary: {
       main: "#000000",
@@ -8,16 +9,8 @@ export const sidebarTheme = createTheme({
       main: "#1DA1F2",
     },
   },
-  components: {
-    MuiStack: {
-      styleOverrides: {
-        root: {
-          borderRight: "1px",
-          marginTop: "20px",
-        },
-      },
-    },
 
+  components: {
     MuiGrid: {
       styleOverrides: {
         root: {

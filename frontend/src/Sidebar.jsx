@@ -14,8 +14,23 @@ import { Grid, Stack } from "@mui/material";
 
 function Sidebar() {
   return (
-    <Stack>
-      <TwitterIcon color="#1DA1F2" />
+    <Stack
+      sx={{
+        borderRight: "1px solid #e6ecf0",
+        flex: 0.3,
+        marginTop: "20px",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+      }}
+    >
+      <TwitterIcon
+        sx={{
+          color: "#1DA1F2",
+          fontSize: "30px",
+          marginLeft: "20px",
+          marginBottom: "20px",
+        }}
+      />
       <SidebarOption Icon={HomeIcon} text="Home" />
       <SidebarOption Icon={SearchIcon} text="Explore" />
       <SidebarOption Icon={NotificationsNoneIcon} text="Notifications" />
