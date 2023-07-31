@@ -16,6 +16,8 @@ export const SidebarTheme = createTheme({
         root: {
           display: "flex",
           alignItems: "center",
+          border: "none",
+          outline: "none",
         },
       },
     },

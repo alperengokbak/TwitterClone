@@ -1,5 +1,6 @@
 import React from "react";
 import { Stack } from "@mui/material";
+import TweetBox from "./TweetBox";
 
 function Feed() {
   return (
@@ -23,10 +24,11 @@ function Feed() {
           backgroundColor: "#FFFFFF",
           zIndex: 100,
           borderRight: "1px solid #e6ecf0",
-          padding: "15px 20px",
+          padding: "1px 20px",
         }}
       >
-        <h2>Home</h2>
+        <h2 style={{ borderBottom: "1px solid #e6ecf0" }}>Home</h2>
+        <TweetBox />
       </Stack>
     </Stack>
   );
