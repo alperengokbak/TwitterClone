@@ -4,8 +4,48 @@ import {
   getUserById1,
   postUser,
   removeUser,
+  checkEmail,
 } from "../../queries/user/index.js";
 
+import { bcrypt } from "../../../imports.js";
+
+const salt = 10;
+
+export const login = (req, res) => {
+  pool.query(checkEmail, [req.body.email], (error, results) => {
+    if (error) return res.json({ Error: "Login Error In Server" });
+    if (results.rows.length) {
+      bcrypt.compare(
+        req.body.password,
+        results.rows[0].password,
+        (err, result) => {
+          if (err) return res.json({ Error: "Error for comparing password" });
+          if (result) {
+            return res.json({ status: "Success" });
+          } else {
+            return res.status(401).json({ status: "Wrong password" });
+          }
+        }
+      );
+    } else {
+      return res.status(404).json({ status: "Not found email" });
+    }
+  });
+};
+
+export const register = (req, res) => {
+  bcrypt.hash(req.body.password, salt, (err, hash) => {
+    if (err) return res.json({ Error: "Error for hashing password" });
+    pool.query(
+      postUser,
+      [req.body.username, req.body.email, hash],
+      (error, results) => {
+        if (error) throw error;
+        return res.status(200).json({ status: "Success" });
+      }
+    );
+  });
+};
 export const getUsers = (req, res) => {
   pool.query(getUser, (error, results) => {
     if (error) throw error;
@@ -20,18 +60,6 @@ export const getUserById = (req, res) => {
     if (error) throw error;
     res.status(200).json(results.rows);
   });
-};
-
-export const postUsers = (req, res) => {
-  const { username, email, password, profile_picture, birthday } = req.body;
-  pool.query(
-    postUser,
-    [username, email, password, profile_picture, birthday],
-    (error, results) => {
-      if (error) throw error;
-      res.status(200).send(`User added with username: ${username}`);
-    }
-  );
 };
 
 export const deleteUser = (req, res) => {

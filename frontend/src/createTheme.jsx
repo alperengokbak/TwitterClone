@@ -9,7 +9,6 @@ export const SidebarTheme = createTheme({
       main: "#1DA1F2",
     },
   },
-
   components: {
     MuiGrid: {
       styleOverrides: {

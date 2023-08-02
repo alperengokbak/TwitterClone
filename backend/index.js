@@ -6,14 +6,16 @@ import {
   likeRoutes,
   commentRoutes,
   followerRoutes,
+  cors,
 } from "./imports.js";
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
-app.use("/api", userRoutes);
+app.use("/", userRoutes);
 app.use("/api", tweetRoutes);
 app.use("/api", followerRoutes);
 app.use("/api", commentRoutes);

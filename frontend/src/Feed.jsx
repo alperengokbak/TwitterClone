@@ -1,6 +1,7 @@
 import React from "react";
 import { Stack } from "@mui/material";
 import TweetBox from "./TweetBox";
+import Post from "./Post";
 
 function Feed() {
   return (
@@ -29,6 +30,7 @@ function Feed() {
       >
         <h2 style={{ borderBottom: "1px solid #e6ecf0" }}>Home</h2>
         <TweetBox />
+        <Post />
       </Stack>
     </Stack>
   );
