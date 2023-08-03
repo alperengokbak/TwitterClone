@@ -1,7 +1,7 @@
-import Sidebar from "./Sidebar";
-import Feed from "./Feed";
+import Sidebar from "./HomePage/Sidebar";
+import Feed from "./HomePage/Feed";
 import { Stack } from "@mui/material";
-import Widget from "./Widget";
+import Widget from "./HomePage/Widget";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginScreen from "./LoginAndRegister/LoginScreen";
 import RegisterScreen from "./LoginAndRegister/RegisterScreen";
