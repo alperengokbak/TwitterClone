@@ -8,7 +8,6 @@ import followerRoutes from "./src/routes/follower/index.js";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import cookieParser from "cookie-parser";
 
 export {
   express,
@@ -21,5 +20,4 @@ export {
   cors,
   jwt,
   bcrypt,
-  cookieParser,
 };

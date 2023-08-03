@@ -7,7 +7,7 @@ import {
   checkEmail,
 } from "../../queries/user/index.js";
 
-import { bcrypt } from "../../../imports.js";
+import { bcrypt, jwt } from "../../../imports.js";
 
 const salt = 10;
 
@@ -18,10 +18,22 @@ export const login = (req, res) => {
       bcrypt.compare(
         req.body.password,
         results.rows[0].password,
-        (err, result) => {
+        (err, response) => {
           if (err) return res.json({ Error: "Error for comparing password" });
-          if (result) {
-            return res.json({ status: "Success" });
+          if (response) {
+            const username = results.rows[0].username;
+            const token = jwt.sign({ username }, "jwt-secret-key", {
+              expiresIn: "1d",
+            });
+            return res.json({
+              status: "Success",
+              user: {
+                id: results.rows[0].id,
+                username: results.rows[0].username,
+                email: results.rows[0].email,
+              },
+              token,
+            });
           } else {
             return res.status(401).json({ status: "Wrong password" });
           }
