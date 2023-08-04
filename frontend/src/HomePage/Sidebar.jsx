@@ -11,8 +11,13 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Button from "@mui/material/Button";
 import { Grid, Stack } from "@mui/material";
+import { useContext } from "react";
+import { AuthContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
+  const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
   return (
     <Stack
       sx={{
@@ -48,6 +53,26 @@ function Sidebar() {
       >
         <Button variant="contained" fullWidth color="secondary">
           Tweet
+        </Button>
+      </Grid>
+      <Grid
+        marginTop="20px"
+        height="50px"
+        borderRadius="30px"
+        textTransform={"inherit"}
+        border={"none"}
+      >
+        <Button
+          variant="contained"
+          fullWidth
+          color="secondary"
+          onClick={() => {
+            setUser(null);
+            localStorage.removeItem("token");
+            navigate("/login");
+          }}
+        >
+          Logout
         </Button>
       </Grid>
     </Stack>

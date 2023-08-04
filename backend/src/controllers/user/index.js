@@ -21,10 +21,13 @@ export const login = (req, res) => {
         (err, response) => {
           if (err) return res.json({ Error: "Error for comparing password" });
           if (response) {
-            const username = results.rows[0].username;
-            const token = jwt.sign({ username }, "jwt-secret-key", {
-              expiresIn: "1d",
-            });
+            const token = jwt.sign(
+              { id: results.rows[0].id },
+              "jwt-secret-key",
+              {
+                expiresIn: "1d",
+              }
+            );
             return res.json({
               status: "Success",
               user: {
@@ -92,5 +95,24 @@ export const deleteUser = (req, res) => {
         res.status(404).send("Not Found User Id!");
       }
     }
+  });
+};
+
+export const checkUser = (req, res) => {
+  const token = req.header("authorization").split(" ")[1];
+  if (!token) return res.status(401).json({ status: "No token provided" });
+  jwt.verify(token, "jwt-secret-key", (err, decoded) => {
+    if (err) return res.status(401).json({ status: "Unauthorized" });
+    pool.query(getUserById1, [decoded.id], (error, results) => {
+      if (error) return res.json({ Error: "Error for getting user" });
+      if (!results.rows.length) return res.json({ user: null });
+      return res.json({
+        user: {
+          id: results.rows[0].id,
+          username: results.rows[0].username,
+          email: results.rows[0].email,
+        },
+      });
+    });
   });
 };

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,10 +12,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { AuthContext } from "../App";
 
 export default function LoginScreen() {
+  const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [values, setValues] = useState({
@@ -42,6 +43,8 @@ export default function LoginScreen() {
       .then((data) => {
         console.log(data);
         if (data.status === "Success") {
+          localStorage.setItem("token", data.token);
+          setUser(data.user);
           navigate("/homepage");
         }
       })
@@ -101,12 +104,7 @@ export default function LoginScreen() {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2" color={"#1DA1F2"}>
-                Forgot password?
-              </Link>
-            </Grid>
+          <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="/register" variant="body2" color={"#1DA1F2"}>
                 {"Don't have an account? Sign Up"}
