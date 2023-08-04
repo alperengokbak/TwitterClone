@@ -2,17 +2,20 @@ import Sidebar from "./HomePage/Sidebar";
 import Feed from "./HomePage/Feed";
 import { Stack } from "@mui/material";
 import Widget from "./HomePage/Widget";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import LoginScreen from "./LoginAndRegister/LoginScreen";
 import RegisterScreen from "./LoginAndRegister/RegisterScreen";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
 import { LoginAuthentication } from "./LoginAuthentication";
-
-export const AuthContext = createContext();
+import { AuthContext } from "./AuthenticationSystem";
 
 function App() {
-  const [user, setUser] = useState(null);
-
+  const { user, setUser } = useContext(AuthContext);
   const checkUser = async () => {
     const user = await LoginAuthentication();
     if (user) {
@@ -24,29 +27,24 @@ function App() {
     checkUser();
   }, []);
 
-  if (!user) {
-    return (
-      <AuthContext.Provider value={{ user, setUser }}>
-        <Router>
-          <Routes>
-            <Route path="/login" element={<LoginScreen />}></Route>
-            <Route path="/register" element={<RegisterScreen />}></Route>
-          </Routes>
-        </Router>
-      </AuthContext.Provider>
-    );
-  }
-
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<LoginScreen />}></Route>
-          <Route path="/register" element={<RegisterScreen />}></Route>
-          <Route path="/homepage" element={<HomePage />} />
-        </Routes>
-      </Router>
-    </AuthContext.Provider>
+    <Router>
+      <Routes>
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" /> : <LoginScreen />}
+        />
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/" /> : <RegisterScreen />}
+        />
+        {user ? (
+          <Route path="/" element={<HomePage />} />
+        ) : (
+          <Route path="*" element={<Navigate to="/login" />} />
+        )}
+      </Routes>
+    </Router>
   );
 }
 

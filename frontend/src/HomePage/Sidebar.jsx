@@ -12,7 +12,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Button from "@mui/material/Button";
 import { Grid, Stack } from "@mui/material";
 import { useContext } from "react";
-import { AuthContext } from "../App";
+import { AuthContext } from "../AuthenticationSystem";
 import { useNavigate } from "react-router-dom";
 
 function Sidebar() {

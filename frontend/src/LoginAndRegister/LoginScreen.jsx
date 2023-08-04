@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { AuthContext } from "../App";
+import { AuthContext } from "../AuthenticationSystem";
 
 export default function LoginScreen() {
   const { setUser } = useContext(AuthContext);
@@ -45,7 +45,7 @@ export default function LoginScreen() {
         if (data.status === "Success") {
           localStorage.setItem("token", data.token);
           setUser(data.user);
-          navigate("/homepage");
+          navigate("/");
         }
       })
       .catch((err) => console.log(err));
