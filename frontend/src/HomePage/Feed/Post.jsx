@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Box, Stack } from "@mui/material";
+import { Avatar, Stack, Typography } from "@mui/material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Verified from "@mui/icons-material/Verified";
@@ -12,54 +12,58 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
       borderBottom="1px solid #1DA1F2"
       marginBottom="10px"
       alignItems="flex-start"
+      padding="20px"
     >
-      <Box>
-        <Stack
-          display="flex"
-          direction="row"
-          padding="20px"
-          justifyContent="space-between"
-        >
-          <Avatar sx={{}} src="IMG_9021.jpeg" />
-          <Stack display="flex" direction="column" flex={1} padding="10px">
-            <Stack display="flex" direction="row">
-              <h4
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                  marginBottom: "5px",
-                }}
-              >
-                Alperen Gokbak
-              </h4>
-              <Verified
-                sx={{
-                  marginLeft: "5px",
-                  marginTop: "5px",
-                  color: "#1DA1F2",
-                  width: "15px",
-                  height: "15px",
-                }}
-              />
-              <span
-                style={{
-                  color: "gray",
-                  fontSize: "15px",
-                  fontWeight: "400",
-                  marginLeft: "5px",
-                }}
-              >
-                @alperengokbak
-              </span>
-            </Stack>
-            <p
+      <Stack direction="row" alignItems="flex-start" justifyItems="flex-start">
+        <Avatar src="IMG_9021.jpeg" />
+        <Stack flex={0.8} paddingLeft="20px" flexDirection="column">
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+            spacing={0}
+          >
+            <Typography
+              variant="h5"
+              component="h4"
               style={{
-                marginBottom: "15px",
+                fontWeight: "bold",
                 fontSize: "15px",
+                marginRight: "5px",
               }}
             >
-              Test
-            </p>
+              Alperen Gokbak
+            </Typography>
+            <Verified
+              sx={{
+                color: "#1DA1F2",
+                width: "15px",
+                height: "15px",
+              }}
+            />
+            <Typography
+              variant="body2"
+              component="span"
+              style={{
+                color: "gray",
+                fontSize: "15px",
+                fontWeight: "400",
+                marginLeft: "5px",
+              }}
+            >
+              @alperengokbak
+            </Typography>
+          </Stack>
+          <p
+            style={{
+              marginTop: "5px",
+              marginBottom: "1px",
+              fontSize: "15px",
+            }}
+          >
+            Test
+          </p>
+          <Stack direction={"column"} justifyContent="flex-start">
             <img
               style={{
                 borderRadius: "20px",
@@ -71,23 +75,20 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
               src="https://pbs.twimg.com/media/F2BL9oSWYAQ5fzy?format=webp&name=small"
             />
             <Stack
-              display="flex"
-              position="relative"
-              alignItems="stretch"
               direction="row"
               justifyContent="space-between"
               marginTop="20px"
               border="0 solid #1DA1F2"
-              boxSizing={{ xs: "border-box", md: "content-box" }}
+              marginRight="10px"
             >
-              <ChatBubbleOutlineIcon />
+              <ChatBubbleOutlineIcon s />
               <RepeatIcon />
               <FavoriteBorderIcon />
               <PublishIcon />
             </Stack>
           </Stack>
         </Stack>
-      </Box>
+      </Stack>
     </Stack>
   );
 }

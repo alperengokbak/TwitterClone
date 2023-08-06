@@ -69,7 +69,7 @@ function TweetBox() {
               alignItems: "center",
               marginRight: "auto",
               justifyContent: "space-between",
-              width: "200px",
+              width: "230px",
               marginLeft: "45px",
             }}
           >

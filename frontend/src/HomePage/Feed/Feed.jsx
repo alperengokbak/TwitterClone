@@ -11,7 +11,7 @@ function Feed() {
         flex: "0.4",
         overflowY: "scroll",
         borderRight: "1px solid #e6ecf0",
-        minWidth: "fit-content",
+        minWidth: "fit-content", // TODO - Ask about what is the difference between fit-content and max-content.
         WebkitOverflowScrolling: "touch",
         "&::-webkit-scrollbar": {
           display: "none",
@@ -23,10 +23,9 @@ function Feed() {
         sx={{
           position: "sticky",
           top: 0,
-          backgroundColor: "#FFFFFF",
           zIndex: 100,
           borderRight: "1px solid #e6ecf0",
-          padding: "1px 20px",
+          paddingRight: "1px 20px",
         }}
       >
         <h2>Home</h2>
@@ -34,7 +33,7 @@ function Feed() {
         <TweetBox />
         <Divider
           sx={{
-            border: "2px solid #1DA1F2",
+            border: "1px solid #1DA1F2",
             borderRadius: "30px",
           }}
         />
