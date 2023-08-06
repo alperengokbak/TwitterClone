@@ -1,7 +1,7 @@
-import Sidebar from "./HomePage/Sidebar";
-import Feed from "./HomePage/Feed";
+import Sidebar from "./HomePage/Sidebar/Sidebar";
+import Feed from "./HomePage/Feed/Feed";
 import { Stack } from "@mui/material";
-import Widget from "./HomePage/Widget";
+import Widget from "./HomePage/Widget/Widget";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,10 +11,10 @@ import {
 import LoginScreen from "./LoginAndRegister/LoginScreen";
 import RegisterScreen from "./LoginAndRegister/RegisterScreen";
 import { useEffect, useContext } from "react";
-import { LoginAuthentication } from "./LoginAuthentication";
-import { AuthContext } from "./AuthenticationSystem";
+import { LoginAuthentication } from "./AuthenticationSystem/LoginAuthentication";
+import { AuthContext } from "./AuthenticationSystem/AuthenticationSystem";
 
-function App() {
+const App = () => {
   const { user, setUser } = useContext(AuthContext);
   const checkUser = async () => {
     const user = await LoginAuthentication();
@@ -46,7 +46,7 @@ function App() {
       </Routes>
     </Router>
   );
-}
+};
 
 function HomePage() {
   return (

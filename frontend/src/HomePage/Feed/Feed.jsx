@@ -2,6 +2,7 @@ import React from "react";
 import { Stack } from "@mui/material";
 import TweetBox from "./TweetBox";
 import Post from "./Post";
+import Divider from "@mui/material/Divider";
 
 function Feed() {
   return (
@@ -28,8 +29,16 @@ function Feed() {
           padding: "1px 20px",
         }}
       >
-        <h2 style={{ borderBottom: "1px solid #e6ecf0" }}>Home</h2>
+        <h2>Home</h2>
+        <Divider />
         <TweetBox />
+        <Divider
+          sx={{
+            border: "2px solid #1DA1F2",
+            borderRadius: "30px",
+          }}
+        />
+        <Post />
         <Post />
       </Stack>
     </Stack>

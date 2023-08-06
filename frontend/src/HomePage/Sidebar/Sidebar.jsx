@@ -9,30 +9,26 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import Button from "@mui/material/Button";
 import { Grid, Stack } from "@mui/material";
-import { useContext } from "react";
-import { AuthContext } from "../AuthenticationSystem";
-import { useNavigate } from "react-router-dom";
+import { BasicMenu } from "./Dashboard";
+import { PostScreen } from "./PostScreen";
 
 function Sidebar() {
-  const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
   return (
     <Stack
       sx={{
         borderRight: "1px solid #e6ecf0",
-        flex: 0.3,
-        marginTop: "20px",
+        flex: "0.2",
+        marginTop: "10px",
         paddingLeft: "20px",
-        paddingRight: "20px",
+        paddingRight: "40px",
       }}
     >
       <TwitterIcon
         sx={{
           color: "#1DA1F2",
           fontSize: "30px",
-          marginLeft: "20px",
+          marginLeft: "8px",
           marginBottom: "20px",
         }}
       />
@@ -44,36 +40,33 @@ function Sidebar() {
       <SidebarOption Icon={ListAltIcon} text="Lists" />
       <SidebarOption Icon={PermIdentityIcon} text="Profile" />
       <SidebarOption Icon={MoreHorizIcon} text="More" />
-      <Grid
-        marginTop="20px"
-        height="50px"
-        borderRadius="30px"
-        textTransform={"inherit"}
-        border={"none"}
-      >
-        <Button variant="contained" fullWidth color="secondary">
-          Tweet
-        </Button>
-      </Grid>
-      <Grid
-        marginTop="20px"
-        height="50px"
-        borderRadius="30px"
-        textTransform={"inherit"}
-        border={"none"}
-      >
-        <Button
-          variant="contained"
-          fullWidth
-          color="secondary"
-          onClick={() => {
-            setUser(null);
-            localStorage.removeItem("token");
-            navigate("/login");
+      <Grid container display="flex" alignItems="stretch" position="relative">
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          sx={{
+            marginTop: "20px",
+            "@media (width: 1920px)": {
+              marginTop: "20px",
+            },
           }}
         >
-          Logout
-        </Button>
+          <PostScreen />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          sx={{
+            marginTop: "140px",
+            "@media (width: 1920px)": {
+              marginTop: "320px",
+            },
+          }}
+        >
+          <BasicMenu />
+        </Grid>
       </Grid>
     </Stack>
   );

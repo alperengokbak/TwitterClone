@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { AuthContext } from "../AuthenticationSystem";
+import { AuthContext } from "../AuthenticationSystem/AuthenticationSystem";
 
 export default function LoginScreen() {
   const { setUser } = useContext(AuthContext);
@@ -105,11 +105,9 @@ export default function LoginScreen() {
             Sign In
           </Button>
           <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/register" variant="body2" color={"#1DA1F2"}>
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
+            <Link href="/register" variant="body2" color={"#1DA1F2"}>
+              {"Don't have an account? Sign Up"}
+            </Link>
           </Grid>
         </Box>
       </Box>
