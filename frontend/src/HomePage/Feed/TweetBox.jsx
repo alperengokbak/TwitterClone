@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Stack, Avatar } from "@mui/material";
+import { Button, Stack, Avatar, TextField } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import GifIcon from "@mui/icons-material/Gif";
 import PollIcon from "@mui/icons-material/Poll";
@@ -7,9 +7,7 @@ import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 
 function TweetBox() {
-  /* const [tweetMessage, setTweetMessage] = useState("");
-  const [tweetImage, setTweetImage] = useState(""); */
-
+  const [tweetMessage, setTweetMessage] = React.useState("");
   /* const sendTweet = (e) => {
     e.preventDefault();
 
@@ -48,15 +46,17 @@ function TweetBox() {
           }}
         >
           <Avatar alt="Alperen Gokbak" src="..//public/IMG_9021.jpeg" />
-          <input
+          <TextField
+            variant="standard"
             placeholder="What's happening?"
-            type="text"
-            style={{
+            value={tweetMessage}
+            onChange={(e) => setTweetMessage(e.target.value)}
+            rows={2}
+            multiline
+            sx={{
               flex: 1,
               marginLeft: "20px",
               fontSize: "20px",
-              border: "none",
-              outline: "none",
             }}
           />
         </Stack>
@@ -80,14 +80,17 @@ function TweetBox() {
             <ScheduleIcon fontSize="small" />
           </Stack>
           <Button
-            color="secondary"
-            //onClick={sendTweet}
-            type="submit"
+            onClick={() => {
+              console.log(tweetMessage);
+              setTweetMessage("");
+            }}
+            /* type="submit" */
+
+            disabled={tweetMessage === ""}
             sx={{
               background: "#1DA1F2",
               border: "none",
               borderRadius: "30px",
-              fontWeight: "900",
               marginLeft: "auto",
               height: "40px",
               width: "80px",

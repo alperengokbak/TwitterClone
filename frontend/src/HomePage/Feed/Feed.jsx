@@ -3,15 +3,16 @@ import { Stack } from "@mui/material";
 import TweetBox from "./TweetBox";
 import Post from "./Post";
 import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 
 function Feed() {
   return (
     <Stack
       sx={{
-        flex: "0.4",
+        borderRight: "2px solid #e6ecf0",
+        borderLeft: "2px solid #e6ecf0",
         overflowY: "scroll",
-        borderRight: "1px solid #e6ecf0",
-        minWidth: "fit-content", // TODO - Ask about what is the difference between fit-content and max-content.
+        minWidth: "fit-content",
         WebkitOverflowScrolling: "touch",
         "&::-webkit-scrollbar": {
           display: "none",
@@ -21,19 +22,26 @@ function Feed() {
     >
       <Stack
         sx={{
-          position: "sticky",
+          position: "-webkit-sticky",
           top: 0,
           zIndex: 100,
-          borderRight: "1px solid #e6ecf0",
           paddingRight: "1px 20px",
         }}
       >
-        <h2>Home</h2>
-        <Divider />
+        <Typography
+          variant="h5"
+          sx={{
+            paddingTop: "10px",
+            paddingLeft: "20px",
+            fontWeight: "bold",
+          }}
+        >
+          Home
+        </Typography>
         <TweetBox />
         <Divider
           sx={{
-            border: "1px solid #1DA1F2",
+            border: "1px solid #e6ecf0",
             borderRadius: "30px",
           }}
         />

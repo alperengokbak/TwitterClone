@@ -1,15 +1,17 @@
 import React from "react";
-import { Avatar, Stack, Typography } from "@mui/material";
+import { Avatar, Stack, Typography, Divider } from "@mui/material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Verified from "@mui/icons-material/Verified";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import PublishIcon from "@mui/icons-material/Publish";
 
+// TODO - Improve the styling of the Post component
+
 function Post({ displayName, username, verified, text, image, avatar }, ref) {
   return (
     <Stack
-      borderBottom="1px solid #1DA1F2"
+      borderBottom="2px solid #e6ecf0"
       marginBottom="10px"
       alignItems="flex-start"
       padding="20px"
@@ -25,11 +27,9 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
           >
             <Typography
               variant="h5"
-              component="h4"
-              style={{
+              sx={{
                 fontWeight: "bold",
                 fontSize: "15px",
-                marginRight: "5px",
               }}
             >
               Alperen Gokbak
@@ -44,44 +44,54 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
             <Typography
               variant="body2"
               component="span"
-              style={{
+              sx={{
                 color: "gray",
                 fontSize: "15px",
                 fontWeight: "400",
-                marginLeft: "5px",
               }}
             >
               @alperengokbak
             </Typography>
+            <Typography
+              variant="body2"
+              component="span"
+              sx={{
+                color: "gray",
+                fontSize: "15px",
+                fontWeight: "400",
+                paddingLeft: "5px",
+              }}
+            >
+              1h
+            </Typography>
           </Stack>
-          <p
-            style={{
-              marginTop: "5px",
-              marginBottom: "1px",
+          <Typography
+            variant="body2"
+            sx={{
               fontSize: "15px",
+              fontWeight: "400",
             }}
           >
             Test
-          </p>
+          </Typography>
           <Stack direction={"column"} justifyContent="flex-start">
             <img
               style={{
-                borderRadius: "20px",
-                marginTop: "20px",
+                borderRadius: "15px",
+                marginTop: "15px",
                 width: "100%",
                 height: "100%",
-                marginBottom: "20px",
               }}
               src="https://pbs.twimg.com/media/F2BL9oSWYAQ5fzy?format=webp&name=small"
             />
             <Stack
               direction="row"
               justifyContent="space-between"
-              marginTop="20px"
-              border="0 solid #1DA1F2"
-              marginRight="10px"
+              marginTop={"20px"}
+              marginRight={"20px"}
+              paddingTop="10px"
             >
-              <ChatBubbleOutlineIcon s />
+              <ChatBubbleOutlineIcon />
               <RepeatIcon />
               <FavoriteBorderIcon />
               <PublishIcon />

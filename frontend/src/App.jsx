@@ -1,6 +1,6 @@
-import Sidebar from "./HomePage/Sidebar/Sidebar";
+import { Sidebar } from "./HomePage/Sidebar/Sidebar";
 import Feed from "./HomePage/Feed/Feed";
-import { Stack } from "@mui/material";
+import { Grid } from "@mui/material";
 import Widget from "./HomePage/Widget/Widget";
 import {
   BrowserRouter as Router,
@@ -14,7 +14,7 @@ import { useEffect, useContext } from "react";
 import { LoginAuthentication } from "./AuthenticationSystem/LoginAuthentication";
 import { AuthContext } from "./AuthenticationSystem/AuthenticationSystem";
 
-const App = () => {
+export const App = () => {
   const { user, setUser } = useContext(AuthContext);
   const checkUser = async () => {
     const user = await LoginAuthentication();
@@ -48,24 +48,18 @@ const App = () => {
   );
 };
 
-function HomePage() {
+const HomePage = () => {
   return (
-    <Stack
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        height: "100vh",
-        maxWidth: "1300px",
-        marginLeft: "auto",
-        marginRight: "auto",
-        padding: "0 10px",
-      }}
-    >
-      <Sidebar />
-      <Feed />
-      <Widget />
-    </Stack>
+    <Grid container padding="0 10px">
+      <Grid item xs={1.3} sm={1.3} md={1.3} lg={1.3} xl={3.7}>
+        <Sidebar />
+      </Grid>
+      <Grid item xs={6.2} sm={6.2} md={6.2} lg={6.2} xl={3.8}>
+        <Feed />
+      </Grid>
+      <Grid item xs={4.5} sm={4.5} md={4.5} lg={4.5} xl={4.5}>
+        <Widget />
+      </Grid>
+    </Grid>
   );
-}
-
-export default App;
+};

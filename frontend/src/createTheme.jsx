@@ -10,36 +10,28 @@ export const SidebarTheme = createTheme({
     },
   },
   components: {
-    MuiGrid: {
-      styleOverrides: {
-        root: {
-          display: "flex",
-          alignItems: "center",
-          border: "none",
-          outline: "none",
-        },
-      },
-    },
     MuiSvgIcon: {
       styleOverrides: {
         root: {
           padding: "3px",
           blockSize: "34px",
           fontSize: "26px",
+          "&:hover": {
+            borderRadius: "20px",
+            color: "#1DA1F2",
+          },
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          fontWeight: "500",
-          fontSize: "15px",
-          color: "white",
+          color: "#FFFFFF",
+          fontWeight: "600",
           "&:hover": {
             backgroundColor: "#E8F5FE",
-            borderRadius: "30px",
-            color: "#50b7f5",
-            transition: "color 100ms ease-out",
+            borderRadius: "20px",
+            color: "#000000",
           },
         },
       },

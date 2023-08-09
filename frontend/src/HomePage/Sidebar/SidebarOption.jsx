@@ -1,37 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { Button, Grid } from "@mui/material";
+import React from "react";
+import { Button, Stack, useMediaQuery } from "@mui/material";
 
-function SidebarOptions({ text, Icon }) {
-  const [showText, setShowText] = useState(window.innerWidth >= 768);
-  useEffect(() => {
-    const handleResize = () => {
-      setShowText(window.innerWidth >= 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+export const SidebarOptions = ({ text, Icon }) => {
+  const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("xl"));
   return (
-    <Grid container={true} padding="8px" spacing={1}>
-      <Button>
-        <Grid item color="#000000">
-          <Icon />
-        </Grid>
-        {showText && (
-          <Grid
-            item
-            fontWeight="600"
-            fontSize="16px"
-            marginRight="20px"
-            color="#000000"
-          >
-            {text}
-          </Grid>
-        )}
-      </Button>
-    </Grid>
+    <Stack alignItems={"flex-start"} flexDirection="column">
+      <Stack justifyItems="space-between" flexDirection="row">
+        <Button
+          startIcon={
+            <Icon
+              style={{
+                padding: "6px",
+                fontSize: "27",
+              }}
+            />
+          }
+          sx={{
+            size: "10px",
+            color: "#000000",
+            fontSize: isDesktop ? "15px" : "0",
+          }}
+        >
+          {text}
+        </Button>
+      </Stack>
+    </Stack>
   );
-}
-
-export default SidebarOptions;
+};

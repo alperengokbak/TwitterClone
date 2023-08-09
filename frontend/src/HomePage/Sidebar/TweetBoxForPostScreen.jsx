@@ -6,7 +6,7 @@ import PollIcon from "@mui/icons-material/Poll";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 
-function TweetBox() {
+export const TweetBoxForPostScreen = () => {
   /* const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImage, setTweetImage] = useState(""); */
 
@@ -53,7 +53,6 @@ function TweetBox() {
             type="text"
             style={{
               flex: 1,
-              marginTop: "45px",
               marginLeft: "20px",
               fontSize: "20px",
               border: "none",
@@ -96,7 +95,6 @@ function TweetBox() {
               background: "#1DA1F2",
               border: "none",
               borderRadius: "30px",
-              fontWeight: "900",
               marginLeft: "auto",
               height: "40px",
               width: "80px",
@@ -109,6 +107,4 @@ function TweetBox() {
       </form>
     </Stack>
   );
-}
-
-export default TweetBox;
+};

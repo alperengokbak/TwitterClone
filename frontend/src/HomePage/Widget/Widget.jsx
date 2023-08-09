@@ -1,10 +1,20 @@
 import { Stack } from "@mui/material";
 import React from "react";
+import Typography from "@mui/material/Typography";
 
 function Widget() {
   return (
-    <Stack flex="0.3">
-      <h2>Widgets</h2>
+    <Stack>
+      <Typography
+        variant="h5"
+        sx={{
+          paddingTop: "10px",
+          paddingLeft: "20px",
+          fontWeight: "bold",
+        }}
+      >
+        Widgets
+      </Typography>
     </Stack>
   );
 }
