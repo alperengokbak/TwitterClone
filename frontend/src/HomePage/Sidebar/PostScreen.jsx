@@ -1,22 +1,16 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  Modal,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Button, Grid, IconButton, Modal, Stack } from "@mui/material";
 import { TweetBoxForPostScreen } from "./TweetBoxForPostScreen";
 import SendIcon from "@mui/icons-material/Send";
+import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 const style = {
   position: "absolute",
   top: "30%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 530,
-  height: 230,
+  width: "40%",
+  height: "20%",
   bgcolor: "background.paper",
   border: "1px solid #000",
   boxShadow: 24,
@@ -24,58 +18,30 @@ const style = {
 };
 
 export const PostScreen = () => {
-  const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("xl"));
+  const { isDesktop } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      <Grid
-        height="10px"
+      <Stack
+        marginTop={"15px"}
         borderRadius="30px"
         textTransform={"inherit"}
         border={"none"}
         marginLeft={isDesktop ? "0px" : "4px"}
       >
         {isDesktop ? (
-          <Button
-            variant="contained"
-            fullWidth
-            color="secondary"
-            sx={{
-              background: "#1DA1F2",
-              border: "none",
-              borderRadius: "30px",
-              fontWeight: "900",
-              height: "50px",
-              width: "230px",
-              textTransform: "inherit",
-            }}
-            onClick={handleOpen}
-          >
+          <Button variant="contained" fullWidth onClick={handleOpen}>
             Post
           </Button>
         ) : (
-          <IconButton
-            aria-label="send"
-            title="Send"
-            sx={{
-              color: "#1DA1F2",
-              background: "#FFFFFF",
-              border: "none",
-              borderRadius: "50px",
-              textTransform: "inherit",
-              "&:hover": {
-                color: "#000000",
-              },
-            }}
-            onClick={handleOpen}
-          >
+          <IconButton aria-label="send" title="Send" onClick={handleOpen}>
             <SendIcon />
           </IconButton>
         )}
-      </Grid>
+      </Stack>
       <Modal
         open={open}
         onClose={handleClose}

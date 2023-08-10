@@ -5,6 +5,7 @@ import GifIcon from "@mui/icons-material/Gif";
 import PollIcon from "@mui/icons-material/Poll";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ScheduleIcon from "@mui/icons-material/Schedule";
+import { TweetBoxIcon } from "../Sidebar/TweetBoxAndPostIcons";
 
 function TweetBox() {
   const [tweetMessage, setTweetMessage] = React.useState("");
@@ -73,29 +74,21 @@ function TweetBox() {
               marginLeft: "45px",
             }}
           >
-            <ImageIcon fontSize="small" />
-            <GifIcon fontSize="small" />
-            <PollIcon fontSize="small" />
-            <EmojiEmotionsIcon fontSize="small" />
-            <ScheduleIcon fontSize="small" />
+            <TweetBoxIcon text="ImageIcon" Icon={ImageIcon} />
+            <TweetBoxIcon text="GifIcon" Icon={GifIcon} />
+            <TweetBoxIcon text="PollIcon" Icon={PollIcon} />
+            <TweetBoxIcon text="EmojiEmotionsIcon" Icon={EmojiEmotionsIcon} />
+            <TweetBoxIcon text="ScheduleIcon" Icon={ScheduleIcon} />
           </Stack>
+
           <Button
+            variant="contained"
             onClick={() => {
               console.log(tweetMessage);
               setTweetMessage("");
             }}
             /* type="submit" */
-
             disabled={tweetMessage === ""}
-            sx={{
-              background: "#1DA1F2",
-              border: "none",
-              borderRadius: "30px",
-              marginLeft: "auto",
-              height: "40px",
-              width: "80px",
-              textTransform: "inherit",
-            }}
           >
             Post
           </Button>

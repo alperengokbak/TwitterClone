@@ -44,8 +44,8 @@ export const BasicMenuForMobile = () => {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        transformOrigin={{ horizontal: "right", vertical: "bottom" }}
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}
       >
         <MenuItem
           onClick={() => {

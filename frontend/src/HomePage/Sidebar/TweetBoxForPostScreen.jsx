@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Stack, Avatar, Divider } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import GifIcon from "@mui/icons-material/Gif";
 import PollIcon from "@mui/icons-material/Poll";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ScheduleIcon from "@mui/icons-material/Schedule";
+import TextField from "@mui/material/TextField";
+import { TweetBoxForPostIcon } from "./TweetBoxAndPostIcons";
 
 export const TweetBoxForPostScreen = () => {
-  /* const [tweetMessage, setTweetMessage] = useState("");
-  const [tweetImage, setTweetImage] = useState(""); */
+  // TODO - Make TweetBoxForPostScreen responsive for mobile devices.
+  const [tweetMessage, setTweetMessage] = useState("");
+  /*const [tweetImage, setTweetImage] = useState("");
 
   /* const sendTweet = (e) => {
     e.preventDefault();
@@ -48,55 +51,59 @@ export const TweetBoxForPostScreen = () => {
           }}
         >
           <Avatar alt="Alperen Gokbak" src="..//public/IMG_9021.jpeg" />
-          <input
+          <TextField
+            variant="standard"
+            InputProps={{
+              disableUnderline: true,
+            }}
             placeholder="What's happening?"
-            type="text"
-            style={{
+            value={tweetMessage}
+            onChange={(e) => setTweetMessage(e.target.value)}
+            rows={4}
+            multiline
+            sx={{
               flex: 1,
-              marginLeft: "20px",
+              marginLeft: "5%",
               fontSize: "20px",
-              border: "none",
-              outline: "none",
             }}
           />
         </Stack>
         <Divider
-          variant="middle"
+          variant="fullWidth"
           sx={{
-            marginTop: "80px",
-            border: "1px solid #1DA1F2",
-            borderRadius: "10px",
+            width: "100%",
+            height: "1px",
+            backgroundColor: "#808080",
+            border: "none",
           }}
+          textAlign="left"
         />
-        <Stack flexDirection={"row"} marginTop="20px" marginLeft="auto">
+        <Stack flexDirection={"row"} marginTop="20px" alignItems={"center"}>
           <Stack
             color={"#1DA1F2"}
             sx={{
-              display: "flex",
               flexDirection: "row",
-              alignItems: "center",
               marginRight: "auto",
               justifyContent: "space-between",
-              width: "200px",
-              marginLeft: "45px",
+              width: "45%",
             }}
           >
-            <ImageIcon fontSize="small" />
-            <GifIcon fontSize="small" />
-            <PollIcon fontSize="small" />
-            <EmojiEmotionsIcon fontSize="small" />
-            <ScheduleIcon fontSize="small" />
+            <TweetBoxForPostIcon text="ImageIcon" Icon={ImageIcon} />
+            <TweetBoxForPostIcon text="GifIcon" Icon={GifIcon} />
+            <TweetBoxForPostIcon text="PollIcon" Icon={PollIcon} />
+            <TweetBoxForPostIcon
+              text="EmojiEmotionsIcon"
+              Icon={EmojiEmotionsIcon}
+            />
+            <TweetBoxForPostIcon text="ScheduleIcon" Icon={ScheduleIcon} />
           </Stack>
           <Button
+            className="tweetBox__tweetButton"
+            variant="contained"
             color="secondary"
             //onClick={sendTweet}
             type="submit"
             sx={{
-              background: "#1DA1F2",
-              border: "none",
-              borderRadius: "30px",
-              marginLeft: "auto",
-              height: "40px",
               width: "80px",
               textTransform: "inherit",
             }}

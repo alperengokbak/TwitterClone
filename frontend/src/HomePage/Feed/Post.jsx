@@ -1,12 +1,14 @@
 import React from "react";
-import { Avatar, Stack, Typography, Divider } from "@mui/material";
+import { Avatar, Stack, Typography } from "@mui/material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Verified from "@mui/icons-material/Verified";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import PublishIcon from "@mui/icons-material/Publish";
+import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 
 // TODO - Improve the styling of the Post component
+// TODO - Create a Profile Page, redirect the profile page when the user clicks on the username
 
 function Post({ displayName, username, verified, text, image, avatar }, ref) {
   return (
@@ -18,7 +20,7 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
     >
       <Stack direction="row" alignItems="flex-start" justifyItems="flex-start">
         <Avatar src="IMG_9021.jpeg" />
-        <Stack flex={0.8} paddingLeft="20px" flexDirection="column">
+        <Stack paddingLeft="20px" flexDirection="column">
           <Stack
             direction="row"
             justifyContent="flex-start"
@@ -30,7 +32,9 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
               sx={{
                 fontWeight: "bold",
                 fontSize: "15px",
+                cursor: "pointer",
               }}
+              onClick={() => console.log("Clicked")}
             >
               Alperen Gokbak
             </Typography>
@@ -39,7 +43,9 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
                 color: "#1DA1F2",
                 width: "15px",
                 height: "15px",
+                cursor: "pointer",
               }}
+              onClick={() => console.log("Clicked")}
             />
             <Typography
               variant="body2"
@@ -48,7 +54,9 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
                 color: "gray",
                 fontSize: "15px",
                 fontWeight: "400",
+                cursor: "pointer",
               }}
+              onClick={() => console.log("Clicked")}
             >
               @alperengokbak
             </Typography>
@@ -91,10 +99,10 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
               marginRight={"20px"}
               paddingTop="10px"
             >
-              <ChatBubbleOutlineIcon />
-              <RepeatIcon />
-              <FavoriteBorderIcon />
-              <PublishIcon />
+              <PostComponentIcon text="Reply" Icon={ChatBubbleOutlineIcon} />
+              <PostComponentIcon text="Retweet" Icon={RepeatIcon} />
+              <PostComponentIcon text="Like" Icon={FavoriteBorderIcon} />
+              <PostComponentIcon text="Share" Icon={PublishIcon} />
             </Stack>
           </Stack>
         </Stack>

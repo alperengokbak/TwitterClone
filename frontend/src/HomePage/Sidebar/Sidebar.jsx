@@ -1,5 +1,5 @@
 import React from "react";
-import { useMediaQuery, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,16 +12,18 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { SidebarOptions } from "./SidebarOption";
 import { BasicMenu, BasicMenuForMobile } from "./BasicMenu";
 import { PostScreen } from "./PostScreen";
+import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 export const Sidebar = () => {
-  const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("xl"));
+  const { isDesktop } = React.useContext(AuthContext);
+  /* const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("md")); */
   return (
     <Stack
       direction="column"
       alignItems="flex-end"
       justifyContent="space-between"
       spacing={1}
-      height={"100vh"}
+      minHeight={isDesktop ? "51%" : "45%"}
     >
       <Stack
         sx={{
@@ -48,7 +50,9 @@ export const Sidebar = () => {
         <SidebarOptions Icon={MoreHorizIcon} text="More" />
         <PostScreen />
       </Stack>
-      <Stack>{isDesktop ? <BasicMenu /> : <BasicMenuForMobile />}</Stack>
+      <Stack paddingRight={isDesktop ? "30px" : "0"}>
+        {isDesktop ? <BasicMenu /> : <BasicMenuForMobile />}
+      </Stack>
     </Stack>
   );
 };

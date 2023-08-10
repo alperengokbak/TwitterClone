@@ -9,6 +9,7 @@ function Feed() {
   return (
     <Stack
       sx={{
+        height: "55%",
         borderRight: "2px solid #e6ecf0",
         borderLeft: "2px solid #e6ecf0",
         overflowY: "scroll",
@@ -39,12 +40,7 @@ function Feed() {
           Home
         </Typography>
         <TweetBox />
-        <Divider
-          sx={{
-            border: "1px solid #e6ecf0",
-            borderRadius: "30px",
-          }}
-        />
+        <Divider />
         <Post />
         <Post />
       </Stack>
