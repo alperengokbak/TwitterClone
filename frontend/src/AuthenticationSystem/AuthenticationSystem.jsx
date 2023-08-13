@@ -7,7 +7,13 @@ export function AuthContextProvider({ children }) {
   const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("md"));
   const [user, setUser] = useState(null);
   return (
-    <AuthContext.Provider value={{ user, setUser, isDesktop }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        isDesktop,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

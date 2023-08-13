@@ -16,6 +16,8 @@ export default function RegisterScreen() {
   const navigate = useNavigate();
 
   const [values, setValues] = useState({
+    firstName: "",
+    lastName: "",
     username: "",
     email: "",
     password: "",
@@ -26,6 +28,8 @@ export default function RegisterScreen() {
 
     const data = new FormData(event.currentTarget);
     console.log({
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
       username: data.get("username"),
       email: data.get("email"),
       password: data.get("password"),
@@ -69,6 +73,32 @@ export default function RegisterScreen() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                onChange={(e) =>
+                  setValues({ ...values, firstName: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="lastName"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                autoFocus
+                onChange={(e) =>
+                  setValues({ ...values, lastName: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
                 autoComplete="given-username"
                 name="username"
                 required
@@ -109,20 +139,20 @@ export default function RegisterScreen() {
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2, mb: 2, background: "#1DA1F2" }}
-          >
-            Sign Up
-          </Button>
+          <Grid container justifyContent={"center"}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, mb: 2, background: "#1DA1F2" }}
+            >
+              Sign Up
+            </Button>
+          </Grid>
           <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/login" variant="body2" sx={{ color: "#1DA1F2" }}>
-                Already have an account? Sign in
-              </Link>
-            </Grid>
+            <Link href="/login" variant="body2" sx={{ color: "#1DA1F2" }}>
+              Already have an account? Sign in
+            </Link>
           </Grid>
         </Box>
       </Box>

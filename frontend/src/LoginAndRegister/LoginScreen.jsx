@@ -4,8 +4,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -92,18 +90,20 @@ export default function LoginScreen() {
             autoComplete="current-password"
             onChange={(e) => setValues({ ...values, password: e.target.value })}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2, background: "#1DA1F2" }}
-          >
-            Sign In
-          </Button>
+          <Grid container justifyContent="center">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 2,
+                mb: 2,
+                background: "#1DA1F2",
+              }}
+            >
+              Sign In
+            </Button>
+          </Grid>
           <Grid container justifyContent="flex-end">
             <Link href="/register" variant="body2" color={"#1DA1F2"}>
               {"Don't have an account? Sign Up"}

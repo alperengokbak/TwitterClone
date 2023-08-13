@@ -26,6 +26,12 @@ export const SidebarTheme = createTheme({
     MuiIconButton: {
       variants: [
         {
+          props: { className: "profileIconButton" },
+          style: {
+            color: colors.primary,
+          },
+        },
+        {
           props: { className: "PostComponentIcon" },
           style: {
             padding: "3px",

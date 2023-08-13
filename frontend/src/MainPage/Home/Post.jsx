@@ -6,11 +6,26 @@ import Verified from "@mui/icons-material/Verified";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import PublishIcon from "@mui/icons-material/Publish";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
+import { CurrentDateFormat } from "./CurrentDateFormat";
 
 // TODO - Improve the styling of the Post component
 // TODO - Create a Profile Page, redirect the profile page when the user clicks on the username
 
-function Post({ displayName, username, verified, text, image, avatar }, ref) {
+function Post({
+  firstName,
+  lastName,
+  username,
+  is_verified,
+  creation_date,
+  content,
+  profile_picture,
+  image_url,
+}) {
+  const [currentDate, setCurrentDate] = React.useState("");
+  React.useEffect(() => {
+    const currentDate = CurrentDateFormat(creation_date);
+    setCurrentDate(currentDate);
+  }, [creation_date]);
   return (
     <Stack
       borderBottom="2px solid #e6ecf0"
@@ -19,7 +34,7 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
       padding="20px"
     >
       <Stack direction="row" alignItems="flex-start" justifyItems="flex-start">
-        <Avatar src="IMG_9021.jpeg" />
+        <Avatar src={profile_picture} />
         <Stack paddingLeft="20px" flexDirection="column">
           <Stack
             direction="row"
@@ -34,43 +49,36 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
                 fontSize: "15px",
                 cursor: "pointer",
               }}
-              onClick={() => console.log("Clicked")}
             >
-              Alperen Gokbak
+              {firstName} {lastName}
             </Typography>
-            <Verified
-              sx={{
-                color: "#1DA1F2",
-                width: "15px",
-                height: "15px",
-                cursor: "pointer",
-              }}
-              onClick={() => console.log("Clicked")}
-            />
+            {is_verified ? (
+              <Verified
+                sx={{
+                  marginLeft: "1px",
+                  color: "#1DA1F2",
+                  width: "15px",
+                  height: "15px",
+                  cursor: "pointer",
+                }}
+              />
+            ) : (
+              ""
+            )}
             <Typography
               variant="body2"
               component="span"
+              justifyItems={"center"}
               sx={{
                 color: "gray",
                 fontSize: "15px",
                 fontWeight: "400",
                 cursor: "pointer",
+                marginLeft: is_verified ? "1px" : "5px",
               }}
               onClick={() => console.log("Clicked")}
             >
-              @alperengokbak
-            </Typography>
-            <Typography
-              variant="body2"
-              component="span"
-              sx={{
-                color: "gray",
-                fontSize: "15px",
-                fontWeight: "400",
-                paddingLeft: "5px",
-              }}
-            >
-              1h
+              @{username} · {currentDate}
             </Typography>
           </Stack>
           <Typography
@@ -80,7 +88,7 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
               fontWeight: "400",
             }}
           >
-            Test
+            {content}
           </Typography>
           <Stack direction={"column"} justifyContent="flex-start">
             <img
@@ -90,7 +98,7 @@ function Post({ displayName, username, verified, text, image, avatar }, ref) {
                 width: "100%",
                 height: "100%",
               }}
-              src="https://pbs.twimg.com/media/F2BL9oSWYAQ5fzy?format=webp&name=small"
+              src={image_url}
             />
             <Stack
               direction="row"

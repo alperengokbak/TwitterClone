@@ -16,14 +16,14 @@ import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 export const Sidebar = () => {
   const { isDesktop } = React.useContext(AuthContext);
-  /* const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("md")); */
+
   return (
     <Stack
       direction="column"
       alignItems="flex-end"
       justifyContent="space-between"
       spacing={1}
-      minHeight={isDesktop ? "51%" : "45%"}
+      height={isDesktop ? "100%" : "45%"}
     >
       <Stack
         sx={{

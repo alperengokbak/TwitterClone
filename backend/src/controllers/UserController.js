@@ -1,19 +1,19 @@
-import { pool } from "../../../database.js";
+import { pool } from "../../database.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import {
   getUser,
   getUserById1,
   postUser,
   removeUser,
   checkEmail,
-} from "../../queries/user/index.js";
-
-import { bcrypt, jwt } from "../../../imports.js";
+} from "../queries/UserQuery.js";
 
 const salt = 10;
 
 export const login = (req, res) => {
   pool.query(checkEmail, [req.body.email], (error, results) => {
-    if (error) return res.json({ Error: "Login Error In Server" });
+    if (error) return res.status(501).json("Internal Server Error!");
     if (results.rows.length) {
       bcrypt.compare(
         req.body.password,
@@ -53,14 +53,21 @@ export const register = (req, res) => {
     if (err) return res.json({ Error: "Error for hashing password" });
     pool.query(
       postUser,
-      [req.body.username, req.body.email, hash],
-      (error, results) => {
+      [
+        req.body.firstName,
+        req.body.lastName,
+        req.body.username,
+        req.body.email,
+        hash,
+      ],
+      (error) => {
         if (error) throw error;
         return res.status(200).json({ status: "Success" });
       }
     );
   });
 };
+
 export const getUsers = (req, res) => {
   pool.query(getUser, (error, results) => {
     if (error) throw error;
@@ -70,7 +77,6 @@ export const getUsers = (req, res) => {
 
 export const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
-
   pool.query(getUserById1, [id], (error, results) => {
     if (error) throw error;
     res.status(200).json(results.rows);

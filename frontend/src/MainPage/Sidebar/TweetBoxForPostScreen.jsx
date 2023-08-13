@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Stack, Avatar, Divider } from "@mui/material";
+import React from "react";
+import { Button, Stack, Avatar, Divider, Grid } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import GifIcon from "@mui/icons-material/Gif";
 import PollIcon from "@mui/icons-material/Poll";
@@ -7,28 +7,30 @@ import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import TextField from "@mui/material/TextField";
 import { TweetBoxForPostIcon } from "./TweetBoxAndPostIcons";
+import axios from "axios";
 
 export const TweetBoxForPostScreen = () => {
-  // TODO - Make TweetBoxForPostScreen responsive for mobile devices.
-  const [tweetMessage, setTweetMessage] = useState("");
-  /*const [tweetImage, setTweetImage] = useState("");
+  const [tweetMessage, setTweetMessage] = React.useState("");
+  const [imageUrl, setImageUrl] = React.useState("");
+  const postTweet = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/tweet", {
+        user_id: 7,
+        content: tweetMessage,
+        image_url: imageUrl,
+        likes: 0,
+        retweets: 0,
+      });
 
-  /* const sendTweet = (e) => {
-    e.preventDefault();
-
-    db.collection("posts").add({
-      displayName: "Rafeh Qazi",
-      username: "cleverqazi",
-      verified: true,
-      text: tweetMessage,
-      image: tweetImage,
-      avatar:
-        "https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png",
-    });
-
-    setTweetMessage("");
-    setTweetImage("");
-  }; */
+      if (response.status === 201) {
+        console.log("Tweet posted successfully!");
+        setTweetMessage("");
+        setImageUrl("");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
 
   return (
     <Stack
@@ -51,22 +53,43 @@ export const TweetBoxForPostScreen = () => {
           }}
         >
           <Avatar alt="Alperen Gokbak" src="..//public/IMG_9021.jpeg" />
-          <TextField
-            variant="standard"
-            InputProps={{
-              disableUnderline: true,
-            }}
-            placeholder="What's happening?"
-            value={tweetMessage}
-            onChange={(e) => setTweetMessage(e.target.value)}
-            rows={4}
-            multiline
-            sx={{
-              flex: 1,
-              marginLeft: "5%",
-              fontSize: "20px",
-            }}
-          />
+          <Grid container direction="column">
+            <Grid item>
+              <TextField
+                variant="standard"
+                InputProps={{
+                  disableUnderline: true,
+                }}
+                placeholder="What's happening?"
+                value={tweetMessage}
+                onChange={(e) => setTweetMessage(e.target.value)}
+                rows={2}
+                multiline
+                sx={{
+                  flex: 1,
+                  marginLeft: "5%",
+                  fontSize: "20px",
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                variant="standard"
+                InputProps={{
+                  disableUnderline: true,
+                }}
+                placeholder="Enter image URL:"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                multiline
+                sx={{
+                  flex: 1,
+                  marginLeft: "5%",
+                  fontSize: "20px",
+                }}
+              />
+            </Grid>
+          </Grid>
         </Stack>
         <Divider
           variant="fullWidth"
@@ -100,8 +123,8 @@ export const TweetBoxForPostScreen = () => {
           <Button
             className="tweetBox__tweetButton"
             variant="contained"
-            color="secondary"
-            //onClick={sendTweet}
+            color="primary"
+            onClick={postTweet}
             type="submit"
             sx={{
               width: "80px",

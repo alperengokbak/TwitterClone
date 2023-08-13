@@ -1,13 +1,12 @@
-import {
-  express,
-  tweetRoutes,
-  userRoutes,
-  retweetRoutes,
-  likeRoutes,
-  commentRoutes,
-  followerRoutes,
-  cors,
-} from "./imports.js";
+import express from "express";
+import tweetRoutes from "./src/routes/TweetRoute.js";
+import userRoutes from "./src/routes/UserRoute.js";
+import widgetRoutes from "./src/routes/WidgetRoute.js";
+/* import retweetRoutes from "./src/routes/retweet/index.js";
+import likeRoutes from "./src/routes/like/index.js";
+import commentRoutes from "./src/routes/comment/index.js";
+import followerRoutes from "./src/routes/follower/index.js"; */
+import cors from "cors";
 
 const app = express();
 const port = 3000;
@@ -16,12 +15,14 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/", userRoutes);
-app.use("/api", tweetRoutes);
-app.use("/api", followerRoutes);
-app.use("/api", commentRoutes);
-app.use("/api", likeRoutes);
-app.use("/api", retweetRoutes);
+app.use("/", tweetRoutes);
+app.use("/", widgetRoutes);
 
+/* app.use("/", followerRoutes);
+app.use("/", commentRoutes);
+app.use("/", likeRoutes);
+app.use("/", retweetRoutes);
+ */
 app.listen(port, () => console.log(`App listening on port ${port}`));
 
 /* 

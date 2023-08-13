@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Button, Grid, IconButton, Modal, Stack } from "@mui/material";
+import { Box, Button, IconButton, Modal, Stack } from "@mui/material";
 import { TweetBoxForPostScreen } from "./TweetBoxForPostScreen";
 import SendIcon from "@mui/icons-material/Send";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
