@@ -100,18 +100,20 @@ function Post({
               }}
               src={image_url}
             />
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              marginTop={"20px"}
-              marginRight={"20px"}
-              paddingTop="10px"
-            >
-              <PostComponentIcon text="Reply" Icon={ChatBubbleOutlineIcon} />
-              <PostComponentIcon text="Retweet" Icon={RepeatIcon} />
-              <PostComponentIcon text="Like" Icon={FavoriteBorderIcon} />
-              <PostComponentIcon text="Share" Icon={PublishIcon} />
-            </Stack>
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            marginTop={"20px"}
+            marginRight={"20px"}
+            paddingTop="10px"
+            width="50vh"
+            height="100%"
+          >
+            <PostComponentIcon text="Reply" Icon={ChatBubbleOutlineIcon} />
+            <PostComponentIcon text="Retweet" Icon={RepeatIcon} />
+            <PostComponentIcon text="Like" Icon={FavoriteBorderIcon} />
+            <PostComponentIcon text="Share" Icon={PublishIcon} />
           </Stack>
         </Stack>
       </Stack>
