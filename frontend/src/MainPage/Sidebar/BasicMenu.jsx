@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box, Avatar, Typography, IconButton, Stack } from "@mui/material";
+import { Box, Avatar, Typography, IconButton } from "@mui/material";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -11,7 +11,7 @@ import Logout from "@mui/icons-material/Logout";
 
 export const BasicMenuForMobile = () => {
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const open = Boolean(anchorEl);
@@ -34,7 +34,7 @@ export const BasicMenuForMobile = () => {
       >
         <Tooltip title="Accounts">
           <IconButton onClick={handleClick} size="small">
-            <Avatar src="IMG_9021.jpeg" sx={{ width: 40, height: 40 }}></Avatar>
+            <Avatar src={user.profile_picture} sx={{ width: 40, height: 40 }} />
           </IconButton>
         </Tooltip>
       </Box>
@@ -66,7 +66,7 @@ export const BasicMenuForMobile = () => {
 
 export const BasicMenu = () => {
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   return (
     <Box
@@ -77,11 +77,13 @@ export const BasicMenu = () => {
     >
       <Box display="flex" alignItems="center">
         <Box display="flex" alignItems="space-between">
-          <Avatar src="IMG_9021.jpeg" alt="Profile Photo" />
+          <Avatar src={user.profile_picture} alt="Profile Photo" />
           <Box display="flex" flexDirection="column" paddingLeft={1}>
-            <Typography variant="subtitle2">Alperen Gokbak</Typography>
+            <Typography variant="subtitle2">
+              {user.firstName} {user.lastName}
+            </Typography>
             <Typography variant="body2" component="span" color="gray">
-              @alperengokbak
+              @{user.username}
             </Typography>
           </Box>
           <Box paddingLeft="20px">

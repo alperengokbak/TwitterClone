@@ -1,5 +1,6 @@
 import React from "react";
 import { Avatar, Stack, Typography } from "@mui/material";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Verified from "@mui/icons-material/Verified";
@@ -8,7 +9,6 @@ import PublishIcon from "@mui/icons-material/Publish";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "./CurrentDateFormat";
 
-// TODO - Improve the styling of the Post component
 // TODO - Create a Profile Page, redirect the profile page when the user clicks on the username
 
 function Post({
@@ -20,26 +20,23 @@ function Post({
   content,
   profile_picture,
   image_url,
+  id,
+  handleDeletePost,
 }) {
-  const [currentDate, setCurrentDate] = React.useState("");
-  React.useEffect(() => {
-    const currentDate = CurrentDateFormat(creation_date);
-    setCurrentDate(currentDate);
-  }, [creation_date]);
   return (
     <Stack
       borderBottom="2px solid #e6ecf0"
       marginBottom="10px"
       alignItems="flex-start"
-      padding="20px"
+      padding="10px"
     >
-      <Stack direction="row" alignItems="flex-start" justifyItems="flex-start">
+      <Stack direction="row">
         <Avatar src={profile_picture} />
-        <Stack paddingLeft="20px" flexDirection="column">
+        <Stack paddingLeft="10px" flexDirection="column">
           <Stack
             direction="row"
             justifyContent="flex-start"
-            alignItems="center"
+            alignItems="flex-start"
             spacing={0}
           >
             <Typography
@@ -55,7 +52,8 @@ function Post({
             {is_verified ? (
               <Verified
                 sx={{
-                  marginLeft: "1px",
+                  m: 0.3,
+                  marginLeft: "5px",
                   color: "#1DA1F2",
                   width: "15px",
                   height: "15px",
@@ -78,8 +76,12 @@ function Post({
               }}
               onClick={() => console.log("Clicked")}
             >
-              @{username} · {currentDate}
+              @{username} · {CurrentDateFormat(creation_date)}
             </Typography>
+            <MoreHorizIcon
+              className="more_postScreen"
+              onClick={() => handleDeletePost(id)}
+            />
           </Stack>
           <Typography
             variant="body2"
@@ -90,17 +92,19 @@ function Post({
           >
             {content}
           </Typography>
-          <Stack direction={"column"} justifyContent="flex-start">
-            <img
-              style={{
-                borderRadius: "15px",
-                marginTop: "15px",
-                width: "100%",
-                height: "100%",
-              }}
-              src={image_url}
-            />
-          </Stack>
+          {image_url && (
+            <Stack direction={"column"} justifyContent="flex-start">
+              <img
+                style={{
+                  borderRadius: "15px",
+                  marginTop: "15px",
+                  width: "100%",
+                  height: "100%",
+                }}
+                src={image_url}
+              />
+            </Stack>
+          )}
           <Stack
             direction="row"
             justifyContent="space-between"

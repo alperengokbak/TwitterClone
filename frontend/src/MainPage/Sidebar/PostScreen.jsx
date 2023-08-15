@@ -18,7 +18,7 @@ const style = {
 };
 
 export const PostScreen = () => {
-  const { isDesktop } = React.useContext(AuthContext);
+  const { isDesktop, user } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

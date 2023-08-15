@@ -32,8 +32,11 @@ export const login = (req, res) => {
               status: "Success",
               user: {
                 id: results.rows[0].id,
+                firstName: results.rows[0].firstname,
+                lastName: results.rows[0].lastname,
                 username: results.rows[0].username,
                 email: results.rows[0].email,
+                profile_picture: results.rows[0].profile_picture,
               },
               token,
             });
@@ -115,8 +118,11 @@ export const checkUser = (req, res) => {
       return res.json({
         user: {
           id: results.rows[0].id,
+          firstName: results.rows[0].firstname,
+          lastName: results.rows[0].lastname,
           username: results.rows[0].username,
           email: results.rows[0].email,
+          profile_picture: results.rows[0].profile_picture,
         },
       });
     });

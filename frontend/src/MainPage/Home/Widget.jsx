@@ -44,13 +44,12 @@ export const Widget = () => {
     >
       <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
         <TextField
-          variant="outlined"
+          variant="filled"
           placeholder="Search"
-          fullWidth
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: "#808080" }} />
+                <SearchIcon />
               </InputAdornment>
             ),
           }}
@@ -71,15 +70,15 @@ export const Widget = () => {
         sx={{
           display: "flex",
           "& > :not(style)": {
-            m: 1,
+            m: 1.5,
             width: "30vh",
-            height: "89vh",
+            height: "92vh",
           },
         }}
       >
         <Paper
-          elevation={10}
           sx={{
+            backgroundColor: "#f5f8fa",
             borderRadius: "15px",
             overflowY: "scroll",
             "&::-webkit-scrollbar": {
@@ -93,36 +92,51 @@ export const Widget = () => {
               fontWeight: "bold",
               padding: "2%",
               marginLeft: "4%",
+              cursor: "pointer",
             }}
           >
             Trends for you
           </Typography>
-          <Box
-            sx={{
-              padding: "2%",
-              marginLeft: "4%",
-            }}
-          >
-            {data.map((trend, index) => (
-              <Box
-                // TODO - Ask logic of the key keyword to Mert.
-                key={index}
-                sx={{
-                  marginBottom: "10%",
-                }}
-              >
-                <Typography variant="span">{trend.title}</Typography>
-                <Typography
-                  variant="body1"
+          <Box>
+            <Box
+              sx={{
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              {data.map((trend, index) => (
+                <Box
+                  // TODO - Ask logic of the key keyword to Mert.
+                  key={index}
                   sx={{
-                    fontWeight: "bold",
+                    height: "8vh",
+                    "&:hover": {
+                      backgroundColor: "#e0e6eb",
+                    },
                   }}
                 >
-                  {trend.keyword}
-                </Typography>
-                <Typography variant="span">{trend.post + "K post"}</Typography>
-              </Box>
-            ))}
+                  <Box
+                    sx={{
+                      padding: "2%",
+                      marginLeft: "4%",
+                    }}
+                  >
+                    <Typography variant="span">{trend.title}</Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {trend.keyword}
+                    </Typography>
+                    <Typography variant="span">
+                      {trend.post + "K post"}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
           </Box>
         </Paper>
       </Grid>

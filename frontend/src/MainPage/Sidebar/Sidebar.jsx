@@ -40,14 +40,18 @@ export const Sidebar = () => {
             marginBottom: "10px",
           }}
         />
-        <SidebarOptions Icon={HomeIcon} text="Home" />
-        <SidebarOptions Icon={SearchIcon} text="Explore" />
-        <SidebarOptions Icon={NotificationsNoneIcon} text="Notifications" />
-        <SidebarOptions Icon={MailOutlineIcon} text="Messages" />
-        <SidebarOptions Icon={BookmarkBorderIcon} text="Bookmarks" />
-        <SidebarOptions Icon={ListAltIcon} text="Lists" />
-        <SidebarOptions Icon={PermIdentityIcon} text="Profile" />
-        <SidebarOptions Icon={MoreHorizIcon} text="More" />
+        <SidebarOptions Icon={HomeIcon} text="Home" link="" />
+        <SidebarOptions Icon={SearchIcon} text="Explore" link="#" />
+        <SidebarOptions
+          Icon={NotificationsNoneIcon}
+          text="Notifications"
+          link="#"
+        />
+        <SidebarOptions Icon={MailOutlineIcon} text="Messages" link="#" />
+        <SidebarOptions Icon={BookmarkBorderIcon} text="Bookmarks" link="#" />
+        <SidebarOptions Icon={ListAltIcon} text="Lists" link="#" />
+        <SidebarOptions Icon={PermIdentityIcon} text="Profile" link="#" />
+        <SidebarOptions Icon={MoreHorizIcon} text="More" link="#" />
         <PostScreen />
       </Stack>
       <Stack paddingRight={isDesktop ? "30px" : "0"}>

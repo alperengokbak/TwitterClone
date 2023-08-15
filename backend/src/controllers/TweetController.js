@@ -5,6 +5,7 @@ import {
   deleteTweet,
   displayUserPost,
   postTweet,
+  getTweetCount,
 } from "../queries/TweetQuery.js";
 
 export const getTweets = (req, res) => {
@@ -41,6 +42,29 @@ export const removeTweet = (req, res) => {
       }
     }
   });
+};
+export const paginationProcess = async (req, res) => {
+  const page = req.query.page || 1;
+  const pageSize = req.query.pageSize || 3;
+
+  try {
+    const tweets = await pool.query(displayUserPost, [
+      pageSize,
+      (page - 1) * pageSize,
+    ]);
+
+    const totalCountResult = await pool.query(getTweetCount);
+    const totalCount = parseInt(totalCountResult.rows[0].count, 10);
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    return res.json({
+      items: tweets.rows,
+      totalPages: totalPages,
+    });
+  } catch (error) {
+    console.error("Error fetching tweets:", error);
+    res.status(500).json({ error: "An error occurred while fetching tweets" });
+  }
 };
 
 export const displayTweet = (req, res) => {

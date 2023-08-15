@@ -9,9 +9,9 @@ export const TweetBoxForPostIcon = ({ text, Icon }) => {
   );
 };
 
-export const TweetBoxIcon = ({ text, Icon }) => {
+export const TweetBoxIcon = ({ text, Icon, handleOpen }) => {
   return (
-    <IconButton aria-label={text} className="TweetBoxIcon">
+    <IconButton aria-label={text} className="TweetBoxIcon" onClick={handleOpen}>
       <Icon />
     </IconButton>
   );

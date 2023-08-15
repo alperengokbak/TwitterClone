@@ -15,11 +15,47 @@ export const SidebarTheme = createTheme({
   },
   components: {
     MuiSvgIcon: {
+      variants: [
+        {
+          props: { className: "more_postScreen" },
+          style: {
+            cursor: "pointer",
+            color: "#808080",
+            fontSize: "17px",
+            "&:hover": {
+              backgroundColor: "#E8F5FE",
+              borderRadius: "20px",
+            },
+          },
+        },
+      ],
+    },
+    MuiTypography: {
+      styleOverrides: {
+        subtitle1: {
+          fontSize: "1.15rem",
+        },
+      },
+    },
+    MuiInputAdornment: {
       styleOverrides: {
         root: {
-          padding: "3px",
-          blockSize: "34px",
-          fontSize: "26px",
+          "&:not(.MuiInputAdornment-hiddenLabel)": {
+            marginTop: "0px !important",
+          },
+        },
+      },
+    },
+    MuiFilledInput: {
+      defaultProps: {
+        disableUnderline: true,
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: "20px",
+        },
+        input: {
+          padding: "9.5px 0px",
         },
       },
     },
@@ -104,11 +140,22 @@ export const SidebarTheme = createTheme({
     MuiButton: {
       variants: [
         {
+          props: { className: "showMoreButton" },
+          style: {
+            color: colors.secondary,
+            borderRadius: "0px",
+            fontWeight: "400",
+          },
+        },
+        {
           props: { variant: "contained" },
           style: {
             backgroundColor: "#1DA1F2",
-            color: "secondary",
             borderRadius: "20px",
+            "&:hover": {
+              backgroundColor: "#FFFFFF",
+              color: colors.primary,
+            },
           },
         },
         {
@@ -116,6 +163,10 @@ export const SidebarTheme = createTheme({
           style: {
             height: "50px",
             width: "230px",
+            "&:hover": {
+              backgroundColor: "#FFFFFF",
+              color: colors.primary,
+            },
           },
         },
       ],
@@ -123,11 +174,12 @@ export const SidebarTheme = createTheme({
         root: {
           fontWeight: "900",
           textTransform: "inherit",
-          "&:hover": {
+          borderRadius: "20px",
+          /*           "&:hover": {
             backgroundColor: "#E8F5FE",
             borderRadius: "20px",
             color: "#000000",
-          },
+          }, */
         },
       },
     },

@@ -8,14 +8,17 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import TextField from "@mui/material/TextField";
 import { TweetBoxForPostIcon } from "./TweetBoxAndPostIcons";
 import axios from "axios";
+import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 export const TweetBoxForPostScreen = () => {
   const [tweetMessage, setTweetMessage] = React.useState("");
   const [imageUrl, setImageUrl] = React.useState("");
+  const { user } = React.useContext(AuthContext);
+
   const postTweet = async () => {
     try {
       const response = await axios.post("http://localhost:3000/tweet", {
-        user_id: 7,
+        user_id: user.id,
         content: tweetMessage,
         image_url: imageUrl,
         likes: 0,
@@ -52,7 +55,7 @@ export const TweetBoxForPostScreen = () => {
             flexDirection: "row",
           }}
         >
-          <Avatar alt="Alperen Gokbak" src="..//public/IMG_9021.jpeg" />
+          <Avatar alt="Alperen Gokbak" src={user.profile_picture} />
           <Grid container direction="column">
             <Grid item>
               <TextField
