@@ -5,6 +5,6 @@ export const postTweet =
 export const deleteTweet = "DELETE FROM tweets WHERE id = $1";
 
 export const displayUserPost =
-  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id  ORDER BY creation_date ASC LIMIT $1 OFFSET $2";
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id  ORDER BY creation_date DESC LIMIT $1 OFFSET $2";
 
 export const getTweetCount = "SELECT COUNT(*) FROM tweets";

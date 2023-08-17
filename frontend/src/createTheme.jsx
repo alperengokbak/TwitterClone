@@ -28,6 +28,41 @@ export const SidebarTheme = createTheme({
             },
           },
         },
+        {
+          props: { className: "PostComponentIcon" },
+          style: {
+            height: "20px",
+            width: "20px",
+            padding: "3px",
+            color: "gray",
+          },
+        },
+        {
+          props: { className: "TweetBoxForPostIcon" },
+          style: {
+            padding: "3px",
+            blockSize: "34px",
+            fontSize: "26px",
+            color: colors.secondary,
+            "&:hover": {
+              borderRadius: "20px",
+              color: "#1DA1F2",
+            },
+          },
+        },
+        {
+          props: { className: "TweetBoxIcon" },
+          style: {
+            marginLeft: "15px",
+            padding: "3px",
+            color: colors.secondary,
+            size: "small",
+            "&:hover": {
+              borderRadius: "20px",
+              color: "#1DA1F2",
+            },
+          },
+        },
       ],
     },
     MuiTypography: {
@@ -68,37 +103,21 @@ export const SidebarTheme = createTheme({
           },
         },
         {
-          props: { className: "PostComponentIcon" },
+          props: { "aria-label": "close" },
           style: {
-            padding: "3px",
-            blockSize: "34px",
-            fontSize: "26px",
             color: colors.primary,
-          },
-        },
-        {
-          props: { className: "TweetBoxForPostIcon" },
-          style: {
-            padding: "3px",
-            blockSize: "34px",
-            fontSize: "26px",
-            color: colors.secondary,
+            backgroundColor: "rgba(15, 20, 25, 0.75)",
+            position: "absolute",
+            backdropFilter: "blur(4px)",
+            height: "32px",
+            width: "32px",
+            outline: "none",
+            top: "14px",
+            right: "6px",
+            transition:
+              "background-color 0.2s ease-in-out,box-shadow 0.2s ease-in-out",
             "&:hover": {
-              borderRadius: "20px",
-              color: "#1DA1F2",
-            },
-          },
-        },
-        {
-          props: { className: "TweetBoxIcon" },
-          style: {
-            padding: "3px",
-            blockSize: "34px",
-            fontSize: "26px",
-            color: colors.secondary,
-            "&:hover": {
-              borderRadius: "20px",
-              color: "#1DA1F2",
+              backgroundColor: "rgba(39, 44, 48, 0.75)",
             },
           },
         },

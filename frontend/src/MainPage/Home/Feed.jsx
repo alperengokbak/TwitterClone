@@ -29,7 +29,7 @@ function Feed() {
 
       if (response.ok) {
         const jsonData = await response.json();
-        setPosts((prevPosts) => [...jsonData.items, ...prevPosts]);
+        setPosts((prevPosts) => [...prevPosts, ...jsonData.items]);
         setShowMore(currentPage !== jsonData.totalPages);
       } else {
         console.error("Failed to fetch data");
@@ -70,10 +70,11 @@ function Feed() {
       }}
     >
       <Stack
+        width="60vh"
         sx={{
+          zIndex: 100,
           position: "-webkit-sticky",
           top: 0,
-          zIndex: 100,
           paddingRight: "1px 20px",
         }}
       >
@@ -88,25 +89,14 @@ function Feed() {
           Home
         </Typography>
         <TweetBox />
-        <Divider />
       </Stack>
+      <Divider />
       <Stack>
-        {showMore && (
-          <Stack>
-            <Button
-              className="showMoreButton"
-              disabled={!showMore}
-              onClick={handleShowMore}
-            >
-              Show More Tweets
-            </Button>
-          </Stack>
-        )}
         {posts.map((post) => (
           <Post
             key={post.id}
-            firstName={post.firstName}
-            lastName={post.lastName}
+            firstName={post.firstname}
+            lastName={post.lastname}
             username={post.username}
             is_verified={post.is_verified}
             creation_date={post.creation_date}
@@ -119,6 +109,17 @@ function Feed() {
             handleDeletePost={handleDeletePost}
           />
         ))}
+        {showMore && (
+          <Stack>
+            <Button
+              className="showMoreButton"
+              disabled={!showMore}
+              onClick={handleShowMore}
+            >
+              Show More Tweets
+            </Button>
+          </Stack>
+        )}
       </Stack>
     </Stack>
   );

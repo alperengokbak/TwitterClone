@@ -106,7 +106,6 @@ export const Widget = () => {
             >
               {data.map((trend, index) => (
                 <Box
-                  // TODO - Ask logic of the key keyword to Mert.
                   key={index}
                   sx={{
                     height: "8vh",

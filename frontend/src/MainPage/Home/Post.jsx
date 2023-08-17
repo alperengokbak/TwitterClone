@@ -5,7 +5,8 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Verified from "@mui/icons-material/Verified";
 import RepeatIcon from "@mui/icons-material/Repeat";
-import PublishIcon from "@mui/icons-material/Publish";
+import UploadIcon from "@mui/icons-material/Upload";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "./CurrentDateFormat";
 
@@ -30,7 +31,22 @@ function Post({
       alignItems="flex-start"
       padding="10px"
     >
-      <Stack direction="row">
+      <MoreHorizIcon
+        sx={{
+          marginLeft: "auto",
+          marginRight: "5px",
+        }}
+        className="more_postScreen"
+        onClick={() => handleDeletePost(id)}
+      />
+      <Stack
+        direction="row"
+        sx={{
+          padding: "0px 0px 0px 14px",
+          width: "100%",
+          height: "100%",
+        }}
+      >
         <Avatar src={profile_picture} />
         <Stack paddingLeft="10px" flexDirection="column">
           <Stack
@@ -74,20 +90,14 @@ function Post({
                 cursor: "pointer",
                 marginLeft: is_verified ? "1px" : "5px",
               }}
-              onClick={() => console.log("Clicked")}
             >
               @{username} · {CurrentDateFormat(creation_date)}
             </Typography>
-            <MoreHorizIcon
-              className="more_postScreen"
-              onClick={() => handleDeletePost(id)}
-            />
           </Stack>
           <Typography
             variant="body2"
             sx={{
               fontSize: "15px",
-              fontWeight: "400",
             }}
           >
             {content}
@@ -96,10 +106,10 @@ function Post({
             <Stack direction={"column"} justifyContent="flex-start">
               <img
                 style={{
+                  objectFit: "contain",
                   borderRadius: "15px",
                   marginTop: "15px",
-                  width: "100%",
-                  height: "100%",
+                  width: "510px",
                 }}
                 src={image_url}
               />
@@ -108,16 +118,14 @@ function Post({
           <Stack
             direction="row"
             justifyContent="space-between"
-            marginTop={"20px"}
-            marginRight={"20px"}
             paddingTop="10px"
-            width="50vh"
-            height="100%"
+            width="57vh"
           >
             <PostComponentIcon text="Reply" Icon={ChatBubbleOutlineIcon} />
             <PostComponentIcon text="Retweet" Icon={RepeatIcon} />
             <PostComponentIcon text="Like" Icon={FavoriteBorderIcon} />
-            <PostComponentIcon text="Share" Icon={PublishIcon} />
+            <PostComponentIcon text="View" Icon={BarChartIcon} />
+            <PostComponentIcon text="Upload" Icon={UploadIcon} />
           </Stack>
         </Stack>
       </Stack>

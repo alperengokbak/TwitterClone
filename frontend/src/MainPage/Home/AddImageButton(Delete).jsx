@@ -11,6 +11,9 @@ export const AddImageButton = ({ onClose, onSave }) => {
     onSave(imageUrl);
     onClose();
   };
+  const handleFileUpload = (event) => {
+    const selectedFile = event.target.files[0];
+  };
 
   return (
     <form
@@ -28,7 +31,7 @@ export const AddImageButton = ({ onClose, onSave }) => {
         <Avatar alt={user.username} src={user.profile_picture} />
         <Grid container direction="column">
           <Grid item>
-            <TextField
+            {/* <TextField
               variant="standard"
               InputProps={{
                 disableUnderline: true,
@@ -42,7 +45,8 @@ export const AddImageButton = ({ onClose, onSave }) => {
                 marginLeft: "5%",
                 fontSize: "20px",
               }}
-            />
+            /> */}
+            <input type="file" onChange={handleFileUpload}></input>
           </Grid>
         </Grid>
       </Stack>

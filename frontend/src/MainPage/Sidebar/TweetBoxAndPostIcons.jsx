@@ -1,35 +1,43 @@
-import { IconButton } from "@mui/material";
+import { IconButton, SvgIcon } from "@mui/material";
 import React from "react";
 
 export const TweetBoxForPostIcon = ({ text, Icon }) => {
   return (
-    <IconButton edge="end" aria-label={text} className="TweetBoxForPostIcon">
+    <SvgIcon edge="end" aria-label={text} className="TweetBoxForPostIcon">
       <Icon />
-    </IconButton>
+    </SvgIcon>
   );
 };
 
 export const TweetBoxIcon = ({ text, Icon, handleOpen }) => {
   return (
-    <IconButton aria-label={text} className="TweetBoxIcon" onClick={handleOpen}>
+    <SvgIcon
+      title="media"
+      aria-label={text}
+      className="TweetBoxIcon"
+      onClick={handleOpen}
+    >
       <Icon />
-    </IconButton>
+    </SvgIcon>
   );
 };
 
 export const PostComponentIcon = ({ text, Icon }) => {
   return (
-    <IconButton
+    <SvgIcon
       sx={{
+        cursor: "pointer",
         "&:hover": {
-          borderRadius: "20px",
-          color: text === "Retweet" ? "#17BF63" : "#E0245E",
+          borderRadius: "10px",
+          backgroundColor:
+            text === "Retweet" ? "rgba(249, 24, 128, 0.1)" : "rgba(0, 0, 0, 0)",
+          color: text === "Retweet" ? "#17BF63" : "#1DA1F2",
         },
       }}
       aria-label={text}
       className="PostComponentIcon"
     >
       <Icon />
-    </IconButton>
+    </SvgIcon>
   );
 };

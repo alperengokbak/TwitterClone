@@ -23,7 +23,6 @@ export const App = () => {
   useEffect(() => {
     checkUser();
   }, []);
-  // TODO - Ask the multiple users connect to the same server, how to handle the situation?
   // TODO - Create a profile page and provide navigation to it, but only if the user is logged in
   return (
     <Router>
