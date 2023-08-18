@@ -5,11 +5,15 @@ import Post from "./Post";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 function Feed() {
   const [posts, setPosts] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [showMore, setShowMore] = React.useState(true);
+  const { user } = React.useContext(AuthContext);
+  const token = localStorage.getItem("token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   React.useEffect(() => {
     handlePosts();
@@ -22,11 +26,10 @@ function Feed() {
         {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-
       if (response.ok) {
         const jsonData = await response.json();
         setPosts((prevPosts) => [...prevPosts, ...jsonData.items]);
@@ -44,12 +47,31 @@ function Feed() {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  const handleDeletePost = (id) => {
-    axios
+  const handleDeletePost = async (id) => {
+    await axios
       .delete(`http://localhost:3000/tweet/${id}/`)
       .then((res) => {
         setDeletePost(res.data);
         console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleUnlike = async (id) => {
+    await axios
+      .delete(`http://localhost:3000/tweet/unlike`, {
+        data: {
+          user_id: user.id,
+          tweet_id: id,
+        },
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleLikes = async (id) => {
+    await axios
+      .post(`http://localhost:3000/tweet/like`, {
+        user_id: user.id,
+        tweet_id: id,
       })
       .catch((err) => console.log(err));
   };
@@ -70,12 +92,10 @@ function Feed() {
       }}
     >
       <Stack
-        width="60vh"
         sx={{
           zIndex: 100,
           position: "-webkit-sticky",
           top: 0,
-          paddingRight: "1px 20px",
         }}
       >
         <Typography
@@ -88,6 +108,7 @@ function Feed() {
         >
           Home
         </Typography>
+        <Divider />
         <TweetBox />
       </Stack>
       <Divider />
@@ -106,7 +127,10 @@ function Feed() {
             retweets={post.retweets}
             image_url={post.image_url}
             id={post.id}
+            isLiked={post.liked}
             handleDeletePost={handleDeletePost}
+            handleLikePost={handleLikes}
+            handleUnlikePost={handleUnlike}
           />
         ))}
         {showMore && (

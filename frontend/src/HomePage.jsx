@@ -3,30 +3,27 @@ import { Grid } from "@mui/material";
 import { Widget } from "./MainPage/Home/Widget";
 import { Sidebar } from "./MainPage/Sidebar/Sidebar";
 
-export const HomePage = () => {
+export const HomePage = ({ child }) => {
   //TODO - Separate the Sidebar component from the App.jsx file.
   // TODO - Feed boyutunu ayarla.
   return (
     <Grid container height="100vh">
-      <Grid item xs={2} sm={2} md={4.5} lg={3} xl={3.8}>
+      <Grid item xs={2} sm={2} md={4.5} lg={3} xl={3.7}>
         <Sidebar />
       </Grid>
-      <Grid item xs={10} sm={10} md={7.5} lg={5} xl={4.2}>
+      <Grid item xs={10} sm={10} md={7.5} lg={5} xl={3.8}>
         <Feed />
       </Grid>
       <Grid
         item
         sx={{
           display: {
-            xs: "none",
-            sm: "none",
             md: "none",
             lg: "block",
-            xl: "block",
           },
         }}
         lg={4}
-        xl={4}
+        xl={4.5}
       >
         <Widget />
       </Grid>

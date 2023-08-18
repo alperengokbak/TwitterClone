@@ -60,86 +60,82 @@ function TweetBox() {
   };
 
   return (
-    <Stack
-      sx={{
-        paddingBottom: "10px",
-      }}
-    >
+    <Stack padding={1}>
       <form
         sx={{
           display: "flex",
           flexDirection: "column",
+          justifyContent: "space-between",
         }}
       >
-        <Stack
-          sx={{
-            padding: "20px 0px 20px 20px",
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <Avatar alt="Alperen Gokbak" src={user.profile_picture} />
-          <Grid container direction="column">
-            <Grid item>
-              <TextField
-                variant="standard"
-                InputProps={{
-                  disableUnderline: true,
-                }}
-                placeholder="What's happening?"
-                value={tweetMessage}
-                onChange={(e) => setTweetMessage(e.target.value)}
-                rows={2}
-                multiline
-                sx={{
-                  flex: 1,
-                  marginLeft: "20px",
-                  fontSize: "20px",
-                }}
-              />
-              {imageUrl ? (
-                <Stack position={"relative"} display={"inline-block"}>
-                  <Card
+        <Stack padding="16px 8px 16px 8px" flexDirection="row">
+          <Avatar
+            className="Profile Image"
+            alt="Alperen Gokbak"
+            src={user.profile_picture}
+          />
+          <Stack direction={"column"}>
+            <TextField
+              variant="standard"
+              InputProps={{
+                disableUnderline: true,
+              }}
+              placeholder="What's happening?"
+              value={tweetMessage}
+              onChange={(e) => setTweetMessage(e.target.value)}
+              rows={2}
+              multiline
+              sx={{
+                marginLeft: 3,
+                fontSize: "20px",
+              }}
+            />
+            {imageUrl ? (
+              <Stack
+                position={"relative"}
+                display={"inline-block"}
+                alignItems="flex-start"
+              >
+                <Card
+                  sx={{
+                    borderRadius: 4,
+                    marginTop: 1,
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    src={imageUrl}
+                    image={imageUrl}
+                    alt="Image"
                     sx={{
-                      borderRadius: "20px",
-                      marginTop: "10px",
-                      width: "510px",
-                      height: "340px",
+                      cursor: "pointer",
                     }}
-                  >
-                    <CardMedia
-                      component="img"
-                      image={imageUrl}
-                      alt="Image"
+                  />
+                  <IconButton aria-label="close" onClick={handleClearImage}>
+                    <CloseIcon
                       sx={{
-                        cursor: "pointer",
+                        height: "20px",
+                        width: "20px",
+                        color: "#FFFFFF",
                       }}
                     />
-                    <IconButton aria-label="close" onClick={handleClearImage}>
-                      <CloseIcon
-                        sx={{
-                          height: "20px",
-                          width: "20px",
-                          color: "#FFFFFF",
-                        }}
-                      />
-                    </IconButton>
-                  </Card>
-                </Stack>
-              ) : (
-                ""
-              )}
-            </Grid>
-          </Grid>
+                  </IconButton>
+                </Card>
+              </Stack>
+            ) : (
+              ""
+            )}
+          </Stack>
         </Stack>
-        <Stack flexDirection={"row"}>
+        <Stack flexDirection={"row"} justifyContent={"initial"}>
           <Stack
             color={"#1DA1F2"}
             sx={{
-              flexDirection: "row",
-              marginRight: "23vh",
+              alignItems: "center",
               justifyContent: "space-between",
-              width: "230px",
+              flexDirection: "row",
+              marginRight: imageUrl ? "auto" : "27.5vh",
+              width: "200px",
               marginLeft: "4.5vh",
             }}
           >

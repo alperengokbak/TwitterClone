@@ -38,6 +38,8 @@ export const App = () => {
         {user ? (
           <Route path="/" element={<HomePage />} />
         ) : (
+          /* <Route path="/" element={<Layout child={home}/>} />
+          <Route path="/profile" element={<Layout child={Profile}/>} /> */
           <Route path="*" element={<Navigate to="/login" />} />
         )}
       </Routes>

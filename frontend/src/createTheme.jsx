@@ -29,8 +29,21 @@ export const SidebarTheme = createTheme({
           },
         },
         {
+          props: { className: "" },
+          style: {
+            cursor: "pointer",
+            color: "#808080",
+            fontSize: "17px",
+            "&:hover": {
+              backgroundColor: "#E8F5FE",
+              borderRadius: "20px",
+            },
+          },
+        },
+        {
           props: { className: "PostComponentIcon" },
           style: {
+            cursor: "pointer",
             height: "20px",
             width: "20px",
             padding: "3px",
@@ -40,9 +53,10 @@ export const SidebarTheme = createTheme({
         {
           props: { className: "TweetBoxForPostIcon" },
           style: {
+            cursor: "pointer",
             padding: "3px",
-            blockSize: "34px",
-            fontSize: "26px",
+            height: "20px",
+            width: "20px",
             color: colors.secondary,
             "&:hover": {
               borderRadius: "20px",
@@ -53,10 +67,11 @@ export const SidebarTheme = createTheme({
         {
           props: { className: "TweetBoxIcon" },
           style: {
-            marginLeft: "15px",
+            cursor: "pointer",
             padding: "3px",
+            height: "20px",
+            width: "20px",
             color: colors.secondary,
-            size: "small",
             "&:hover": {
               borderRadius: "20px",
               color: "#1DA1F2",
@@ -66,6 +81,19 @@ export const SidebarTheme = createTheme({
       ],
     },
     MuiTypography: {
+      /* variants: [
+        {
+          props: { className: "retweet" },
+          style: {
+            color: "#808080",
+            cursor: "pointer",
+            ":&hover": {
+              backgroundColor: "#E8F5FE",
+              color: "#17BF63",
+            },
+          },
+        },
+      ], */
       styleOverrides: {
         subtitle1: {
           fontSize: "1.15rem",
@@ -151,6 +179,19 @@ export const SidebarTheme = createTheme({
             textTransform: "inherit",
             "&:hover": {
               color: "#000000",
+            },
+          },
+        },
+      ],
+    },
+    MuiAvatar: {
+      variants: [
+        {
+          props: { className: "Profile Image" },
+          style: {
+            "&:hover": {
+              cursor: "pointer",
+              opacity: "0.8",
             },
           },
         },
