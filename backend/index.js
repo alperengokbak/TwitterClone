@@ -2,8 +2,9 @@ import express from "express";
 import tweetRoutes from "./src/routes/TweetRoute.js";
 import userRoutes from "./src/routes/UserRoute.js";
 import widgetRoutes from "./src/routes/WidgetRoute.js";
-/* import retweetRoutes from "./src/routes/retweet/index.js";
-import likeRoutes from "./src/routes/like/index.js";
+import retweetRoutes from "./src/routes/RetweetRoute.js";
+import profileRoutes from "./src/routes/ProfileRoute.js";
+/*import likeRoutes from "./src/routes/like/index.js";
 import commentRoutes from "./src/routes/comment/index.js";
 import followerRoutes from "./src/routes/follower/index.js"; */
 import cors from "cors";
@@ -16,7 +17,9 @@ app.use(cors());
 
 app.use("/auth", userRoutes);
 app.use("/tweet", tweetRoutes);
+app.use("/retweet", retweetRoutes);
 app.use("/", widgetRoutes);
+app.use("/profile", profileRoutes);
 
 /* app.use("/", followerRoutes);
 app.use("/", commentRoutes);

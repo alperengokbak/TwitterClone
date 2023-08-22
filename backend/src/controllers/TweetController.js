@@ -64,9 +64,6 @@ export const paginationProcess = async (req, res) => {
     const totalCountResult = await pool.query(getTweetCount);
     const totalCount = parseInt(totalCountResult.rows[0].count, 10);
     const totalPages = Math.ceil(totalCount / pageSize);
-
-    // TODO - check if user liked the tweet
-    // TODO - Returning undefined
     const likedTweets = await pool.query(checkLike, [user_id]);
 
     tweets.rows.map((tweet) => {
@@ -108,32 +105,10 @@ export const postTweets = (req, res) => {
     }
   );
 };
-/* export const likeTweet = (req, res) => {
-  const { user_id, tweet_id } = req.body;
-  pool
-    .query(likeTweets, [user_id, tweet_id])
-    .then((results, error) => {
-      if (error) return res.status(500).send("Internal Server Error!");
-      if (results.rowCount === 1) {
-        return pool.query(likeIncrease, [tweet_id]);
-      } else {
-        console.log("Already Liked !");
-        return null;
-      }
-    })
-    .then((results) => {
-      if (results !== null) {
-        console.log("Liked !");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}; */
 export const likeTweet = (req, res) => {
   const { user_id, tweet_id } = req.body;
   pool
-    .query(likeTweets2, [user_id, tweet_id])
+    .query(likeTweets, [user_id, tweet_id])
     .then((results, error) => {
       if (error) return res.status(500).send("Internal Server Error!");
       if (results.rowCount === 1) return pool.query(likeIncrease, [tweet_id]);
@@ -159,8 +134,11 @@ export const unlikeTweet = (req, res) => {
     .then(() => {
       return pool.query(likeDecrease, [tweet_id]);
     })
-    .then(() => {
-      res.status(200).send("Tweet unlike successfully");
+    .then((results) => {
+      if (results !== null) {
+        console.log("UnLiked !");
+        res.status(200).send("Tweet unlike successfully");
+      }
     })
     .catch((error) => {
       console.error("Error:", error);

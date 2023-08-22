@@ -17,6 +17,19 @@ export const SidebarTheme = createTheme({
     MuiSvgIcon: {
       variants: [
         {
+          props: { className: "profileBackButton" },
+          style: {
+            cursor: "pointer",
+            color: "#000000",
+            fontSize: "20px",
+            marginLeft: "15px",
+            "&:hover": {
+              backgroundColor: "#E8F5FE",
+              borderRadius: "20px",
+            },
+          },
+        },
+        {
           props: { className: "more_postScreen" },
           style: {
             cursor: "pointer",

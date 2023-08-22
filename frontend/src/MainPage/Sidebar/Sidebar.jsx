@@ -15,11 +15,12 @@ import { PostScreen } from "./PostScreen";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 export const Sidebar = () => {
-  const { isDesktop } = React.useContext(AuthContext);
+  const { isDesktop, user } = React.useContext(AuthContext);
 
   return (
     <Stack
       direction="column"
+      borderRight="2px solid #000000" // TODO - It will change to #e6ecf0
       alignItems="flex-end"
       justifyContent="space-between"
       spacing={1}
@@ -28,7 +29,6 @@ export const Sidebar = () => {
       <Stack
         sx={{
           marginTop: "10px",
-          paddingLeft: isDesktop ? "20px" : "0",
           paddingRight: isDesktop ? "40px" : "0",
         }}
       >
@@ -40,17 +40,21 @@ export const Sidebar = () => {
             marginBottom: "10px",
           }}
         />
-        <SidebarOptions Icon={HomeIcon} text="Home" link="" />
+        <SidebarOptions Icon={HomeIcon} text="Home" link="/home" />
         <SidebarOptions Icon={SearchIcon} text="Explore" link="#" />
         <SidebarOptions
           Icon={NotificationsNoneIcon}
           text="Notifications"
           link="#"
         />
-        <SidebarOptions Icon={MailOutlineIcon} text="Messages" link="#" />
+        <SidebarOptions Icon={MailOutlineIcon} text="Messages" />
         <SidebarOptions Icon={BookmarkBorderIcon} text="Bookmarks" link="#" />
         <SidebarOptions Icon={ListAltIcon} text="Lists" link="#" />
-        <SidebarOptions Icon={PermIdentityIcon} text="Profile" link="#" />
+        <SidebarOptions
+          Icon={PermIdentityIcon}
+          text="Profile"
+          link={`/${user.username}`}
+        />
         <SidebarOptions Icon={MoreHorizIcon} text="More" link="#" />
         <PostScreen />
       </Stack>

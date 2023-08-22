@@ -9,13 +9,8 @@ import RepeatIcon from "@mui/icons-material/Repeat";
 import UploadIcon from "@mui/icons-material/Upload";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
-import { CurrentDateFormat } from "./CurrentDateFormat";
-import { useNavigate } from "react-router-dom";
 
-// TODO - Create a Profile Page, redirect the profile page when the user clicks on the username
-// TODO - Text için show more ekleyeceğim, bunu yaparken de textin uzunluğuna göre ayarlayacağım.
-
-function Post({
+function ProfilePost({
   firstName,
   lastName,
   username,
@@ -28,12 +23,7 @@ function Post({
   image_url,
   id,
   isLiked,
-  handleDeletePost,
-  handleLikePost,
-  handleUnlikePost,
-  handleRetweet,
 }) {
-  const navigate = useNavigate();
   return (
     <Stack>
       <Divider
@@ -48,9 +38,6 @@ function Post({
               className="Profile Image"
               alt="Profile Image"
               src={profile_picture}
-              onClick={() => {
-                navigate(`/${username}`);
-              }}
             />
           </Grid>
           <Grid item xs={12} sm container>
@@ -65,9 +52,6 @@ function Post({
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
-                    }}
-                    onClick={() => {
-                      navigate(`/${username}`);
                     }}
                   >
                     {firstName} {lastName}
@@ -95,18 +79,15 @@ function Post({
                       marginLeft: is_verified ? "1px" : "5px",
                       marginRight: "1vw",
                     }}
-                    onClick={() => {
-                      navigate(`/${username}`);
-                    }}
                   >
-                    @{username} · {CurrentDateFormat(creation_date)}
+                    @{username} · {/* {CurrentDateFormat(creation_date)} */}
                   </Typography>
                   <MoreHorizIcon
                     sx={{
                       marginLeft: "9vw",
                     }}
                     className="more_postScreen"
-                    onClick={() => handleDeletePost(id)}
+                    /* onClick={() => handleDeletePost(id)} */
                   />
                 </Stack>
                 <Typography
@@ -150,19 +131,19 @@ function Post({
                     text="Retweet"
                     Icon={RepeatIcon}
                     retweets={retweets}
-                    handleRetweet={() => handleRetweet()}
+                    /* handleRetweet={() => handleRetweet()} */
                   />
                   <PostComponentIcon
                     text="Like"
                     Icon={isLiked ? FavoriteIcon : FavoriteBorderIcon}
                     likes={likes}
-                    handleLikePost={() => {
+                    /* handleLikePost={() => {
                       if (isLiked) {
                         handleUnlikePost(id);
                       } else {
                         handleLikePost(id);
                       }
-                    }}
+                    }} */
                   />
                   <PostComponentIcon text="View" Icon={BarChartIcon} />
                   <PostComponentIcon text="Upload" Icon={UploadIcon} />
@@ -176,4 +157,4 @@ function Post({
   );
 }
 
-export default Post;
+export default ProfilePost;

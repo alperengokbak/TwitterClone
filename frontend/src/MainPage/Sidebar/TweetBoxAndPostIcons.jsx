@@ -28,11 +28,12 @@ export const PostComponentIcon = ({
   likes,
   retweets,
   handleLikePost,
+  handleRetweet,
 }) => {
   return (
     <Stack flexDirection="row">
       <SvgIcon
-        onClick={handleLikePost}
+        onClick={text === "Like" ? handleLikePost : handleRetweet}
         sx={{
           color: text === "Like" ? "red" : "gray",
           "&:hover": {

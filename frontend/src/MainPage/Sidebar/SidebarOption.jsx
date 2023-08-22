@@ -9,11 +9,11 @@ export const SidebarOptions = ({ text, Icon, link }) => {
     <Stack justifyItems="space-between" flexDirection="row">
       {isDesktop ? (
         <TwitterLink
-          // TODO - activate the active button
+          // TODO - activate the sidebar buttons
           sx={{
             my: 0.5,
           }}
-          to={`/${link}`}
+          to={`${link}`}
         >
           <Icon
             style={{

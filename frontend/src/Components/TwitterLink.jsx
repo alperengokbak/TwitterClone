@@ -13,13 +13,6 @@ const LinkButton = styled(Link)({
   "&:hover": {
     backgroundColor: "#f7f9f9",
   },
-  "&.active": {
-    fontWeight: "bold",
-    color: "#000",
-    "& .icon": {
-      color: "#000",
-    },
-  },
 });
 
 export default function TwitterLink(props) {

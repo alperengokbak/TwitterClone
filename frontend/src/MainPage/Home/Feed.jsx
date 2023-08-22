@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
+// Bir postu beğenip, diğer postuda beğendiğinde isLiked true oluyor. Bu yüzden beğen butonu kırmızı oluyor. Ve düzelmiyor.
 function Feed() {
   const [posts, setPosts] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -75,13 +76,12 @@ function Feed() {
       })
       .catch((err) => console.log(err));
   };
+  const handleRetweet = async () => {};
 
   return (
     <Stack
       sx={{
         height: "100vh",
-        borderRight: "2px solid #e6ecf0",
-        borderLeft: "2px solid #e6ecf0",
         overflowY: "scroll",
         minWidth: "fit-content",
         WebkitOverflowScrolling: "touch",
@@ -131,6 +131,7 @@ function Feed() {
             handleDeletePost={handleDeletePost}
             handleLikePost={handleLikes}
             handleUnlikePost={handleUnlike}
+            handleRetweet={handleRetweet}
           />
         ))}
         {showMore && (

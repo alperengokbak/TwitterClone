@@ -95,6 +95,7 @@ function TweetBox() {
                 position={"relative"}
                 display={"inline-block"}
                 alignItems="flex-start"
+                marginLeft={1}
               >
                 <Card
                   sx={{
@@ -127,43 +128,46 @@ function TweetBox() {
             )}
           </Stack>
         </Stack>
-        <Stack flexDirection={"row"} justifyContent={"initial"}>
-          <Stack
-            color={"#1DA1F2"}
-            sx={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexDirection: "row",
-              marginRight: imageUrl ? "auto" : "27.5vh",
-              width: "200px",
-              marginLeft: "4.5vh",
-            }}
-          >
-            <TweetBoxIcon
-              handleOpen={handleFileUpload}
-              text="ImageIcon"
-              Icon={ImageIcon}
-            />
-            <TweetBoxIcon text="GifIcon" Icon={GifIcon} />
-            <TweetBoxIcon text="PollIcon" Icon={PollIcon} />
-            <TweetBoxIcon text="EmojiEmotionsIcon" Icon={EmojiEmotionsIcon} />
-            <TweetBoxIcon text="ScheduleIcon" Icon={ScheduleIcon} />
-          </Stack>
-          <Button
-            variant="contained"
-            onClick={postTweet}
-            type="submit"
-            disabled={tweetMessage === "" && imageUrl === ""}
-          >
-            Post
-          </Button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileSelected}
-          />
-        </Stack>
+        <Grid container justifyContent={"space-between"} alignItems={"center"}>
+          <Grid item>
+            <Grid
+              container
+              sx={{
+                justifyContent: "space-between",
+                marginLeft: 6.5,
+              }}
+            >
+              <TweetBoxIcon
+                handleOpen={handleFileUpload}
+                text="ImageIcon"
+                Icon={ImageIcon}
+              />
+              <TweetBoxIcon text="GifIcon" Icon={GifIcon} />
+              <TweetBoxIcon text="PollIcon" Icon={PollIcon} />
+              <TweetBoxIcon text="EmojiEmotionsIcon" Icon={EmojiEmotionsIcon} />
+              <TweetBoxIcon text="ScheduleIcon" Icon={ScheduleIcon} />
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              onClick={postTweet}
+              type="submit"
+              disabled={tweetMessage === "" && imageUrl === ""}
+              sx={{
+                marginRight: 0.5,
+              }}
+            >
+              Post
+            </Button>
+          </Grid>
+        </Grid>
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleFileSelected}
+        />
       </form>
     </Stack>
   );

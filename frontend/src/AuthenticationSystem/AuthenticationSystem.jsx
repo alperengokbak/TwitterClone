@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 export function AuthContextProvider({ children }) {
   const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("md"));
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(undefined);
   return (
     <AuthContext.Provider
       value={{

@@ -43,7 +43,7 @@ export default function LoginScreen() {
         if (data.status === "Success") {
           localStorage.setItem("token", data.token);
           setUser(data.user);
-          navigate("/");
+          navigate("/home");
         }
       })
       .catch((err) => console.log(err));

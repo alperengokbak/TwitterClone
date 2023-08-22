@@ -20,7 +20,6 @@ export const Widget = () => {
             "Content-Type": "application/json",
           },
         });
-
         if (response.ok) {
           const jsonData = await response.json();
           setData(jsonData);
@@ -41,9 +40,13 @@ export const Widget = () => {
       padding={"0 20px"}
       direction={"column"}
       justifyContent={"space-between"}
+      sx={{
+        borderLeft: "2px solid #000000", // TODO - It will change to #e6ecf0
+      }}
     >
-      <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+      <Grid item xs={12}>
         <TextField
+          fullWidth
           variant="filled"
           placeholder="Search"
           InputProps={{
@@ -54,28 +57,12 @@ export const Widget = () => {
             ),
           }}
           sx={{
-            m: 1,
-            width: "30vh",
+            marginTop: 1,
+            marginBottom: 1,
           }}
         />
       </Grid>
-      <Grid
-        item
-        xs={10}
-        sm={10}
-        md={10}
-        lg={10}
-        xl={10}
-        display={"flex"}
-        sx={{
-          display: "flex",
-          "& > :not(style)": {
-            m: 1.5,
-            width: "30vh",
-            height: "92vh",
-          },
-        }}
-      >
+      <Grid item xs={12}>
         <Paper
           sx={{
             backgroundColor: "#f5f8fa",

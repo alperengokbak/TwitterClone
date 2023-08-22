@@ -1,3 +1,4 @@
+import React, { useContext, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,42 +7,66 @@ import {
 } from "react-router-dom";
 import LoginScreen from "./LoginAndRegister/LoginScreen";
 import RegisterScreen from "./LoginAndRegister/RegisterScreen";
-import { useEffect, useContext } from "react";
 import { LoginAuthentication } from "./AuthenticationSystem/LoginAuthentication";
 import { AuthContext } from "./AuthenticationSystem/AuthenticationSystem";
-import { HomePage } from "./HomePage";
+import { Layouts } from "./Layouts";
+import Feed from "./MainPage/Home/Feed";
+import { Profile } from "./MainPage/ProfilePage/Profile";
 
 export const App = () => {
   const { user, setUser } = useContext(AuthContext);
+
   const checkUser = async () => {
     const user = await LoginAuthentication();
     if (user) {
       setUser(user);
+    } else {
+      setUser(null);
     }
   };
-
   useEffect(() => {
     checkUser();
   }, []);
-  // TODO - Create a profile page and provide navigation to it, but only if the user is logged in
+
+  // TODO - Sidebar ve Widget ekrandan taşıyor.
+  // TODO - Profile sayfasını tamamla.
+  // TODO - Sidebar biraz küçük kaldı onu düzelt.
+  if (user === undefined) {
+    return null;
+  }
+  if (user === null) {
+    console.log(user);
+
+    return (
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginScreen />} />
+          <Route path="/register" element={<RegisterScreen />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </Router>
+    );
+  }
   return (
     <Router>
       <Routes>
         <Route
-          path="/login"
-          element={user ? <Navigate to="/" /> : <LoginScreen />}
+          path="/home"
+          element={
+            <Layouts>
+              <Feed />
+            </Layouts>
+          }
         />
         <Route
-          path="/register"
-          element={user ? <Navigate to="/" /> : <RegisterScreen />}
+          path={`/${user.username}`}
+          element={
+            <Layouts>
+              <Profile />
+            </Layouts>
+          }
         />
-        {user ? (
-          <Route path="/" element={<HomePage />} />
-        ) : (
-          /* <Route path="/" element={<Layout child={home}/>} />
-          <Route path="/profile" element={<Layout child={Profile}/>} /> */
-          <Route path="*" element={<Navigate to="/login" />} />
-        )}
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>
   );
