@@ -15,6 +15,7 @@ TODO - image geç yükleniyor
 */
 export const Profile = () => {
   const [userProfile, setUserProfile] = React.useState([]);
+  const [userPosts, setUserPosts] = React.useState([]);
   const { user } = React.useContext(AuthContext);
   axios.defaults.headers.common[
     "Authorization"
@@ -29,9 +30,12 @@ export const Profile = () => {
   };
   React.useEffect(() => {
     handleUserInformation();
+    handleUserPosts();
   }, []);
   console.log(userProfile);
   console.log(userProfile[0]?.profile_picture);
+
+  const handleUserPosts = async () => {};
 
   return (
     <Grid
@@ -246,11 +250,11 @@ export const Profile = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item>
+          <Grid item xs={12}>
             {/*NavBar*/}
-            {/* <NavTabs user={user.username} /> */}
+            <NavTabs user={user.username} />
           </Grid>
-          <Grid item width="100%">
+          <Grid item xs={12}>
             {/*Downside Navbar(Profile Posts)*/}
             <Stack>
               {userProfile.map((post) => (

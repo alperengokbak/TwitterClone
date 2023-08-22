@@ -43,6 +43,23 @@ function Feed() {
     }
   };
 
+  const postTweet = async (imageUrl, tweet) => {
+    try {
+      const response = await axios.post("http://localhost:3000/tweet", {
+        user_id: user.id,
+        content: tweet,
+        image_url: imageUrl,
+      });
+
+      if (response.status === 201) {
+        console.log("Tweet posted successfully!");
+        setPosts((prevPosts) => [response.data, ...prevPosts]);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
   const handleShowMore = async () => {
     console.log("show more");
     setCurrentPage((prevPage) => prevPage + 1);
@@ -65,7 +82,23 @@ function Feed() {
           tweet_id: id,
         },
       })
-      .catch((err) => console.log(err));
+      .then((res) => {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: false,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleLikes = async (id) => {
@@ -74,7 +107,23 @@ function Feed() {
         user_id: user.id,
         tweet_id: id,
       })
-      .catch((err) => console.log(err));
+      .then((res) => {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: true,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const handleRetweet = async () => {};
 
@@ -109,7 +158,7 @@ function Feed() {
           Home
         </Typography>
         <Divider />
-        <TweetBox />
+        <TweetBox postTweet={postTweet} />
       </Stack>
       <Divider />
       <Stack>

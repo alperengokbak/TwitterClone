@@ -1,9 +1,11 @@
+import { parse } from "dotenv";
 import { pool } from "../../database.js";
 import {
   userInformation,
   checkLike,
   displayUserPost,
   getTweetCount,
+  displayOwnPost,
 } from "../queries/ProfileQuery.js";
 
 export const getUserInformation = (req, res) => {
@@ -14,6 +16,15 @@ export const getUserInformation = (req, res) => {
     res.status(200).json(results.rows);
   });
 };
+
+export const getUserOwnPost = (req, res) => {
+  const { id } = parseInt(req.params.id);
+  pool.query(displayOwnPost, [id], (error, results) => {
+    if (error) throw error;
+    res.status(200).json(results.rows);
+  });
+};
+
 export const paginationProcess = async (req, res) => {
   const user_id = req.user.id;
 

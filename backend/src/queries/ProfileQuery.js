@@ -18,8 +18,11 @@ export const getFollowersUserContent =
 export const getFollowingsUserContent =
   "SELECT followers.id AS follower_id, follower.id AS follower_id, follower.firstName AS follower_firstName, follower.lastName AS follower_lastName, follower.username AS follower_username, follower.profile_picture AS follower_profile_picture, user.id AS user_id, user.firstName AS user_firstName, user.lastName AS user_lastName, user.username AS user_username, user.profile_picture AS user_profile_picture FROM followers JOIN users AS follower ON followers.follower_id = follower.id JOIN users AS user ON followers.user_id = user.id WHERE followers.follower_id = $1 ORDER BY followers.id DESC";
 
+export const getTweetCount = "SELECT COUNT(*) FROM tweets";
+export const checkLike = "SELECT tweet_id FROM likes WHERE user_id = $1";
+
 export const displayUserPost =
   "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id  ORDER BY creation_date DESC LIMIT $1 OFFSET $2";
 
-export const getTweetCount = "SELECT COUNT(*) FROM tweets";
-export const checkLike = "SELECT tweet_id FROM likes WHERE user_id = $1";
+export const displayOwnPost =
+  "SELECT t.id, t.content, t.creation_date, t.likes, t.retweets, t.image_url FROM tweets t INNER JOIN users u ON t.user_id = u.id WHERE u.id = $1 OR t.id IN (SELECT rt.tweet_id FROM retweets rt WHERE rt.user_id = $1) ORDER BY t.creation_date DESC";

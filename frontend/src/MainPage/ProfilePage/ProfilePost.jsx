@@ -40,9 +40,9 @@ function ProfilePost({
               src={profile_picture}
             />
           </Grid>
-          <Grid item xs={12} sm container>
-            <Grid item xs container direction="column" spacing={1.5}>
-              <Grid item xs>
+          <Grid item>
+            <Grid item xs={12} direction="column" spacing={1.5}>
+              <Grid item xs={12}>
                 <Stack flexDirection="row">
                   <Typography
                     variant="h5"

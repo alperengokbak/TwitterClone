@@ -7,6 +7,7 @@ import {
   postTweet,
   getTweetCount,
   checkLike,
+  checkLike2,
   likeTweets,
   likeTweets2,
   unlikeTweets,
@@ -93,55 +94,54 @@ export const displayTweet = (req, res) => {
 };
 
 export const postTweets = (req, res) => {
-  const { user_id, content, likes, retweets, image_url } = req.body;
-  pool.query(
-    postTweet,
-    [user_id, content, likes, retweets, image_url],
-    (error, results) => {
-      if (error) {
-        res.status(500).send("Internal Server Error!");
-      }
-      return res.status(201).json(results.rows);
+  const { user_id, content, image_url } = req.body;
+  console.log(req.body);
+  pool.query(postTweet, [user_id, content, image_url], (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send("Internal Server Error!");
     }
-  );
+    return res.status(201).json(results.rows[0]);
+  });
 };
 export const likeTweet = (req, res) => {
   const { user_id, tweet_id } = req.body;
-  pool
-    .query(likeTweets, [user_id, tweet_id])
-    .then((results, error) => {
-      if (error) return res.status(500).send("Internal Server Error!");
-      if (results.rowCount === 1) return pool.query(likeIncrease, [tweet_id]);
-    })
-    .then((results) => {
-      if (results !== null) {
-        console.log("Liked !");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  pool.query(checkLike2, [user_id, tweet_id], (error, results) => {
+    if (error) return res.status(500).send("Internal Server Error!");
+    if (results.rowCount === 0) {
+      pool.query(likeTweets, [user_id, tweet_id]).then((results, error) => {
+        if (error) return res.status(500).send("Internal Server Error!");
+        if (results.rowCount === 1) {
+          pool.query(likeIncrease, [tweet_id], (error, results) => {
+            if (error) return res.status(500).send("Internal Server Error!");
+            res.status(200).json(results.rows[0]);
+          });
+        }
+      });
+    } else {
+      res.status(200).send(`Tweet already liked `);
+    }
+  });
 };
 
 export const unlikeTweet = (req, res) => {
   const { user_id, tweet_id } = req.body;
-  pool
-    .query(checkLike, [user_id])
-    .then((results) => {
-      if (results.rowCount === 1)
-        return pool.query(unlikeTweets, [user_id, tweet_id]);
-    })
-    .then(() => {
-      return pool.query(likeDecrease, [tweet_id]);
-    })
-    .then((results) => {
-      if (results !== null) {
-        console.log("UnLiked !");
-        res.status(200).send("Tweet unlike successfully");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      res.status(500).send("Internal Server Error!");
-    });
+  pool.query(checkLike2, [user_id, tweet_id], (error, results) => {
+    if (error) return res.status(500).send("Internal Server Error!");
+    if (results.rowCount !== 0) {
+      pool.query(unlikeTweets, [user_id, tweet_id], (error, results) => {
+        if (error) return res.status(500).send("Internal Server Error!");
+        if (results.rowCount === 1) {
+          pool.query(likeDecrease, [tweet_id], (error, results) => {
+            if (error) return res.status(500).send("Internal Server Error!");
+            res.status(200).json(results.rows[0]);
+          });
+        } else if (results.rowCount === 0) {
+          return res.status(404).json({ status: "Tweet not found" });
+        }
+      });
+    } else {
+      res.status(200).send(`Tweet already unlike `);
+    }
+  });
 };

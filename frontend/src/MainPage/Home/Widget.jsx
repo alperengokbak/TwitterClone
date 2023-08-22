@@ -38,10 +38,11 @@ export const Widget = () => {
     <Grid
       container
       padding={"0 20px"}
-      direction={"column"}
       justifyContent={"space-between"}
       sx={{
-        borderLeft: "2px solid #000000", // TODO - It will change to #e6ecf0
+        borderLeft: "2px solid #e6ecf0",
+        maxHeight: "100vh",
+        overflowY: "scroll",
       }}
     >
       <Grid item xs={12}>
@@ -59,15 +60,17 @@ export const Widget = () => {
           sx={{
             marginTop: 1,
             marginBottom: 1,
+            position: "sticky",
+            top: 0,
           }}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} maxHeight="calc(100vh - 58px)" overflow="scroll">
         <Paper
           sx={{
             backgroundColor: "#f5f8fa",
             borderRadius: "15px",
-            overflowY: "scroll",
+
             "&::-webkit-scrollbar": {
               display: "none",
             },

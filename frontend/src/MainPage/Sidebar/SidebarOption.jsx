@@ -3,13 +3,15 @@ import { IconButton, Stack, Typography } from "@mui/material";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 import TwitterLink from "../../Components/TwitterLink";
 
-export const SidebarOptions = ({ text, Icon, link }) => {
+export const SidebarOptions = ({ text, Icon, link, onClick }) => {
   const { isDesktop } = React.useContext(AuthContext);
   return (
     <Stack justifyItems="space-between" flexDirection="row">
       {isDesktop ? (
         <TwitterLink
-          // TODO - activate the sidebar buttons
+          onClick={() => {
+            onClick();
+          }}
           sx={{
             my: 0.5,
           }}

@@ -22,7 +22,7 @@ import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 // TODO - TweetBox'a resim ekleyip post atmadan siliyorum, aynı resmi bir daha ekleyemiyorum.
 // TODO - Refetch, cache nedir ? Ve bunlar nasıl çalışır ? Bir tanesini projeye implement et.
 
-function TweetBox() {
+function TweetBox({ postTweet }) {
   const [tweetMessage, setTweetMessage] = React.useState("");
   const [imageUrl, setImageUrl] = React.useState("");
   const { user } = React.useContext(AuthContext);
@@ -41,23 +41,12 @@ function TweetBox() {
     setImageUrl("");
   };
 
-  const postTweet = async () => {
-    try {
-      const response = await axios.post("http://localhost:3000/tweet", {
-        user_id: user.id,
-        content: tweetMessage,
-        image_url: imageUrl,
-      });
-
-      if (response.status === 201) {
-        console.log("Tweet posted successfully!");
-        setTweetMessage("");
-        setImageUrl("");
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
-  };
+  function handlePostTweet(e) {
+    e.preventDefault();
+    postTweet(imageUrl, tweetMessage);
+    setTweetMessage("");
+    setImageUrl("");
+  }
 
   return (
     <Stack padding={1}>
@@ -151,8 +140,7 @@ function TweetBox() {
           <Grid item>
             <Button
               variant="contained"
-              onClick={postTweet}
-              type="submit"
+              onClick={handlePostTweet}
               disabled={tweetMessage === "" && imageUrl === ""}
               sx={{
                 marginRight: 0.5,

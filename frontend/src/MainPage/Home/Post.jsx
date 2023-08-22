@@ -12,9 +12,6 @@ import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "./CurrentDateFormat";
 import { useNavigate } from "react-router-dom";
 
-// TODO - Create a Profile Page, redirect the profile page when the user clicks on the username
-// TODO - Text için show more ekleyeceğim, bunu yaparken de textin uzunluğuna göre ayarlayacağım.
-
 function Post({
   firstName,
   lastName,
