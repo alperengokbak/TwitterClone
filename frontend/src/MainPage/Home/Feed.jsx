@@ -22,17 +22,18 @@ function Feed() {
 
   const handlePosts = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/tweet?page=${currentPage}&pageSize=3`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const jsonData = await response.json();
+      const response = await axios.get(`http://localhost:3000/tweet`, {
+        params: {
+          page: currentPage,
+          pageSize: 3,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const jsonData = response.data;
         setPosts((prevPosts) => [...prevPosts, ...jsonData.items]);
         setShowMore(currentPage !== jsonData.totalPages);
       } else {
