@@ -10,9 +10,6 @@ import NavTabs from "./NavTabs";
 import axios from "axios";
 import ProfilePost from "./ProfilePost";
 
-/*
-TODO - image geç yükleniyor
-*/
 export const Profile = () => {
   const [userProfile, setUserProfile] = React.useState([]);
   const [userPosts, setUserPosts] = React.useState([]);

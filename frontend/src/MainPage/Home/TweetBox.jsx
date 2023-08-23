@@ -19,9 +19,6 @@ import { TweetBoxIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import axios from "axios";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
-// TODO - TweetBox'a resim ekleyip post atmadan siliyorum, aynı resmi bir daha ekleyemiyorum.
-// TODO - Refetch, cache nedir ? Ve bunlar nasıl çalışır ? Bir tanesini projeye implement et.
-
 function TweetBox({ postTweet }) {
   const [tweetMessage, setTweetMessage] = React.useState("");
   const [imageUrl, setImageUrl] = React.useState("");
@@ -38,6 +35,7 @@ function TweetBox({ postTweet }) {
   };
 
   const handleClearImage = () => {
+    fileInputRef.current.value = "";
     setImageUrl("");
   };
 

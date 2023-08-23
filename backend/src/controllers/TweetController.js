@@ -94,14 +94,27 @@ export const displayTweet = (req, res) => {
 };
 
 export const postTweets = (req, res) => {
+  const { firstname, lastname, username, profile_picture, is_verified } =
+    req.user;
   const { user_id, content, image_url } = req.body;
-  console.log(req.body);
   pool.query(postTweet, [user_id, content, image_url], (error, results) => {
     if (error) {
       console.error(error);
       return res.status(500).send("Internal Server Error!");
     }
-    return res.status(201).json(results.rows[0]);
+    return res.status(201).json({
+      user_id: results.rows[0].user_id,
+      content: results.rows[0].content,
+      image_url: results.rows[0].image_url,
+      creation_date: results.rows[0].creation_date,
+      likes: results.rows[0].likes,
+      retweets: results.rows[0].retweets,
+      firstname: firstname,
+      lastname: lastname,
+      username: username,
+      profile_picture: profile_picture,
+      is_verified: is_verified,
+    });
   });
 };
 export const likeTweet = (req, res) => {

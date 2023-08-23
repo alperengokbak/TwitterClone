@@ -28,9 +28,6 @@ export const App = () => {
     checkUser();
   }, []);
 
-  // TODO - Sidebar ve Widget ekrandan taşıyor.
-  // TODO - Profile sayfasını tamamla.
-  // TODO - Sidebar biraz küçük kaldı onu düzelt.
   if (user === undefined) {
     return null;
   }

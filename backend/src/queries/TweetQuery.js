@@ -1,8 +1,7 @@
 export const getTweet = "SELECT * FROM tweets";
 export const getTweetById1 = "SELECT * FROM tweets WHERE id = $1";
-// TODO - Add profile firstname, lastname..... inside of the postTweet quey.
 export const postTweet =
-  "INSERT INTO tweets (user_id , content, image_url,) VALUES ($1, $2, $3) RETURNING *";
+  "INSERT INTO tweets (user_id , content, image_url) VALUES ($1, $2, $3) RETURNING *";
 export const deleteTweet = "DELETE FROM tweets WHERE id = $1";
 
 export const displayUserPost =
