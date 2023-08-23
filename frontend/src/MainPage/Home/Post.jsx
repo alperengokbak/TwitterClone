@@ -12,6 +12,8 @@ import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "./CurrentDateFormat";
 import { useNavigate } from "react-router-dom";
 
+// TODO - Post attıktan hemen sonra beğeni yapılmıyor.
+// TODO - Retweet'i bitir.
 function Post({
   firstName,
   lastName,
@@ -133,7 +135,7 @@ function Post({
                   </Stack>
                 )}
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <Stack
                   direction="row"
                   justifyContent="space-between"

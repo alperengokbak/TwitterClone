@@ -16,7 +16,6 @@ import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import CloseIcon from "@mui/icons-material/Close";
 import { TweetBoxIcon } from "../Sidebar/TweetBoxAndPostIcons";
-import axios from "axios";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 function TweetBox({ postTweet }) {
@@ -39,12 +38,12 @@ function TweetBox({ postTweet }) {
     setImageUrl("");
   };
 
-  function handlePostTweet(e) {
+  const handlePostTweet = (e) => {
     e.preventDefault();
     postTweet(imageUrl, tweetMessage);
     setTweetMessage("");
     setImageUrl("");
-  }
+  };
 
   return (
     <Stack padding={1}>

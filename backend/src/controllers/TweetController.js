@@ -1,6 +1,5 @@
 import { pool } from "../../database.js";
 import {
-  getTweet,
   getTweetById1,
   deleteTweet,
   displayUserPost,
@@ -9,52 +8,42 @@ import {
   checkLike,
   checkLike2,
   likeTweets,
-  likeTweets2,
   unlikeTweets,
   likeDecrease,
   likeIncrease,
 } from "../queries/TweetQuery.js";
 
-export const getTweets = (req, res) => {
-  pool.query(getTweet, (error, results) => {
-    if (error) throw error;
-    res.status(200).json(results.rows);
-  });
-};
-
-export const getTweetById = (req, res) => {
-  const id = parseInt(req.params.id);
-  pool.query(getTweetById1, [id], (error, results) => {
-    if (error) res.status(500).send("Defined tweet not found!");
-    res.status(200).json(results.rows);
-  });
-};
-
-export const removeTweet = (req, res) => {
+export const deleteTweets = (req, res) => {
+  const user_id = req.user.id;
   const id = parseInt(req.params.id);
   pool.query(getTweetById1, [id], (error, results) => {
     if (error) {
-      res.status(500).send("Internal server error.");
-    } else {
-      if (results.rows.length) {
-        pool.query(deleteTweet, [id], (error, results) => {
-          if (error) {
-            res.status(500).send("Error deleting the tweet.");
-          } else {
-            res.status(200).send("Tweet deleted successfully.");
-          }
-        });
-      } else {
-        res.status(404).send("Tweet not found.");
-      }
+      console.error(error);
+      return res
+        .status(500)
+        .send("An error occurred while fetching the tweet.");
     }
+    if (results.rows.length === 0)
+      return res.status(404).send("Tweet not found.");
+    if (results.rows[0].user_id !== user_id)
+      return res
+        .status(401)
+        .send("You are not authorized to delete this tweet.");
+    pool.query(deleteTweet, [id], (error, results) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send("Error deleting the tweet.");
+      }
+      return res.status(200).send("Tweet deleted successfully.");
+    });
   });
 };
+
 export const paginationProcess = async (req, res) => {
   const user_id = req.user.id;
 
-  const page = req.query.page || 1;
-  const pageSize = req.query.pageSize || 3;
+  const page = req.query.page;
+  const pageSize = req.query.pageSize;
 
   try {
     const tweets = await pool.query(displayUserPost, [
@@ -86,13 +75,6 @@ export const paginationProcess = async (req, res) => {
   }
 };
 
-export const displayTweet = (req, res) => {
-  pool.query(displayUserPost, (error, results) => {
-    if (error) throw error;
-    res.status(200).json(results.rows);
-  });
-};
-
 export const postTweets = (req, res) => {
   const { firstname, lastname, username, profile_picture, is_verified } =
     req.user;
@@ -103,6 +85,7 @@ export const postTweets = (req, res) => {
       return res.status(500).send("Internal Server Error!");
     }
     return res.status(201).json({
+      tweet_id: results.rows[0].id,
       user_id: results.rows[0].user_id,
       content: results.rows[0].content,
       image_url: results.rows[0].image_url,

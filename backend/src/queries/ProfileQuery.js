@@ -22,7 +22,7 @@ export const getTweetCount = "SELECT COUNT(*) FROM tweets";
 export const checkLike = "SELECT tweet_id FROM likes WHERE user_id = $1";
 
 export const displayUserPost =
-  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id  ORDER BY creation_date DESC LIMIT $1 OFFSET $2";
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id WHERE u.id = $1 ORDER BY creation_date DESC";
 
 export const displayOwnPost =
   "SELECT t.id, t.content, t.creation_date, t.likes, t.retweets, t.image_url FROM tweets t INNER JOIN users u ON t.user_id = u.id WHERE u.id = $1 OR t.id IN (SELECT rt.tweet_id FROM retweets rt WHERE rt.user_id = $1) ORDER BY t.creation_date DESC";

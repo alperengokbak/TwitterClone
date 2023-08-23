@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
-// Bir postu beğenip, diğer postuda beğendiğinde isLiked true oluyor. Bu yüzden beğen butonu kırmızı oluyor. Ve düzelmiyor.
 function Feed() {
   const [posts, setPosts] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -20,18 +19,35 @@ function Feed() {
     handlePosts();
   }, [currentPage]);
 
+  const postTweet = async (imageUrl, tweet) => {
+    try {
+      const response = await axios.post("http://localhost:3000/tweet", {
+        user_id: user.id,
+        content: tweet,
+        image_url: imageUrl,
+      });
+      if (response.status === 201) {
+        console.log("Tweet posted successfully!");
+        setPosts((prevPosts) => [response.data, ...prevPosts]);
+        console.log(response.data);
+        console.log(posts);
+        console.log("prevPosts: ", posts);
+      } else {
+        console.error("Failed to post tweet");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
   const handlePosts = async () => {
     try {
       const response = await axios.get(`http://localhost:3000/tweet`, {
         params: {
           page: currentPage,
-          pageSize: 3,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
+          pageSize: 5,
         },
       });
-
       if (response.status === 200) {
         const jsonData = response.data;
         setPosts((prevPosts) => [...prevPosts, ...jsonData.items]);
@@ -44,37 +60,46 @@ function Feed() {
     }
   };
 
-  const postTweet = async (imageUrl, tweet) => {
-    try {
-      const response = await axios.post("http://localhost:3000/tweet", {
-        user_id: user.id,
-        content: tweet,
-        image_url: imageUrl,
-      });
+  const handleShowMore = async () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
 
-      if (response.status === 201) {
-        console.log("Tweet posted successfully!");
-        setPosts((prevPosts) => [response.data, ...prevPosts]);
+  const handleDeletePost = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/tweet/${id}/`);
+      if (response.status === 200) {
+        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
       }
     } catch (error) {
       console.error("An error occurred:", error);
     }
   };
 
-  const handleShowMore = async () => {
-    console.log("show more");
-    setCurrentPage((prevPage) => prevPage + 1);
+  const handleLikes = async (id) => {
+    await axios
+      .post(`http://localhost:3000/tweet/like`, {
+        user_id: user.id,
+        tweet_id: id,
+      })
+      .then((res) => {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: true,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const handleDeletePost = async (id) => {
-    await axios
-      .delete(`http://localhost:3000/tweet/${id}/`)
-      .then((res) => {
-        setDeletePost(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
   const handleUnlike = async (id) => {
     await axios
       .delete(`http://localhost:3000/tweet/unlike`, {
@@ -102,30 +127,6 @@ function Feed() {
       });
   };
 
-  const handleLikes = async (id) => {
-    await axios
-      .post(`http://localhost:3000/tweet/like`, {
-        user_id: user.id,
-        tweet_id: id,
-      })
-      .then((res) => {
-        setPosts((prevPosts) =>
-          prevPosts.map((post) => {
-            if (post.id === id) {
-              return {
-                ...post,
-                likes: res.data.likes,
-                liked: true,
-              };
-            }
-            return post;
-          })
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const handleRetweet = async () => {};
 
   return (

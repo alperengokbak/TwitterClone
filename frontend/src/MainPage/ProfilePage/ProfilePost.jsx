@@ -24,6 +24,10 @@ function ProfilePost({
   image_url,
   id,
   isLiked,
+  handleDeletePost,
+  handleLikePost,
+  handleUnlikePost,
+  handleRetweet,
 }) {
   return (
     <Stack>
@@ -41,55 +45,59 @@ function ProfilePost({
               src={profile_picture}
             />
           </Grid>
-          <Grid item>
-            <Grid item xs={12} direction="column" spacing={1.5}>
-              <Grid item xs={12}>
-                <Stack flexDirection="row">
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      fontWeight: "bold",
-                      fontSize: "15px",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {firstName} {lastName}
-                    {is_verified ? (
-                      <Verified
-                        sx={{
-                          marginLeft: "5px",
-                          color: "#1DA1F2",
-                          width: "15px",
-                          height: "15px",
-                          cursor: "pointer",
-                        }}
-                      />
-                    ) : null}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    component="span"
-                    alignItems="center"
-                    sx={{
-                      color: "gray",
-                      fontSize: "14px",
-                      fontWeight: "400",
-                      cursor: "pointer",
-                      marginLeft: is_verified ? "1px" : "5px",
-                      marginRight: "1vw",
-                    }}
-                  >
-                    @{username} · {CurrentDateFormat(creation_date)}
-                  </Typography>
-                  <MoreHorizIcon
-                    sx={{
-                      marginLeft: "9vw",
-                    }}
-                    className="more_postScreen"
-                    /* onClick={() => handleDeletePost(id)} */
-                  />
+          <Grid item xs>
+            <Grid container xs direction="column" spacing={1.5}>
+              <Grid item>
+                <Stack flexDirection="row" justifyContent="space-between">
+                  <Stack flexDirection="row">
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: "15px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {firstName} {lastName}
+                      {is_verified ? (
+                        <Verified
+                          sx={{
+                            marginLeft: "5px",
+                            color: "#1DA1F2",
+                            width: "15px",
+                            height: "15px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      ) : null}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      component="span"
+                      alignItems="center"
+                      sx={{
+                        color: "gray",
+                        fontSize: "14px",
+                        fontWeight: "400",
+                        cursor: "pointer",
+                        marginLeft: is_verified ? "1px" : "5px",
+                        marginRight: "1vw",
+                      }}
+                    >
+                      @{username} · {CurrentDateFormat(creation_date)}
+                    </Typography>
+                  </Stack>
+                  <Stack>
+                    <MoreHorizIcon
+                      sx={{
+                        marginLeft: "9vw",
+                      }}
+                      className="more_postScreen"
+                      onClick={() => handleDeletePost(id)}
+                    />
+                  </Stack>
                 </Stack>
                 <Typography
                   variant="body2"
@@ -132,19 +140,19 @@ function ProfilePost({
                     text="Retweet"
                     Icon={RepeatIcon}
                     retweets={retweets}
-                    /* handleRetweet={() => handleRetweet()} */
+                    handleRetweet={() => handleRetweet()}
                   />
                   <PostComponentIcon
                     text="Like"
                     Icon={isLiked ? FavoriteIcon : FavoriteBorderIcon}
                     likes={likes}
-                    /* handleLikePost={() => {
+                    handleLikePost={() => {
                       if (isLiked) {
                         handleUnlikePost(id);
                       } else {
                         handleLikePost(id);
                       }
-                    }} */
+                    }}
                   />
                   <PostComponentIcon text="View" Icon={BarChartIcon} />
                   <PostComponentIcon text="Upload" Icon={UploadIcon} />

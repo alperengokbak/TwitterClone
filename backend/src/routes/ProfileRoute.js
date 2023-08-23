@@ -1,15 +1,14 @@
 import Router from "express";
 import {
   getUserInformation,
-  getUserOwnPost,
+  getUserPosts,
 } from "../controllers/ProfileController.js";
 import { isAuthorized } from "../middleware.js";
 
 const router = Router();
 router.use(isAuthorized);
 
-router.get("/:id", getUserInformation);
-router.get("/pagination", getUserInformation);
-router.get("/profilePost/:id", getUserOwnPost);
+router.get("/", getUserInformation);
+router.get("/post", getUserPosts);
 
 export default router;

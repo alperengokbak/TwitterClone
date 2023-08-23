@@ -4,41 +4,127 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
+import Verified from "@mui/icons-material/Verified";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 import { Link } from "react-router-dom";
 import NavTabs from "./NavTabs";
 import axios from "axios";
 import ProfilePost from "./ProfilePost";
 
+// TODO - Edit profile butonu çalışmıyor.
+// TODO - Navbar'ı ayarla
+// TODO - User'a background image, okul, iş ekle, ve bunları edit profile içinden database'e gönder.
+// TODO - link ile modal açılır mı bak.
+
 export const Profile = () => {
-  const [userProfile, setUserProfile] = React.useState([]);
+  const [userInformation, setUserInformation] = React.useState({}); // [userInformation, setUserInformation
   const [userPosts, setUserPosts] = React.useState([]);
   const { user } = React.useContext(AuthContext);
   axios.defaults.headers.common[
     "Authorization"
   ] = `Bearer ${localStorage.getItem("token")}`;
 
-  const handleUserInformation = async () => {
-    await axios
-      .get(`http://localhost:3000/profile/${user.id}`)
-      .then((response) => {
-        setUserProfile(response.data);
-      });
-  };
   React.useEffect(() => {
     handleUserInformation();
     handleUserPosts();
   }, []);
-  console.log(userProfile);
-  console.log(userProfile[0]?.profile_picture);
 
-  const handleUserPosts = async () => {};
+  const handleUserInformation = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/profile");
+      if (response.status === 200) {
+        setUserInformation(response.data);
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
+  const handleUserPosts = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/profile/post");
+      if (response.status === 200) {
+        const jsonData = response.data;
+        setUserPosts((prevPosts) => [...prevPosts, ...jsonData.items]);
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
+  const handleDeletePost = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/tweet/${id}/`);
+      if (response.status === 200) {
+        setUserPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
+  const handleLikes = async (id) => {
+    await axios
+      .post(`http://localhost:3000/tweet/like`, {
+        user_id: user.id,
+        tweet_id: id,
+      })
+      .then((res) => {
+        setUserPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: true,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleUnlike = async (id) => {
+    await axios
+      .delete(`http://localhost:3000/tweet/unlike`, {
+        data: {
+          user_id: user.id,
+          tweet_id: id,
+        },
+      })
+      .then((res) => {
+        setUserPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: false,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleRetweet = async () => {};
 
   return (
     <Grid
-      container
       sx={{
-        flexDirection: "column",
+        flexDirection: "row",
         height: "100vh",
         overflowY: "scroll",
         minWidth: "fit-content",
@@ -114,7 +200,7 @@ export const Profile = () => {
                 >
                   <Avatar
                     alt="Alperen Gokbak"
-                    src={userProfile[0]?.profile_picture}
+                    src={userInformation[0]?.profile_picture}
                     sx={{
                       transform: "translateX(-50%) translateY(-50%)",
                       top: "-5px",
@@ -130,7 +216,10 @@ export const Profile = () => {
                     }}
                   />
                   <Link
-                    to="/settings/profile"
+                    to="#"
+                    onClick={() => {
+                      console.log("Edit Profile");
+                    }}
                     className="editProfileButton"
                     style={{
                       display: "flex",
@@ -175,7 +264,19 @@ export const Profile = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    {userProfile[0]?.firstname} {userProfile[0]?.lastname}
+                    {userInformation[0]?.firstname}{" "}
+                    {userInformation[0]?.lastname}
+                    {userInformation[0]?.is_verified ? (
+                      <Verified
+                        sx={{
+                          marginLeft: "5px",
+                          color: "#1DA1F2",
+                          width: "15px",
+                          height: "15px",
+                          cursor: "pointer",
+                        }}
+                      />
+                    ) : null}
                   </Typography>
                   <Typography
                     variant="span"
@@ -185,7 +286,7 @@ export const Profile = () => {
                       mb: 2,
                     }}
                   >
-                    @{userProfile[0]?.username}
+                    @{userInformation[0]?.username}
                   </Typography>
                   <Typography variant="body1" fontSize="15px">
                     Yasar University / Software Engineering
@@ -216,13 +317,10 @@ export const Profile = () => {
                     />
                     <Typography variant="body1" fontSize="15px">
                       Joined{" "}
-                      {new Date(user?.creation_date).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "long",
-                        }
-                      )}
+                      {new Date().toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                      })}
                     </Typography>
                   </Stack>
                   <Stack flexDirection="row" alignItems="center">
@@ -240,7 +338,7 @@ export const Profile = () => {
                         alignItems: "center",
                       }}
                     >
-                      Born {userProfile[0]?.birthday.split("T")[0]}
+                      Born {userInformation[0]?.birthday.split("T")[0]}
                     </Typography>
                   </Stack>
                 </Stack>
@@ -254,7 +352,7 @@ export const Profile = () => {
           <Grid item xs={12}>
             {/*Downside Navbar(Profile Posts)*/}
             <Stack>
-              {userProfile.map((post) => (
+              {userPosts.map((post) => (
                 <ProfilePost
                   key={post.id}
                   firstName={post.firstname}
@@ -269,10 +367,10 @@ export const Profile = () => {
                   image_url={post.image_url}
                   id={post.id}
                   isLiked={post.liked}
-                  /* handleDeletePost={handleDeletePost}
+                  handleDeletePost={handleDeletePost}
                   handleLikePost={handleLikes}
                   handleUnlikePost={handleUnlike}
-                  handleRetweet={handleRetweet} */
+                  handleRetweet={handleRetweet}
                 />
               ))}
             </Stack>

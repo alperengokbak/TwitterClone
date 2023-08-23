@@ -1,4 +1,3 @@
-import { parse } from "dotenv";
 import { pool } from "../../database.js";
 import {
   userInformation,
@@ -9,37 +8,25 @@ import {
 } from "../queries/ProfileQuery.js";
 
 export const getUserInformation = (req, res) => {
-  /* const { id } = req.body; */
-  const id = parseInt(req.params.id);
+  const { id } = req.user;
   pool.query(userInformation, [id], (error, results) => {
     if (error) throw error;
-    res.status(200).json(results.rows);
+    return res.status(200).json(results.rows);
   });
 };
 
-export const getUserOwnPost = (req, res) => {
+/* export const getUserOwnPost = (req, res) => {
   const { id } = parseInt(req.params.id);
   pool.query(displayOwnPost, [id], (error, results) => {
     if (error) throw error;
     res.status(200).json(results.rows);
   });
-};
+}; */
 
-export const paginationProcess = async (req, res) => {
+export const getUserPosts = async (req, res) => {
   const user_id = req.user.id;
-
-  const page = req.query.page || 1;
-  const pageSize = req.query.pageSize || 3;
-
   try {
-    const tweets = await pool.query(displayUserPost, [
-      pageSize,
-      (page - 1) * pageSize,
-    ]);
-
-    const totalCountResult = await pool.query(getTweetCount);
-    const totalCount = parseInt(totalCountResult.rows[0].count, 10);
-    const totalPages = Math.ceil(totalCount / pageSize);
+    const tweets = await pool.query(displayUserPost, [user_id]);
     const likedTweets = await pool.query(checkLike, [user_id]);
 
     tweets.rows.map((tweet) => {
@@ -53,7 +40,6 @@ export const paginationProcess = async (req, res) => {
     });
     return res.json({
       items: tweets.rows,
-      totalPages: totalPages,
     });
   } catch (error) {
     console.error("Error fetching tweets:", error);

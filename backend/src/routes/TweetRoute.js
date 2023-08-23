@@ -1,8 +1,7 @@
 import Router from "express";
 import {
-  getTweetById,
   postTweets,
-  removeTweet,
+  deleteTweets,
   paginationProcess,
   likeTweet,
   unlikeTweet,
@@ -16,7 +15,6 @@ router.get("/", paginationProcess);
 router.post("/like", likeTweet);
 router.delete("/unlike", unlikeTweet);
 router.post("/", postTweets);
-router.get("/:id", getTweetById);
-router.delete("/:id", removeTweet);
+router.delete("/:id", deleteTweets);
 
 export default router;

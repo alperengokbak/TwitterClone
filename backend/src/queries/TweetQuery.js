@@ -9,9 +9,6 @@ export const displayUserPost =
 
 export const getTweetCount = "SELECT COUNT(*) FROM tweets";
 
-export const likeTweets2 =
-  "INSERT INTO likes (user_id, tweet_id)SELECT $1, $2 WHERE NOT EXISTS (SELECT 1 FROM likes WHERE user_id = $1 AND tweet_id = $2)RETURNING tweet_id";
-
 export const likeIncrease =
   "UPDATE tweets SET likes = likes + 1 WHERE id = $1 RETURNING *";
 
