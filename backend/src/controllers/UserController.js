@@ -25,7 +25,7 @@ export const login = (req, res) => {
               { id: results.rows[0].id },
               "jwt-secret-key",
               {
-                expiresIn: "1d",
+                expiresIn: "7d",
               }
             );
             return res.json({
@@ -123,6 +123,7 @@ export const checkUser = (req, res) => {
           username: results.rows[0].username,
           email: results.rows[0].email,
           profile_picture: results.rows[0].profile_picture,
+          is_verified: results.rows[0].is_verified,
         },
       });
     });

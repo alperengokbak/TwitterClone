@@ -9,6 +9,7 @@ import RepeatIcon from "@mui/icons-material/Repeat";
 import UploadIcon from "@mui/icons-material/Upload";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
+import { CurrentDateFormat } from "../Home/CurrentDateFormat";
 
 function ProfilePost({
   firstName,
@@ -80,7 +81,7 @@ function ProfilePost({
                       marginRight: "1vw",
                     }}
                   >
-                    @{username} · {/* {CurrentDateFormat(creation_date)} */}
+                    @{username} · {CurrentDateFormat(creation_date)}
                   </Typography>
                   <MoreHorizIcon
                     sx={{
