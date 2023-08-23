@@ -50,8 +50,8 @@ function Post({
               }}
             />
           </Grid>
-          <Grid item sm container>
-            <Grid item xs container direction="column" spacing={1.5}>
+          <Grid item xs>
+            <Grid container xs direction="column" spacing={1.5}>
               <Grid item>
                 <Stack flexDirection="row" justifyContent="space-between">
                   <Stack flexDirection="row">
