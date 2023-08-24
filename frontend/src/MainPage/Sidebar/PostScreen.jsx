@@ -24,24 +24,22 @@ export const PostScreen = () => {
   const handleClose = () => setOpen(false);
 
   return (
-    <>
-      <Stack
-        marginTop={"15px"}
-        borderRadius="30px"
-        textTransform={"inherit"}
-        border={"none"}
-        marginLeft={isDesktop ? "0px" : "4px"}
-      >
-        {isDesktop ? (
-          <Button variant="contained" fullWidth onClick={handleOpen}>
-            Post
-          </Button>
-        ) : (
-          <IconButton aria-label="send" title="Send" onClick={handleOpen}>
-            <SendIcon />
-          </IconButton>
-        )}
-      </Stack>
+    <Stack
+      marginTop={"15px"}
+      borderRadius="30px"
+      textTransform={"inherit"}
+      border={"none"}
+      marginLeft={isDesktop ? "0px" : "4px"}
+    >
+      {isDesktop ? (
+        <Button variant="contained" fullWidth onClick={handleOpen}>
+          Post
+        </Button>
+      ) : (
+        <IconButton aria-label="send" title="Send" onClick={handleOpen}>
+          <SendIcon />
+        </IconButton>
+      )}
       <Modal
         open={open}
         onClose={handleClose}
@@ -52,6 +50,6 @@ export const PostScreen = () => {
           <TweetBoxForPostScreen />
         </Box>
       </Modal>
-    </>
+    </Stack>
   );
 };

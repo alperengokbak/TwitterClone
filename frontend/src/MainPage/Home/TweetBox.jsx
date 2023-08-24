@@ -92,7 +92,6 @@ function TweetBox({ postTweet }) {
                   <CardMedia
                     component="img"
                     src={imageUrl}
-                    image={imageUrl}
                     alt="Image"
                     sx={{
                       cursor: "pointer",

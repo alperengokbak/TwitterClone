@@ -1,5 +1,13 @@
 import React from "react";
-import { Grid, Stack, Typography, SvgIcon, Avatar } from "@mui/material";
+import {
+  Grid,
+  Stack,
+  Typography,
+  SvgIcon,
+  Avatar,
+  Modal,
+  Box,
+} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -10,16 +18,17 @@ import { Link } from "react-router-dom";
 import NavTabs from "./NavTabs";
 import axios from "axios";
 import ProfilePost from "./ProfilePost";
+import { EditProfile } from "./EditProfile";
 
-// TODO - Edit profile butonu çalışmıyor.
-// TODO - Navbar'ı ayarla
 // TODO - User'a background image, okul, iş ekle, ve bunları edit profile içinden database'e gönder.
-// TODO - link ile modal açılır mı bak.
 
 export const Profile = () => {
-  const [userInformation, setUserInformation] = React.useState({}); // [userInformation, setUserInformation
+  const [userInformation, setUserInformation] = React.useState({});
   const [userPosts, setUserPosts] = React.useState([]);
   const { user } = React.useContext(AuthContext);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   axios.defaults.headers.common[
     "Authorization"
   ] = `Bearer ${localStorage.getItem("token")}`;
@@ -123,12 +132,12 @@ export const Profile = () => {
 
   return (
     <Grid
+      flexDirection="row"
+      height="100vh"
+      overflow="scroll"
+      minWidth="fit-content"
+      webkitoverflowscrolling="touch"
       sx={{
-        flexDirection: "row",
-        height: "100vh",
-        overflowY: "scroll",
-        minWidth: "fit-content",
-        WebkitOverflowScrolling: "touch",
         "&::-webkit-scrollbar": {
           display: "none",
         },
@@ -218,9 +227,8 @@ export const Profile = () => {
                   <Link
                     to="#"
                     onClick={() => {
-                      console.log("Edit Profile");
+                      handleOpen();
                     }}
-                    className="editProfileButton"
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -246,15 +254,12 @@ export const Profile = () => {
                       borderBottomColor: "rgb(207, 217, 222)",
                       borderLeftColor: "rgb(207, 217, 222)",
                       borderRadius: "24px",
+                      color: "#000000",
+                      fontSize: "15px",
+                      fontWeight: "bold",
                     }}
                   >
-                    <Typography
-                      variant="body2"
-                      color="#000000"
-                      fontWeight="bold"
-                    >
-                      Edit profile
-                    </Typography>
+                    Edit profile
                   </Link>
                 </Stack>
                 <Stack flexDirection="column" m="24px 0px 8px 16px">
@@ -377,6 +382,23 @@ export const Profile = () => {
           </Grid>
         </Grid>
       </Grid>
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "600px",
+            height: "650px",
+            bgcolor: "background.paper",
+            borderRadius: "20px",
+            boxShadow: 24,
+          }}
+        >
+          <EditProfile handleClose={handleClose} />
+        </Box>
+      </Modal>
     </Grid>
   );
 };

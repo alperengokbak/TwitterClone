@@ -5,7 +5,7 @@ import { Button, Grid, Stack } from "@mui/material";
 
 export const Verified = ({ handleClose }) => {
   return (
-    <>
+    <Stack>
       <CloseIcon
         sx={{
           position: "absolute",
@@ -173,6 +173,6 @@ export const Verified = ({ handleClose }) => {
           </Typography>
         </Stack>
       </Grid>
-    </>
+    </Stack>
   );
 };
