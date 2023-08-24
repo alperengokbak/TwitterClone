@@ -1,5 +1,5 @@
 export const userInformation =
-  "SELECT firstname, lastname, username, profile_picture, birthday, is_verified FROM users WHERE id = $1";
+  "SELECT firstname, lastname, username, profile_picture, birthday, is_verified, profile_wallpaper FROM users WHERE id = $1";
 export const updateProfile =
   "UPDATE users SET firstname = $1, lastname = $2, username = $3, email = $4, profile_picture = $5, birthday = $6 WHERE id = $7";
 export const updatePassword = "UPDATE users SET password = $1 WHERE id = $2";

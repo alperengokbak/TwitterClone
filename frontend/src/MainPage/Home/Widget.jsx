@@ -43,6 +43,9 @@ export const Widget = () => {
         borderLeft: "2px solid #e6ecf0",
         maxHeight: "100vh",
         overflowY: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
       }}
     >
       <Grid item xs={12}>
@@ -65,15 +68,21 @@ export const Widget = () => {
           }}
         />
       </Grid>
-      <Grid item xs={12} maxHeight="calc(100vh - 58px)" overflow="scroll">
+      <Grid
+        item
+        xs={12}
+        maxHeight="calc(100vh - 58px)"
+        sx={{
+          overflow: "scroll",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
         <Paper
           sx={{
             backgroundColor: "#f5f8fa",
             borderRadius: "15px",
-
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
           }}
         >
           <Typography

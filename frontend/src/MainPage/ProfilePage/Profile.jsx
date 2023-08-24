@@ -185,7 +185,7 @@ export const Profile = () => {
               <Grid item xs={12}>
                 {/*Profile Background Image*/}
                 <img
-                  src="IMG_4884.jpeg"
+                  src={userInformation[0]?.profile_picture}
                   style={{
                     objectFit: "cover",
                     width: "100%",
@@ -330,7 +330,7 @@ export const Profile = () => {
                   </Stack>
                   <Stack flexDirection="row" alignItems="center">
                     {userInformation[0]?.birthday ? (
-                      <Stack>
+                      <Stack flexDirection="row">
                         <ChildCareIcon
                           sx={{
                             fontSize: "15px",
@@ -345,7 +345,7 @@ export const Profile = () => {
                             alignItems: "center",
                           }}
                         >
-                          Born ${userInformation[0]?.birthday.split("T")[0]}
+                          Born {userInformation[0]?.birthday.split("T")[0]}
                         </Typography>
                       </Stack>
                     ) : null}
