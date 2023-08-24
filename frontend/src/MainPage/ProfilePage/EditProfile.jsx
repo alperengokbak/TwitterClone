@@ -28,7 +28,7 @@ export const EditProfile = ({ handleClose }) => {
   return (
     <Grid
       container
-      sflexDirection="row"
+      flexDirection="row"
       height="64vh"
       overflow="scroll"
       webkitoverflowscrolling="touch"

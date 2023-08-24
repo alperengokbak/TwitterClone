@@ -25,7 +25,9 @@ export const getUserInformation = (req, res) => {
 
 export const getUserPosts = async (req, res) => {
   const user_id = req.user.id;
+  const countTweet = "SELECT COUNT(*) FROM tweets WHERE user_id = $1";
   try {
+    const countTweets = await pool.query(countTweet, [user_id]);
     const tweets = await pool.query(displayUserPost, [user_id]);
     const likedTweets = await pool.query(checkLike, [user_id]);
 
@@ -40,6 +42,7 @@ export const getUserPosts = async (req, res) => {
     });
     return res.json({
       items: tweets.rows,
+      count: countTweets.rows[0].count,
     });
   } catch (error) {
     console.error("Error fetching tweets:", error);

@@ -35,7 +35,7 @@ export default function RegisterScreen() {
       password: data.get("password"),
     });
 
-    fetch("http://localhost:3000/register", {
+    fetch("http://localhost:3000/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

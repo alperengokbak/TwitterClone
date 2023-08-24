@@ -28,9 +28,26 @@ function TweetBox({ postTweet }) {
     fileInputRef.current.click();
   };
 
-  const handleFileSelected = (event) => {
-    const selectedFile = event.target.files[0];
-    selectedFile && setImageUrl(URL.createObjectURL(selectedFile));
+  const handleFileSelected = async (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("upload_preset", "rdasu5f6");
+
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dsruzqnhp/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      const uploadedImageUrl = data.secure_url;
+
+      setImageUrl(uploadedImageUrl);
+    }
   };
 
   const handleClearImage = () => {
@@ -38,11 +55,17 @@ function TweetBox({ postTweet }) {
     setImageUrl("");
   };
 
-  const handlePostTweet = (e) => {
+  const handlePostTweet = async (e) => {
     e.preventDefault();
-    postTweet(imageUrl, tweetMessage);
-    setTweetMessage("");
-    setImageUrl("");
+
+    if (imageUrl) {
+      postTweet(imageUrl, tweetMessage);
+      setTweetMessage("");
+      setImageUrl("");
+    } else {
+      postTweet(null, tweetMessage);
+      setTweetMessage("");
+    }
   };
 
   return (
@@ -60,7 +83,7 @@ function TweetBox({ postTweet }) {
             alt="Alperen Gokbak"
             src={user.profile_picture}
           />
-          <Stack direction={"column"}>
+          <Stack direction={"column"} width="100%">
             <TextField
               variant="standard"
               InputProps={{
@@ -71,8 +94,10 @@ function TweetBox({ postTweet }) {
               onChange={(e) => setTweetMessage(e.target.value)}
               rows={2}
               multiline
+              fullWidth
               sx={{
-                marginLeft: 3,
+                marginLeft: 2,
+                marginRight: 3,
                 fontSize: "20px",
               }}
             />
@@ -137,7 +162,7 @@ function TweetBox({ postTweet }) {
             <Button
               variant="contained"
               onClick={handlePostTweet}
-              disabled={tweetMessage === "" && imageUrl === ""}
+              disabled={!tweetMessage && !imageUrl}
               sx={{
                 marginRight: 0.5,
               }}

@@ -26,12 +26,10 @@ function Feed() {
         content: tweet,
         image_url: imageUrl,
       });
+
       if (response.status === 201) {
         console.log("Tweet posted successfully!");
         setPosts((prevPosts) => [response.data, ...prevPosts]);
-        console.log(response.data);
-        console.log(posts);
-        console.log("prevPosts: ", posts);
       } else {
         console.error("Failed to post tweet");
       }
@@ -72,6 +70,7 @@ function Feed() {
       }
     } catch (error) {
       console.error("An error occurred:", error);
+      alert("You cannot delete another user's tweet!");
     }
   };
 

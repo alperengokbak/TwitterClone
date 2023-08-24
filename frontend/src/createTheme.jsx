@@ -163,6 +163,25 @@ export const SidebarTheme = createTheme({
           },
         },
         {
+          props: { "aria-label": "closeForPostScreen" },
+          style: {
+            color: colors.primary,
+            backgroundColor: "rgba(15, 20, 25, 0.75)",
+            position: "absolute",
+            backdropFilter: "blur(4px)",
+            height: "32px",
+            width: "32px",
+            outline: "none",
+            top: 8,
+            right: 8,
+            transition:
+              "background-color 0.2s ease-in-out,box-shadow 0.2s ease-in-out",
+            "&:hover": {
+              backgroundColor: "rgba(39, 44, 48, 0.75)",
+            },
+          },
+        },
+        {
           props: { "aria-label": "SidebarIconsForMobile" },
           style: {
             fontSize: "27",

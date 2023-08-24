@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 // TODO - Post attıktan hemen sonra beğeni yapılmıyor.
 // TODO - Retweet'i bitir.
+
 function Post({
   firstName,
   lastName,
@@ -53,7 +54,7 @@ function Post({
             />
           </Grid>
           <Grid item xs>
-            <Grid container xs direction="column" spacing={1.5}>
+            <Grid container direction="column" spacing={1.5} width="100%">
               <Grid item>
                 <Stack flexDirection="row" justifyContent="space-between">
                   <Stack flexDirection="row">

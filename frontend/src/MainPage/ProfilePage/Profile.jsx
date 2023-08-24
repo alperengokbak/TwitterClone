@@ -20,11 +20,10 @@ import axios from "axios";
 import ProfilePost from "./ProfilePost";
 import { EditProfile } from "./EditProfile";
 
-// TODO - User'a background image, okul, iş ekle, ve bunları edit profile içinden database'e gönder.
-
 export const Profile = () => {
   const [userInformation, setUserInformation] = React.useState({});
   const [userPosts, setUserPosts] = React.useState([]);
+  const [userPostsCount, setUserPostsCount] = React.useState(0);
   const { user } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -57,6 +56,7 @@ export const Profile = () => {
       if (response.status === 200) {
         const jsonData = response.data;
         setUserPosts((prevPosts) => [...prevPosts, ...jsonData.items]);
+        setUserPostsCount(jsonData.count);
       } else {
         console.error("Failed to fetch data");
       }
@@ -172,7 +172,7 @@ export const Profile = () => {
                 mb: 0.5,
               }}
             >
-              6 posts
+              {userPostsCount} Tweets
             </Typography>
           </Stack>
         </Stack>
@@ -329,22 +329,26 @@ export const Profile = () => {
                     </Typography>
                   </Stack>
                   <Stack flexDirection="row" alignItems="center">
-                    <ChildCareIcon
-                      sx={{
-                        fontSize: "15px",
-                        color: "#808080",
-                        mr: 0.5,
-                      }}
-                    />
-                    <Typography
-                      variant="body1"
-                      fontSize="15px"
-                      sx={{
-                        alignItems: "center",
-                      }}
-                    >
-                      Born {userInformation[0]?.birthday.split("T")[0]}
-                    </Typography>
+                    {userInformation[0]?.birthday ? (
+                      <Stack>
+                        <ChildCareIcon
+                          sx={{
+                            fontSize: "15px",
+                            color: "#808080",
+                            mr: 0.5,
+                          }}
+                        />
+                        <Typography
+                          variant="body1"
+                          fontSize="15px"
+                          sx={{
+                            alignItems: "center",
+                          }}
+                        >
+                          Born ${userInformation[0]?.birthday.split("T")[0]}
+                        </Typography>
+                      </Stack>
+                    ) : null}
                   </Stack>
                 </Stack>
               </Grid>
