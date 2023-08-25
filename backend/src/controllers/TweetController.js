@@ -11,9 +11,12 @@ import {
   unlikeTweets,
   likeDecrease,
   likeIncrease,
-  getRetweetById1,
-  removeRetweets,
-  getRetweetUserContent,
+  checkRetweet,
+  checkRetweet2,
+  retweet,
+  undoRetweet,
+  retweetIncrease,
+  retweetDecrease,
 } from "../queries/TweetQuery.js";
 
 export const deleteTweets = (req, res) => {
@@ -58,6 +61,7 @@ export const paginationProcess = async (req, res) => {
     const totalCount = parseInt(totalCountResult.rows[0].count, 10);
     const totalPages = Math.ceil(totalCount / pageSize);
     const likedTweets = await pool.query(checkLike, [user_id]);
+    const retweetedTweets = await pool.query(checkRetweet2, [user_id]);
 
     tweets.rows.map((tweet) => {
       if (likedTweets.rows.length) {
@@ -67,7 +71,15 @@ export const paginationProcess = async (req, res) => {
       } else {
         tweet.liked = false;
       }
+      if (retweetedTweets.rows.length) {
+        tweet.retweeted = retweetedTweets.rows.some(
+          (retweetedTweet) => retweetedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.retweeted = false;
+      }
     });
+
     return res.json({
       items: tweets.rows,
       totalPages: totalPages,
@@ -88,7 +100,7 @@ export const postTweets = (req, res) => {
       return res.status(500).send("Internal Server Error!");
     }
     return res.status(201).json({
-      tweet_id: results.rows[0].id,
+      id: results.rows[0].id,
       user_id: results.rows[0].user_id,
       content: results.rows[0].content,
       image_url: results.rows[0].image_url,
@@ -108,7 +120,7 @@ export const likeTweet = (req, res) => {
   pool.query(checkLike2, [user_id, tweet_id], (error, results) => {
     if (error) return res.status(500).send("Internal Server Error!");
     if (results.rowCount === 0) {
-      pool.query(likeTweets, [user_id, tweet_id]).then((results, error) => {
+      pool.query(likeTweets, [user_id, tweet_id], (error, results) => {
         if (error) return res.status(500).send("Internal Server Error!");
         if (results.rowCount === 1) {
           pool.query(likeIncrease, [tweet_id], (error, results) => {
@@ -145,43 +157,44 @@ export const unlikeTweet = (req, res) => {
   });
 };
 
-export const getRetweetById = (req, res) => {
-  const id = parseInt(req.params.id);
-  pool.query(getRetweetById1, [id], (error, results) => {
-    if (error) {
-      throw error;
+export const handleRetweets = (req, res) => {
+  const { user_id, tweet_id } = req.body;
+  pool.query(checkRetweet, [user_id, tweet_id], (error, results) => {
+    if (error) return res.status(500).send("Internal Server Error!");
+    if (results.rowCount === 0) {
+      pool.query(retweet, [user_id, tweet_id]).then((results, error) => {
+        if (error) return res.status(500).send("Internal Server Error!");
+        if (results.rowCount === 1) {
+          pool.query(retweetIncrease, [tweet_id], (error, results) => {
+            if (error) return res.status(500).send("Internal Server Error!");
+            res.status(200).json(results.rows[0]);
+          });
+        }
+      });
+    } else {
+      res.status(200).send(`Tweet already retweeted `);
     }
-    res.status(200).json(results.rows);
   });
 };
 
 export const deleteRetweets = (req, res) => {
-  const id = parseInt(req.params.id);
-  pool.query(getRetweetById1, [id], (error, results) => {
-    if (error) {
-      res.status(500).send("Internal server error.");
+  const { user_id, tweet_id } = req.body;
+  pool.query(checkRetweet, [user_id, tweet_id], (error, results) => {
+    if (error) return res.status(500).send("Internal Server Error!");
+    if (results.rowCount !== 0) {
+      pool.query(undoRetweet, [user_id, tweet_id], (error, results) => {
+        if (error) return res.status(500).send("Internal Server Error!");
+        if (results.rowCount === 1) {
+          pool.query(retweetDecrease, [tweet_id], (error, results) => {
+            if (error) return res.status(500).send("Internal Server Error!");
+            res.status(200).json(results.rows[0]);
+          });
+        } else if (results.rowCount === 0) {
+          return res.status(404).json({ status: "Tweet not found" });
+        }
+      });
     } else {
-      if (results.rows.length > 0) {
-        pool.query(removeRetweets, [id], (error, results) => {
-          if (error) {
-            res.status(500).send("Internal server error.");
-          } else {
-            res.status(200).send(`Like deleted with ID: ${id}`);
-          }
-        });
-      } else {
-        res.status(404).send("Not found.");
-      }
+      return res.status(200).send(`Tweet already retweeted `);
     }
-  });
-};
-
-export const getRetweetsUserContent = (req, res) => {
-  const { user_id } = req.body;
-  pool.query(getRetweetUserContent, [user_id], (error, results) => {
-    if (error) {
-      throw error;
-    }
-    res.status(200).json(results.rows);
   });
 };

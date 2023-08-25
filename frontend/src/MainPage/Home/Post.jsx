@@ -28,10 +28,12 @@ function Post({
   image_url,
   id,
   isLiked,
+  isRetweeted,
   handleDeletePost,
   handleLikePost,
   handleUnlikePost,
   handleRetweet,
+  handleRemoveRetweet,
 }) {
   const navigate = useNavigate();
   return (
@@ -151,7 +153,13 @@ function Post({
                     text="Retweet"
                     Icon={RepeatIcon}
                     retweets={retweets}
-                    handleRetweet={() => handleRetweet()}
+                    handleRetweet={() => {
+                      if (isRetweeted) {
+                        handleRemoveRetweet(id);
+                      } else {
+                        handleRetweet(id);
+                      }
+                    }}
                   />
                   <PostComponentIcon
                     text="Like"

@@ -5,8 +5,8 @@ import {
   paginationProcess,
   likeTweet,
   unlikeTweet,
+  handleRetweets,
   deleteRetweets,
-  getRetweetsUserContent,
 } from "../controllers/TweetController.js";
 import { isAuthorized } from "../middleware.js";
 
@@ -14,11 +14,11 @@ const router = Router();
 router.use(isAuthorized);
 
 router.get("/", paginationProcess);
+router.post("/", postTweets);
 router.post("/like", likeTweet);
 router.delete("/unlike", unlikeTweet);
-router.post("/", postTweets);
+router.post("/retweet", handleRetweets);
+router.delete("/undoretweet", deleteRetweets);
 router.delete("/:id", deleteTweets);
-router.delete("/retweet/:id", deleteRetweets);
-router.get("/retweet", getRetweetsUserContent);
 
 export default router;

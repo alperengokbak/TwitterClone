@@ -70,7 +70,6 @@ function Feed() {
       }
     } catch (error) {
       console.error("An error occurred:", error);
-      alert("You cannot delete another user's tweet!");
     }
   };
 
@@ -126,7 +125,56 @@ function Feed() {
       });
   };
 
-  const handleRetweet = async () => {};
+  const handleRetweet = async (id) => {
+    await axios
+      .post(`http://localhost:3000/tweet/retweet`, {
+        user_id: user.id,
+        tweet_id: id,
+      })
+      .then((res) => {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.retweets,
+                retweeted: true,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleRemoveRetweet = async (id) => {
+    await axios
+      .delete(`http://localhost:3000/tweet/undoretweet`, {
+        data: {
+          user_id: user.id,
+          tweet_id: id,
+        },
+      })
+      .then((res) => {
+        setPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.likes,
+                retweeted: false,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Stack
@@ -178,10 +226,12 @@ function Feed() {
             image_url={post.image_url}
             id={post.id}
             isLiked={post.liked}
+            isRetweeted={post.retweeted}
             handleDeletePost={handleDeletePost}
             handleLikePost={handleLikes}
             handleUnlikePost={handleUnlike}
             handleRetweet={handleRetweet}
+            handleRemoveRetweet={handleRemoveRetweet}
           />
         ))}
         {showMore && (
