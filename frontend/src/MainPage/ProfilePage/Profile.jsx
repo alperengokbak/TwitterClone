@@ -128,7 +128,56 @@ export const Profile = () => {
       });
   };
 
-  const handleRetweet = async () => {};
+  const handleRetweet = async (id) => {
+    await axios
+      .post(`http://localhost:3000/tweet/retweet`, {
+        user_id: user.id,
+        tweet_id: id,
+      })
+      .then((res) => {
+        setUserPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.retweets,
+                retweeted: true,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleRemoveRetweet = async (id) => {
+    await axios
+      .delete(`http://localhost:3000/tweet/undoretweet`, {
+        data: {
+          user_id: user.id,
+          tweet_id: id,
+        },
+      })
+      .then((res) => {
+        setUserPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.likes,
+                retweeted: false,
+              };
+            }
+            return post;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Grid
@@ -185,7 +234,7 @@ export const Profile = () => {
               <Grid item xs={12}>
                 {/*Profile Background Image*/}
                 <img
-                  src={userInformation[0]?.profile_picture}
+                  src={userInformation[0]?.profile_wallpaper}
                   style={{
                     objectFit: "cover",
                     width: "100%",
@@ -376,10 +425,12 @@ export const Profile = () => {
                   image_url={post.image_url}
                   id={post.id}
                   isLiked={post.liked}
+                  isRetweeted={post.retweeted}
                   handleDeletePost={handleDeletePost}
                   handleLikePost={handleLikes}
                   handleUnlikePost={handleUnlike}
                   handleRetweet={handleRetweet}
+                  handleRemoveRetweet={handleRemoveRetweet}
                 />
               ))}
             </Stack>

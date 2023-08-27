@@ -3,8 +3,7 @@ import {
   userInformation,
   checkLike,
   displayUserPost,
-  getTweetCount,
-  displayOwnPost,
+  checkRetweet2,
 } from "../queries/ProfileQuery.js";
 
 export const getUserInformation = (req, res) => {
@@ -15,14 +14,6 @@ export const getUserInformation = (req, res) => {
   });
 };
 
-/* export const getUserOwnPost = (req, res) => {
-  const { id } = parseInt(req.params.id);
-  pool.query(displayOwnPost, [id], (error, results) => {
-    if (error) throw error;
-    res.status(200).json(results.rows);
-  });
-}; */
-
 export const getUserPosts = async (req, res) => {
   const user_id = req.user.id;
   const countTweet = "SELECT COUNT(*) FROM tweets WHERE user_id = $1";
@@ -30,6 +21,7 @@ export const getUserPosts = async (req, res) => {
     const countTweets = await pool.query(countTweet, [user_id]);
     const tweets = await pool.query(displayUserPost, [user_id]);
     const likedTweets = await pool.query(checkLike, [user_id]);
+    const retweetedTweets = await pool.query(checkRetweet2, [user_id]);
 
     tweets.rows.map((tweet) => {
       if (likedTweets.rows.length) {
@@ -38,6 +30,13 @@ export const getUserPosts = async (req, res) => {
         );
       } else {
         tweet.liked = false;
+      }
+      if (retweetedTweets.rows.length) {
+        tweet.retweeted = retweetedTweets.rows.some(
+          (retweetedTweet) => retweetedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.retweeted = false;
       }
     });
     return res.json({

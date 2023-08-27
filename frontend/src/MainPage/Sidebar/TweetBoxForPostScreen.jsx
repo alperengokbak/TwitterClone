@@ -44,9 +44,26 @@ export const TweetBoxForPostScreen = () => {
     fileInputRef.current.click();
   };
 
-  const handleFileSelected = (event) => {
-    const selectedFile = event.target.files[0];
-    selectedFile && setImageUrl(URL.createObjectURL(selectedFile));
+  const handleFileSelected = async (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("upload_preset", "rdasu5f6");
+
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dsruzqnhp/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      const uploadedImageUrl = data.secure_url;
+
+      setImageUrl(uploadedImageUrl);
+    }
   };
 
   const handleClearImage = () => {
@@ -173,7 +190,6 @@ export const TweetBoxForPostScreen = () => {
             <Grid item>
               <Button
                 variant="contained"
-                onClick={handlePostTweet}
                 disabled={tweetMessage === "" && imageUrl === ""}
                 sx={{
                   marginRight: 0.5,

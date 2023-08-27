@@ -24,10 +24,12 @@ function ProfilePost({
   image_url,
   id,
   isLiked,
+  isRetweeted,
   handleDeletePost,
   handleLikePost,
   handleUnlikePost,
   handleRetweet,
+  handleRemoveRetweet,
 }) {
   return (
     <Stack>
@@ -140,7 +142,13 @@ function ProfilePost({
                     text="Retweet"
                     Icon={RepeatIcon}
                     retweets={retweets}
-                    handleRetweet={() => handleRetweet()}
+                    handleRetweet={() => {
+                      if (isRetweeted) {
+                        handleRemoveRetweet(id);
+                      } else {
+                        handleRetweet(id);
+                      }
+                    }}
                   />
                   <PostComponentIcon
                     text="Like"
