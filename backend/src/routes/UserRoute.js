@@ -4,6 +4,7 @@ import {
   login,
   deleteUser,
   checkUser,
+  navigateProfile,
 } from "../controllers/UserController.js";
 
 const router = Router();
@@ -11,6 +12,7 @@ const router = Router();
 router.post("/login", login);
 router.post("/register", register);
 router.get("/checkuser", checkUser);
+router.get("/navigateprofile", navigateProfile);
 router.delete("/delete/:id", deleteUser);
 
 export default router;

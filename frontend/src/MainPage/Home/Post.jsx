@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Avatar, Stack, Typography, Paper, Grid, Divider } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -11,6 +11,9 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "./CurrentDateFormat";
 import { useNavigate } from "react-router-dom";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 function Post({
   firstName,
@@ -33,6 +36,18 @@ function Post({
   handleRemoveRetweet,
 }) {
   const navigate = useNavigate();
+  const { user } = React.useContext(AuthContext);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Stack>
       <Divider
@@ -40,7 +55,15 @@ function Post({
           color: "gray",
         }}
       />
-      <Paper style={{ padding: "16px 0px 16px 16px" }}>
+      <Paper
+        sx={{
+          padding: "16px 0px 16px 16px",
+          cursor: "pointer",
+          "&:hover": {
+            backgroundColor: "#F7F9FA",
+          },
+        }}
+      >
         <Grid container spacing={1.3}>
           <Grid item>
             <Avatar
@@ -105,7 +128,9 @@ function Post({
                   <Stack>
                     <MoreHorizIcon
                       className="more_postScreen"
-                      onClick={() => handleDeletePost(id)}
+                      onClick={(event) => {
+                        handleClick(event);
+                      }}
                     />
                   </Stack>
                 </Stack>
@@ -178,6 +203,25 @@ function Post({
           </Grid>
         </Grid>
       </Paper>
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+        {user.username !== username ? (
+          <Stack>
+            <MenuItem onClick={handleClose}>
+              Not interested in this post
+            </MenuItem>
+            <MenuItem onClick={handleClose}>Follow @{username}</MenuItem>
+          </Stack>
+        ) : null}
+
+        <MenuItem
+          onClick={() => {
+            handleDeletePost(id);
+            handleClose();
+          }}
+        >
+          Delete this post
+        </MenuItem>
+      </Menu>
     </Stack>
   );
 }

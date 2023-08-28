@@ -10,6 +10,8 @@ import UploadIcon from "@mui/icons-material/Upload";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "../Home/CurrentDateFormat";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 function ProfilePost({
   firstName,
@@ -31,6 +33,17 @@ function ProfilePost({
   handleRetweet,
   handleRemoveRetweet,
 }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Stack>
       <Divider
@@ -97,7 +110,9 @@ function ProfilePost({
                         marginLeft: "9vw",
                       }}
                       className="more_postScreen"
-                      onClick={() => handleDeletePost(id)}
+                      onClick={(event) => {
+                        handleClick(event);
+                      }}
                     />
                   </Stack>
                 </Stack>
@@ -170,6 +185,16 @@ function ProfilePost({
           </Grid>
         </Grid>
       </Paper>
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+        <MenuItem
+          onClick={() => {
+            handleDeletePost(id);
+            handleClose();
+          }}
+        >
+          Delete this post
+        </MenuItem>
+      </Menu>
     </Stack>
   );
 }

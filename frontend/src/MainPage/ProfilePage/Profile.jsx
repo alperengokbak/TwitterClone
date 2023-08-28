@@ -21,7 +21,7 @@ import ProfilePost from "./ProfilePost";
 import { EditProfile } from "./EditProfile";
 
 export const Profile = () => {
-  const [userInformation, setUserInformation] = React.useState({});
+  const [userInformation, setUserInformation] = React.useState([]);
   const [userPosts, setUserPosts] = React.useState([]);
   const [userPostsCount, setUserPostsCount] = React.useState(0);
   const { user } = React.useContext(AuthContext);
