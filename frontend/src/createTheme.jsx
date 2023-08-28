@@ -267,11 +267,6 @@ export const SidebarTheme = createTheme({
           fontWeight: "900",
           textTransform: "inherit",
           borderRadius: "20px",
-          /*           "&:hover": {
-            backgroundColor: "#E8F5FE",
-            borderRadius: "20px",
-            color: "#000000",
-          }, */
         },
       },
     },

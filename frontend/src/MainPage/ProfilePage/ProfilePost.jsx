@@ -55,6 +55,9 @@ function ProfilePost({
         <Grid container spacing={1.3}>
           <Grid item>
             <Avatar
+              onClick={() => {
+                navigate(`/${username}`);
+              }}
               className="Profile Image"
               alt="Profile Image"
               src={profile_picture}

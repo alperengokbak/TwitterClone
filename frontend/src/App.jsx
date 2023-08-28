@@ -56,7 +56,7 @@ export const App = () => {
           }
         />
         <Route
-          path={`/${user.username}`}
+          path="/:username"
           element={
             <Layouts>
               <Profile />

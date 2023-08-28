@@ -211,16 +211,16 @@ function Post({
             </MenuItem>
             <MenuItem onClick={handleClose}>Follow @{username}</MenuItem>
           </Stack>
-        ) : null}
-
-        <MenuItem
-          onClick={() => {
-            handleDeletePost(id);
-            handleClose();
-          }}
-        >
-          Delete this post
-        </MenuItem>
+        ) : (
+          <MenuItem
+            onClick={() => {
+              handleDeletePost(id);
+              handleClose();
+            }}
+          >
+            Delete this post
+          </MenuItem>
+        )}
       </Menu>
     </Stack>
   );

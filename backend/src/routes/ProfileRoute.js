@@ -9,8 +9,8 @@ import { isAuthorized } from "../middleware.js";
 const router = Router();
 router.use(isAuthorized);
 
-router.get("/", getUserInformation);
-router.get("/post", getUserPosts);
-router.get("/liked", displayLikedPost);
+router.get("/:username", getUserInformation);
+router.get("/:username/posts", getUserPosts);
+router.get("/:username/liked", displayLikedPost);
 
 export default router;

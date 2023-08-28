@@ -1,5 +1,7 @@
 export const userInformation =
-  "SELECT firstname, lastname, username, profile_picture, birthday, is_verified, profile_wallpaper FROM users WHERE id = $1";
+  "SELECT firstname, lastname, username, profile_picture, birthday, is_verified, profile_wallpaper FROM users WHERE username = $1";
+export const checkUsername =
+  "SELECT id, username FROM users WHERE username = $1";
 export const updateProfile =
   "UPDATE users SET firstname = $1, lastname = $2, username = $3, email = $4, profile_picture = $5, birthday = $6 WHERE id = $7";
 export const updatePassword = "UPDATE users SET password = $1 WHERE id = $2";
@@ -25,5 +27,5 @@ export const displayUserPost =
 
 export const checkRetweet2 = "SELECT tweet_id FROM retweets WHERE user_id = $1";
 
-export const displayOwnPost =
-  "SELECT t.id, t.content, t.creation_date, t.likes, t.retweets, t.image_url FROM tweets t INNER JOIN users u ON t.user_id = u.id WHERE u.id = $1 OR t.id IN (SELECT rt.tweet_id FROM retweets rt WHERE rt.user_id = $1) ORDER BY t.creation_date DESC";
+export const likedPost =
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id JOIN likes l ON l.user_id = u.id WHERE u.id = $1 ORDER BY creation_date DESC";

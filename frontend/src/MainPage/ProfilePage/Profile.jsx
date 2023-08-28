@@ -7,6 +7,7 @@ import {
   Avatar,
   Modal,
   Box,
+  Button,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -14,23 +15,36 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import Verified from "@mui/icons-material/Verified";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import NavTabs from "./NavTabs";
 import axios from "axios";
 import ProfilePost from "./ProfilePost";
 import { EditProfile } from "./EditProfile";
+import { Unfollow } from "./Unfollow";
+
+// TODO - Add follow and unfollow functionality
+// TODO - Add edit profile functionality
+// TODO - When I hover on the following button, it should change to unfollowing and change the color to red. And when I clicked, will open a modal to confirm the unfollowing.
 
 export const Profile = () => {
+  let { username } = useParams();
   const [userInformation, setUserInformation] = React.useState([]);
   const [userPosts, setUserPosts] = React.useState([]);
   const [userPostsCount, setUserPostsCount] = React.useState(0);
+  const [follow, setFollow] = React.useState(true);
+  const [isHovering, setIsHovering] = React.useState(false);
   const { user } = React.useContext(AuthContext);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   axios.defaults.headers.common[
     "Authorization"
   ] = `Bearer ${localStorage.getItem("token")}`;
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [openUnfollowModal, setOpenUnfollowModal] = React.useState(false);
+  const handleOpenUnfollowModal = () => setOpenUnfollowModal(true);
+  const handleCloseUnfollowModal = () => setOpenUnfollowModal(false);
 
   React.useEffect(() => {
     handleUserInformation();
@@ -39,7 +53,9 @@ export const Profile = () => {
 
   const handleUserInformation = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/profile");
+      const response = await axios.get(
+        `http://localhost:3000/profile/${username}`
+      );
       if (response.status === 200) {
         setUserInformation(response.data);
       } else {
@@ -52,7 +68,9 @@ export const Profile = () => {
 
   const handleUserPosts = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/profile/post");
+      const response = await axios.get(
+        `http://localhost:3000/profile/${username}/posts`
+      );
       if (response.status === 200) {
         const jsonData = response.data;
         setUserPosts((prevPosts) => [...prevPosts, ...jsonData.items]);
@@ -211,7 +229,7 @@ export const Profile = () => {
                 fontWeight: "bold",
               }}
             >
-              {user?.firstName} {user?.lastName}
+              {userInformation[0]?.firstname} {userInformation[0]?.lastname}
             </Typography>
             <Typography
               variant="span"
@@ -273,43 +291,100 @@ export const Profile = () => {
                       border: "4px solid #FFFFFF",
                     }}
                   />
-                  <Link
-                    to="#"
-                    onClick={() => {
-                      handleOpen();
-                    }}
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "12px",
-                      width: "90px",
-                      marginRight: "20px",
-                      marginTop: "10px",
-                      padding: "10px",
-                      backgroundColor: "#FFFFFF",
-                      textDecoration: "none",
-                      fontFamily: `"Roboto","Helvetica","Arial",sans-serif`,
-                      borderTopWidth: "1px",
-                      borderRightWidth: "1px",
-                      borderBottomWidth: "1px",
-                      borderLeftWidth: "1px",
-                      borderTopStyle: "solid",
-                      borderRightStyle: "solid",
-                      borderBottomStyle: "solid",
-                      borderLeftStyle: "solid",
-                      borderTopColor: "rgb(207, 217, 222)",
-                      borderRightColor: "rgb(207, 217, 222)",
-                      borderBottomColor: "rgb(207, 217, 222)",
-                      borderLeftColor: "rgb(207, 217, 222)",
-                      borderRadius: "24px",
-                      color: "#000000",
-                      fontSize: "15px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Edit profile
-                  </Link>
+                  {username === user.username ? (
+                    <Link
+                      to="#"
+                      onClick={() => {
+                        handleOpen();
+                      }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "12px",
+                        width: "90px",
+                        marginRight: "20px",
+                        marginTop: "10px",
+                        padding: "10px",
+                        backgroundColor: "#FFFFFF",
+                        textDecoration: "none",
+                        fontFamily: `"Roboto","Helvetica","Arial",sans-serif`,
+                        borderTopWidth: "1px",
+                        borderRightWidth: "1px",
+                        borderBottomWidth: "1px",
+                        borderLeftWidth: "1px",
+                        borderTopStyle: "solid",
+                        borderRightStyle: "solid",
+                        borderBottomStyle: "solid",
+                        borderLeftStyle: "solid",
+                        borderTopColor: "rgb(207, 217, 222)",
+                        borderRightColor: "rgb(207, 217, 222)",
+                        borderBottomColor: "rgb(207, 217, 222)",
+                        borderLeftColor: "rgb(207, 217, 222)",
+                        borderRadius: "24px",
+                        color: "#000000",
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Edit profile
+                    </Link>
+                  ) : follow ? (
+                    <Button
+                      onClick={() => {
+                        setFollow(!follow);
+                      }}
+                      variant="contained"
+                      sx={{
+                        height: "34px",
+                        width: "112px",
+                        marginRight: "20px",
+                        marginTop: "10px",
+                        backgroundColor: "#000000",
+                        borderRadius: "24px",
+                        color: "#FFFFFF",
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                        boxShadow: "none",
+                        "&:hover": {
+                          color: "#FFFFFF",
+                          backgroundColor: "#000000",
+                          opacity: "0.8",
+                        },
+                      }}
+                    >
+                      Follow
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleOpenUnfollowModal();
+                      }}
+                      onMouseEnter={() => setIsHovering(true)}
+                      onMouseLeave={() => setIsHovering(false)}
+                      sx={{
+                        height: "34px",
+                        width: "112px",
+                        marginRight: "20px",
+                        marginTop: "10px",
+                        backgroundColor: "#FFFFFF",
+                        borderRadius: "24px",
+                        color: "#000000",
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                        boxShadow: "none",
+                        border: "1px solid #D3D3D3",
+                        "&:hover": {
+                          color: "rgb(244,33,46)",
+                          backgroundColor: "rgb(246,231,233)",
+                          borderColor: "rgb(236,204,207)",
+                        },
+                      }}
+                    >
+                      {isHovering ? "Unfollow" : "Following"}
+                    </Button>
+                  )}
                 </Stack>
                 <Stack flexDirection="column" m="24px 0px 8px 16px">
                   <Typography
@@ -405,7 +480,7 @@ export const Profile = () => {
           </Grid>
           <Grid item xs={12}>
             {/*NavBar*/}
-            <NavTabs user={user.username} />
+            <NavTabs user={userInformation[0]?.username} />
           </Grid>
           <Grid item xs={12}>
             {/*Downside Navbar(Profile Posts)*/}
@@ -452,6 +527,29 @@ export const Profile = () => {
           }}
         >
           <EditProfile handleClose={handleClose} />
+        </Box>
+      </Modal>
+      <Modal open={openUnfollowModal} onClose={handleCloseUnfollowModal}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "250px",
+            height: "250px",
+            bgcolor: "background.paper",
+            borderRadius: "20px",
+            boxShadow: 24,
+            padding: "32px",
+          }}
+        >
+          <Unfollow
+            handleCloseUnfollowModal={handleCloseUnfollowModal}
+            username={username}
+            follow={follow}
+            setFollow={setFollow}
+          />
         </Box>
       </Modal>
     </Grid>
