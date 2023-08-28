@@ -7,7 +7,6 @@ import {
   postUser,
   removeUser,
   checkEmail,
-  navigateProfilePage,
 } from "../queries/UserQuery.js";
 
 const salt = 10;
@@ -128,14 +127,5 @@ export const checkUser = (req, res) => {
         },
       });
     });
-  });
-};
-
-export const navigateProfile = (req, res) => {
-  const { id } = req.body;
-  pool.query(navigateProfilePage, [id], (error, results) => {
-    if (error) return res.json({ Error: "Error for getting user" });
-    if (!results.rows.length) return res.json({ user: null });
-    return res.json(results.rows);
   });
 };

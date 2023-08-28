@@ -48,3 +48,5 @@ export const getUserPosts = async (req, res) => {
     res.status(500).json({ error: "An error occurred while fetching tweets" });
   }
 };
+
+export const displayLikedPost = async (req, res) => {};

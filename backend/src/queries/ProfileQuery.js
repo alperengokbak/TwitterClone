@@ -27,6 +27,3 @@ export const checkRetweet2 = "SELECT tweet_id FROM retweets WHERE user_id = $1";
 
 export const displayOwnPost =
   "SELECT t.id, t.content, t.creation_date, t.likes, t.retweets, t.image_url FROM tweets t INNER JOIN users u ON t.user_id = u.id WHERE u.id = $1 OR t.id IN (SELECT rt.tweet_id FROM retweets rt WHERE rt.user_id = $1) ORDER BY t.creation_date DESC";
-
-export const navigateProfilePage =
-  "SELECT u.id AS user_id, u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id AS tweet_id, t.user_id AS ownerpost_id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM users u JOIN tweets t ON t.user_id = u.id WHERE u.id = $1";
