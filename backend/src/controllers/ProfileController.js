@@ -13,8 +13,6 @@ import {
   checkFollow,
 } from "../queries/ProfileQuery.js";
 
-// TODO - Complete follow and unfollow functions
-
 export const getUserInformation = async (req, res) => {
   const { username } = req.params;
   const current_user_id = req.user.id; // Follower id

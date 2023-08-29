@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Stack, Typography, Paper, Grid, Divider } from "@mui/material";
+import { Avatar, Stack, Typography, Paper, Grid } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -45,12 +45,11 @@ function ProfilePost({
   };
 
   return (
-    <Stack>
-      <Divider
-        sx={{
-          color: "gray",
-        }}
-      />
+    <Stack
+      sx={{
+        borderBottom: "1px solid #e6ecf0",
+      }}
+    >
       <Paper style={{ padding: "16px 0px 16px 16px" }}>
         <Grid container spacing={1.3}>
           <Grid item>

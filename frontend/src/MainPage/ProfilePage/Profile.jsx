@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import ChildCareIcon from "@mui/icons-material/ChildCare";
+import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import Verified from "@mui/icons-material/Verified";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 import { Link, useParams } from "react-router-dom";
@@ -22,9 +21,7 @@ import ProfilePost from "./ProfilePost";
 import { EditProfile } from "./EditProfile";
 import { Unfollow } from "./Unfollow";
 
-// TODO - Add follow and unfollow functionality
 // TODO - Add edit profile functionality
-// TODO - When I hover on the following button, it should change to unfollowing and change the color to red. And when I clicked, will open a modal to confirm the unfollowing.
 
 export const Profile = () => {
   let { username } = useParams();
@@ -60,6 +57,7 @@ export const Profile = () => {
       setUserInformation((prevUserInformation) => ({
         ...prevUserInformation,
         following: true,
+        followers: parseInt(prevUserInformation.followers + 1),
       }));
     } else {
       console.log("Error");
@@ -67,7 +65,6 @@ export const Profile = () => {
   };
 
   const handleUnfollow = async (followed_user_id) => {
-    console.log(user.id, followed_user_id);
     const response = await axios.delete(
       `http://localhost:3000/profile/unfollow`,
       {
@@ -81,6 +78,7 @@ export const Profile = () => {
       setUserInformation((prevUserInformation) => ({
         ...prevUserInformation,
         following: false,
+        followers: parseInt(prevUserInformation.followers - 1),
       }));
       handleCloseUnfollowModal();
     } else {
@@ -453,62 +451,75 @@ export const Profile = () => {
                   >
                     @{userInformation.username}
                   </Typography>
-                  <Typography variant="body1" fontSize="15px">
+                  <Typography variant="body1" fontSize="15px" mb={1}>
                     Yasar University / Software Engineering
                   </Typography>
                   <Stack flexDirection="row" alignItems="center">
-                    <LocationOnIcon
-                      sx={{
-                        fontSize: "15px",
-                        color: "#808080",
-                        mr: 0.5,
-                      }}
-                    />
-                    <Typography
-                      variant="body1"
-                      fontSize="15px"
+                    <Stack
+                      flexDirection="row"
                       alignItems="center"
+                      mr={1}
+                      mb={1}
                     >
-                      Florida, USA
-                    </Typography>
+                      <FmdGoodOutlinedIcon
+                        sx={{
+                          fontSize: "17px",
+                          color: "#808080",
+                          mr: 0.5,
+                        }}
+                      />
+                      <Typography
+                        variant="body1"
+                        fontSize="15px"
+                        alignItems="center"
+                      >
+                        Florida, USA
+                      </Typography>
+                    </Stack>
+                    <Stack flexDirection="row" alignItems="center" mb={1}>
+                      <CalendarMonthIcon
+                        sx={{
+                          fontSize: "15px",
+                          color: "#808080",
+                          mr: 0.5,
+                        }}
+                      />
+                      <Typography variant="body1" fontSize="15px">
+                        Joined{" "}
+                        {new Date().toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                        })}
+                      </Typography>
+                    </Stack>
                   </Stack>
-                  <Stack flexDirection="row" alignItems="center">
-                    <CalendarMonthIcon
-                      sx={{
-                        fontSize: "15px",
-                        color: "#808080",
-                        mr: 0.5,
-                      }}
-                    />
-                    <Typography variant="body1" fontSize="15px">
-                      Joined{" "}
-                      {new Date().toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                      })}
-                    </Typography>
-                  </Stack>
-                  <Stack flexDirection="row" alignItems="center">
-                    {userInformation.birthday ? (
-                      <Stack flexDirection="row">
-                        <ChildCareIcon
-                          sx={{
-                            fontSize: "15px",
-                            color: "#808080",
-                            mr: 0.5,
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          fontSize="15px"
-                          sx={{
-                            alignItems: "center",
-                          }}
-                        >
-                          Born {userInformation.birthday.split("T")[0]}
-                        </Typography>
-                      </Stack>
-                    ) : null}
+                  <Stack flexDirection="row" ml={0.3}>
+                    <Stack flexDirection="row" mr={1}>
+                      <Typography
+                        variant="span"
+                        color="#000"
+                        mr={0.5}
+                        fontSize="15px"
+                      >
+                        {userInformation.followers}
+                      </Typography>
+                      <Typography variant="span" color="gray" fontSize="15px">
+                        Followers
+                      </Typography>
+                    </Stack>
+                    <Stack flexDirection="row">
+                      <Typography
+                        variant="span"
+                        color="#000"
+                        mr={0.5}
+                        fontSize="15px"
+                      >
+                        {userInformation.followed}
+                      </Typography>
+                      <Typography variant="span" color="gray" fontSize="15px">
+                        Following
+                      </Typography>
+                    </Stack>
                   </Stack>
                 </Stack>
               </Grid>
