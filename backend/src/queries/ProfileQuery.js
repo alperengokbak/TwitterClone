@@ -24,7 +24,7 @@ export const unfollowUp =
 export const checkFollow =
   "SELECT * FROM followers WHERE follower_user_id = $1 AND followed_user_id = $2";
 
-export const checkLike = "SELECT tweet_id FROM likes WHERE user_id = $1";
+export const checkLike = "SELECT * FROM likes WHERE user_id = $1";
 
 export const displayUserPost =
   "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id WHERE u.id = $1 ORDER BY creation_date DESC";
@@ -32,4 +32,4 @@ export const displayUserPost =
 export const checkRetweet2 = "SELECT tweet_id FROM retweets WHERE user_id = $1";
 
 export const likedPost =
-  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id JOIN likes l ON l.user_id = u.id WHERE u.id = $1 ORDER BY creation_date DESC";
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM likes l JOIN tweets t ON t.id = l.tweet_id JOIN users u ON t.user_id = u.id WHERE l.user_id = $1 ORDER BY creation_date DESC";

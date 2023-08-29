@@ -27,6 +27,7 @@ export const Profile = () => {
   let { username } = useParams();
   const [userInformation, setUserInformation] = React.useState([]);
   const [userPosts, setUserPosts] = React.useState([]);
+  const [userLikes, setUserLikes] = React.useState([]);
   const [userPostsCount, setUserPostsCount] = React.useState(0);
   const [isHovering, setIsHovering] = React.useState(false);
   const { user } = React.useContext(AuthContext);
@@ -44,8 +45,9 @@ export const Profile = () => {
   const handleCloseUnfollowModal = () => setOpenUnfollowModal(false);
 
   React.useEffect(() => {
-    handleUserInformation();
     handleUserPosts();
+    handleUserInformation();
+    handleLikedPosts();
   }, []);
 
   const handleFollow = async (followed_user_id) => {
@@ -93,6 +95,21 @@ export const Profile = () => {
       );
       if (response.status === 200) {
         setUserInformation(response.data);
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
+  const handleLikedPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/profile/${username}/liked`
+      );
+      if (response.status === 200) {
+        setUserLikes((prevPosts) => [...prevPosts, ...response.data]);
       } else {
         console.error("Failed to fetch data");
       }
@@ -527,35 +544,15 @@ export const Profile = () => {
           </Grid>
           <Grid item xs={12}>
             {/*NavBar*/}
-            <NavTabs user={userInformation.username} />
-          </Grid>
-          <Grid item xs={12}>
-            {/*Downside Navbar(Profile Posts)*/}
-            <Stack>
-              {userPosts.map((post) => (
-                <ProfilePost
-                  key={post.id}
-                  firstName={post.firstname}
-                  lastName={post.lastname}
-                  username={post.username}
-                  is_verified={post.is_verified}
-                  creation_date={post.creation_date}
-                  content={post.content}
-                  profile_picture={post.profile_picture}
-                  likes={post.likes}
-                  retweets={post.retweets}
-                  image_url={post.image_url}
-                  id={post.id}
-                  isLiked={post.liked}
-                  isRetweeted={post.retweeted}
-                  handleDeletePost={handleDeletePost}
-                  handleLikePost={handleLikes}
-                  handleUnlikePost={handleUnlike}
-                  handleRetweet={handleRetweet}
-                  handleRemoveRetweet={handleRemoveRetweet}
-                />
-              ))}
-            </Stack>
+            <NavTabs
+              userPosts={userPosts}
+              userLikes={userLikes}
+              handleDeletePost={handleDeletePost}
+              handleLikes={handleLikes}
+              handleUnlike={handleUnlike}
+              handleRetweet={handleRetweet}
+              handleRemoveRetweet={handleRemoveRetweet}
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -584,7 +581,7 @@ export const Profile = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "250px",
-            height: "250px",
+            height: "260px",
             bgcolor: "background.paper",
             borderRadius: "20px",
             boxShadow: 24,

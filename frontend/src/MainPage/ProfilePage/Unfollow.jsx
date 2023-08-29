@@ -7,7 +7,6 @@ export const Unfollow = ({
   handleUnfollow,
   userInformation,
 }) => {
-  console.log(userInformation);
   return (
     <Stack width="100%" height="100%">
       <Typography

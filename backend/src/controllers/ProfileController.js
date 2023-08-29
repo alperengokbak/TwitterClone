@@ -93,13 +93,32 @@ export const getUserPosts = async (req, res) => {
 
 export const displayLikedPost = async (req, res) => {
   const user_id = req.user.id;
-  pool.query(checkLike, [user_id], (error, results) => {
-    if (error) throw error;
-    pool.query(likedPost, [user_id], (error, results) => {
-      if (error) throw error;
-      return res.status(200).json(results.rows);
+  try {
+    const tweets = await pool.query(likedPost, [user_id]);
+    const likedTweets = await pool.query(checkLike, [user_id]);
+    const retweetedTweets = await pool.query(checkRetweet2, [user_id]);
+
+    tweets.rows.map((tweet) => {
+      if (likedTweets.rows.length) {
+        tweet.liked = likedTweets.rows.some(
+          (likedTweet) => likedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.liked = false;
+      }
+      if (retweetedTweets.rows.length) {
+        tweet.retweeted = retweetedTweets.rows.some(
+          (retweetedTweet) => retweetedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.retweeted = false;
+      }
     });
-  });
+    return res.json(tweets.rows);
+  } catch (error) {
+    console.error("Error fetching tweets:", error);
+    res.status(500).json({ error: "An error occurred while fetching tweets" });
+  }
 };
 
 export const followUser = async (req, res) => {
