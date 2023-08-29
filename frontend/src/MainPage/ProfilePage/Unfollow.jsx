@@ -3,10 +3,11 @@ import React from "react";
 
 export const Unfollow = ({
   username,
-  setFollow,
-  follow,
   handleCloseUnfollowModal,
+  handleUnfollow,
+  userInformation,
 }) => {
+  console.log(userInformation);
   return (
     <Stack width="100%" height="100%">
       <Typography
@@ -30,8 +31,7 @@ export const Unfollow = ({
       <Stack flexDirection="column">
         <Button
           onClick={() => {
-            setFollow(!follow);
-            handleCloseUnfollowModal();
+            handleUnfollow(userInformation.id);
           }}
           variant="contained"
           sx={{

@@ -1,5 +1,5 @@
-export const userInformation =
-  "SELECT firstname, lastname, username, profile_picture, birthday, is_verified, profile_wallpaper FROM users WHERE username = $1";
+export const userInformations =
+  "SELECT id, firstname, lastname, username, profile_picture, birthday, is_verified, profile_wallpaper FROM users WHERE username = $1";
 export const checkUsername =
   "SELECT id, username FROM users WHERE username = $1";
 export const updateProfile =
@@ -9,16 +9,20 @@ export const updateProfilePicture =
   "UPDATE users SET profile_picture = $1 WHERE id = $2";
 export const updateCoverPicture =
   "UPDATE users SET cover_picture = $1 WHERE id = $2";
-export const getFollowers = "SELECT * FROM followers WHERE user_id = $1";
-export const getFollowings = "SELECT * FROM followers WHERE follower_id = $1";
+
+export const getFollowedCount =
+  "SELECT COUNT(*) FROM followers WHERE follower_user_id = $1";
 export const getFollowersCount =
-  "SELECT COUNT(*) FROM followers WHERE user_id = $1";
-export const getFollowingsCount =
-  "SELECT COUNT(*) FROM followers WHERE follower_id = $1";
-export const getFollowersUserContent =
-  "SELECT followers.id AS follower_id, follower.id AS follower_id, follower.firstName AS follower_firstName, follower.lastName AS follower_lastName, follower.username AS follower_username, follower.profile_picture AS follower_profile_picture, user.id AS user_id, user.firstName AS user_firstName, user.lastName AS user_lastName, user.username AS user_username, user.profile_picture AS user_profile_picture FROM followers JOIN users AS follower ON followers.follower_id = follower.id JOIN users AS user ON followers.user_id = user.id WHERE followers.user_id = $1 ORDER BY followers.id DESC";
-export const getFollowingsUserContent =
-  "SELECT followers.id AS follower_id, follower.id AS follower_id, follower.firstName AS follower_firstName, follower.lastName AS follower_lastName, follower.username AS follower_username, follower.profile_picture AS follower_profile_picture, user.id AS user_id, user.firstName AS user_firstName, user.lastName AS user_lastName, user.username AS user_username, user.profile_picture AS user_profile_picture FROM followers JOIN users AS follower ON followers.follower_id = follower.id JOIN users AS user ON followers.user_id = user.id WHERE followers.follower_id = $1 ORDER BY followers.id DESC";
+  "SELECT COUNT(*) FROM followers WHERE followed_user_id = $1";
+
+export const followUp =
+  "INSERT INTO followers (follower_user_id, followed_user_id) VALUES ($1, $2)";
+
+export const unfollowUp =
+  "DELETE FROM followers WHERE follower_user_id = $1 AND followed_user_id = $2";
+
+export const checkFollow =
+  "SELECT * FROM followers WHERE follower_user_id = $1 AND followed_user_id = $2";
 
 export const checkLike = "SELECT tweet_id FROM likes WHERE user_id = $1";
 

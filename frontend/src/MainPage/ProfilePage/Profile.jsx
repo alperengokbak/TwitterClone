@@ -31,9 +31,9 @@ export const Profile = () => {
   const [userInformation, setUserInformation] = React.useState([]);
   const [userPosts, setUserPosts] = React.useState([]);
   const [userPostsCount, setUserPostsCount] = React.useState(0);
-  const [follow, setFollow] = React.useState(true);
   const [isHovering, setIsHovering] = React.useState(false);
   const { user } = React.useContext(AuthContext);
+  const followed_user_id = userInformation.id;
   axios.defaults.headers.common[
     "Authorization"
   ] = `Bearer ${localStorage.getItem("token")}`;
@@ -50,6 +50,43 @@ export const Profile = () => {
     handleUserInformation();
     handleUserPosts();
   }, []);
+
+  const handleFollow = async (followed_user_id) => {
+    const response = await axios.post(`http://localhost:3000/profile/follow`, {
+      follower_user_id: user.id,
+      followed_user_id: followed_user_id,
+    });
+    if (response.status === 200) {
+      setUserInformation((prevUserInformation) => ({
+        ...prevUserInformation,
+        following: true,
+      }));
+    } else {
+      console.log("Error");
+    }
+  };
+
+  const handleUnfollow = async (followed_user_id) => {
+    console.log(user.id, followed_user_id);
+    const response = await axios.delete(
+      `http://localhost:3000/profile/unfollow`,
+      {
+        data: {
+          follower_user_id: user.id,
+          followed_user_id: followed_user_id,
+        },
+      }
+    );
+    if (response.status === 200) {
+      setUserInformation((prevUserInformation) => ({
+        ...prevUserInformation,
+        following: false,
+      }));
+      handleCloseUnfollowModal();
+    } else {
+      console.log("Error");
+    }
+  };
 
   const handleUserInformation = async () => {
     try {
@@ -229,7 +266,7 @@ export const Profile = () => {
                 fontWeight: "bold",
               }}
             >
-              {userInformation[0]?.firstname} {userInformation[0]?.lastname}
+              {userInformation.firstname} {userInformation.lastname}
             </Typography>
             <Typography
               variant="span"
@@ -252,7 +289,7 @@ export const Profile = () => {
               <Grid item xs={12}>
                 {/*Profile Background Image*/}
                 <img
-                  src={userInformation[0]?.profile_wallpaper}
+                  src={userInformation.profile_wallpaper}
                   style={{
                     objectFit: "cover",
                     width: "100%",
@@ -276,7 +313,7 @@ export const Profile = () => {
                 >
                   <Avatar
                     alt="Alperen Gokbak"
-                    src={userInformation[0]?.profile_picture}
+                    src={userInformation.profile_picture}
                     sx={{
                       transform: "translateX(-50%) translateY(-50%)",
                       top: "-5px",
@@ -329,10 +366,10 @@ export const Profile = () => {
                     >
                       Edit profile
                     </Link>
-                  ) : follow ? (
+                  ) : !userInformation.following ? (
                     <Button
                       onClick={() => {
-                        setFollow(!follow);
+                        handleFollow(followed_user_id);
                       }}
                       variant="contained"
                       sx={{
@@ -393,9 +430,8 @@ export const Profile = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    {userInformation[0]?.firstname}{" "}
-                    {userInformation[0]?.lastname}
-                    {userInformation[0]?.is_verified ? (
+                    {userInformation.firstname} {userInformation.lastname}
+                    {userInformation.is_verified ? (
                       <Verified
                         sx={{
                           marginLeft: "5px",
@@ -415,7 +451,7 @@ export const Profile = () => {
                       mb: 2,
                     }}
                   >
-                    @{userInformation[0]?.username}
+                    @{userInformation.username}
                   </Typography>
                   <Typography variant="body1" fontSize="15px">
                     Yasar University / Software Engineering
@@ -453,7 +489,7 @@ export const Profile = () => {
                     </Typography>
                   </Stack>
                   <Stack flexDirection="row" alignItems="center">
-                    {userInformation[0]?.birthday ? (
+                    {userInformation.birthday ? (
                       <Stack flexDirection="row">
                         <ChildCareIcon
                           sx={{
@@ -469,7 +505,7 @@ export const Profile = () => {
                             alignItems: "center",
                           }}
                         >
-                          Born {userInformation[0]?.birthday.split("T")[0]}
+                          Born {userInformation.birthday.split("T")[0]}
                         </Typography>
                       </Stack>
                     ) : null}
@@ -480,7 +516,7 @@ export const Profile = () => {
           </Grid>
           <Grid item xs={12}>
             {/*NavBar*/}
-            <NavTabs user={userInformation[0]?.username} />
+            <NavTabs user={userInformation.username} />
           </Grid>
           <Grid item xs={12}>
             {/*Downside Navbar(Profile Posts)*/}
@@ -547,8 +583,8 @@ export const Profile = () => {
           <Unfollow
             handleCloseUnfollowModal={handleCloseUnfollowModal}
             username={username}
-            follow={follow}
-            setFollow={setFollow}
+            userInformation={userInformation}
+            handleUnfollow={handleUnfollow}
           />
         </Box>
       </Modal>

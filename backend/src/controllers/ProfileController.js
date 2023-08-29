@@ -1,25 +1,53 @@
 import { pool } from "../../database.js";
 import {
-  userInformation,
+  userInformations,
   checkLike,
   displayUserPost,
   checkRetweet2,
   likedPost,
   checkUsername,
+  getFollowedCount,
+  getFollowersCount,
+  followUp,
+  unfollowUp,
+  checkFollow,
 } from "../queries/ProfileQuery.js";
 
-export const getUserInformation = (req, res) => {
+// TODO - Complete follow and unfollow functions
+
+export const getUserInformation = async (req, res) => {
   const { username } = req.params;
-  pool.query(checkUsername, [username], (error, results) => {
-    if (error) throw error;
-    if (results.rows.length === 0) {
-      return res.status(404).json({ error: "User not found" });
+  const current_user_id = req.user.id; // Follower id
+
+  const user = await pool.query(checkUsername, [username]);
+  if (user.rows.length === 0) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  const id = user.rows[0].id; // Followed id
+
+  try {
+    const userInformationResult = await pool.query(userInformations, [
+      username,
+    ]);
+    const countFollower = await pool.query(getFollowersCount, [id]);
+    const countFollowed = await pool.query(getFollowedCount, [id]);
+    const followUser = await pool.query(checkFollow, [current_user_id, id]);
+
+    const userInformation = userInformationResult.rows[0];
+    userInformation.followers = countFollower.rows[0].count;
+    userInformation.followed = countFollowed.rows[0].count;
+
+    if (followUser.rows.length) {
+      userInformation.following = true;
+    } else {
+      userInformation.following = false;
     }
-    pool.query(userInformation, [username], (error, results) => {
-      if (error) throw error;
-      return res.status(200).json(results.rows);
-    });
-  });
+
+    return res.json(userInformation);
+  } catch (error) {
+    console.error("Error fetching user information:", error);
+    res.status(500).json({ error: "An error occurred while fetching tweets" });
+  }
 };
 
 export const getUserPosts = async (req, res) => {
@@ -74,4 +102,51 @@ export const displayLikedPost = async (req, res) => {
       return res.status(200).json(results.rows);
     });
   });
+};
+
+export const followUser = async (req, res) => {
+  const { follower_user_id, followed_user_id } = req.body;
+  pool.query(
+    checkFollow,
+    [follower_user_id, followed_user_id],
+    (error, results) => {
+      if (error) throw error;
+      if (results.rowCount === 0) {
+        pool.query(
+          followUp,
+          [follower_user_id, followed_user_id],
+          (error, results) => {
+            if (error) throw error;
+            return res.status(200).json(results.rows);
+          }
+        );
+      } else {
+        res.status(200).send(`Already following `);
+      }
+    }
+  );
+};
+
+export const unfollowUser = (req, res) => {
+  const { follower_user_id, followed_user_id } = req.body;
+  pool.query(
+    checkFollow,
+    [follower_user_id, followed_user_id],
+
+    (error, results) => {
+      if (error) return res.status(500).send("Internal Server Error!");
+      if (results.rowCount !== 0) {
+        pool.query(
+          unfollowUp,
+          [follower_user_id, followed_user_id],
+          (error, results) => {
+            if (error) throw error;
+            return res.status(200).json(results.rows);
+          }
+        );
+      } else {
+        res.status(200).send(`You didn't follow this user`);
+      }
+    }
+  );
 };
