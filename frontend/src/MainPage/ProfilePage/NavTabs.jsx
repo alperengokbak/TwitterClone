@@ -37,7 +37,6 @@ export default function NavTabs({
   userMedia,
   userRetweet,
   userRetweetedUsername,
-  userRetweetedPostUsername,
 }) {
   const [value, setValue] = React.useState(0);
 

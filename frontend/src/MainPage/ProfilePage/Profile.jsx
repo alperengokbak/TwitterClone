@@ -14,15 +14,13 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import Verified from "@mui/icons-material/Verified";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
-import { Link, json, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import NavTabs from "./NavTabs";
 import axios from "axios";
 import { EditProfile } from "./EditProfile";
 import { Unfollow } from "./Unfollow";
 
 // TODO - Add edit profile functionality
-// TODO - Add replies tabs
-
 export const Profile = () => {
   let { username } = useParams();
   const [userInformation, setUserInformation] = React.useState([]);
@@ -127,6 +125,22 @@ export const Profile = () => {
     }
   };
 
+  const handleUserPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/profile/${username}/posts`
+      );
+      if (response.status === 200) {
+        setUserPosts((prevPosts) => [...prevPosts, ...response.data.items]);
+        setUserPostsCount(response.data.count);
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
   const handleLikedPosts = async () => {
     try {
       const response = await axios.get(
@@ -149,23 +163,6 @@ export const Profile = () => {
       );
       if (response.status === 200) {
         setUserMedia((prevPosts) => [...prevPosts, ...response.data]);
-      } else {
-        console.error("Failed to fetch data");
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
-  };
-
-  const handleUserPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/profile/${username}/posts`
-      );
-      if (response.status === 200) {
-        const jsonData = response.data;
-        setUserPosts((prevPosts) => [...prevPosts, ...jsonData.items]);
-        setUserPostsCount(jsonData.count);
       } else {
         console.error("Failed to fetch data");
       }

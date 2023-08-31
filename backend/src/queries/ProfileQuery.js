@@ -38,4 +38,4 @@ export const imagePost =
   "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM users u JOIN tweets t ON u.id = t.user_id WHERE t.image_url IS NOT NULL AND u.id = $1 ORDER BY creation_date DESC";
 
 export const retweetedPost =
-  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM users u JOIN tweets t ON u.id = t.user_id JOIN retweets r ON t.id = r.tweet_id WHERE r.user_id = $1 ORDER BY creation_date DESC";
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM users u JOIN tweets t ON u.id = t.user_id JOIN retweets r ON t.id = r.tweet_id WHERE r.user_id = $1 ORDER BY r.creation_date DESC";

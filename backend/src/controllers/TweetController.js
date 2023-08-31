@@ -1,7 +1,6 @@
 import { pool } from "../../database.js";
 import {
   getTweetById1,
-  deleteTweet,
   displayUserPost,
   postTweet,
   getTweetCount,
@@ -19,30 +18,38 @@ import {
   retweetDecrease,
 } from "../queries/TweetQuery.js";
 
-export const deleteTweets = (req, res) => {
+export const deleteTweets = async (req, res) => {
   const user_id = req.user.id;
   const id = parseInt(req.params.id);
-  pool.query(getTweetById1, [id], (error, results) => {
-    if (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send("An error occurred while fetching the tweet.");
-    }
-    if (results.rows.length === 0)
+  const tweetId = id;
+
+  try {
+    const tweetQueryResult = await pool.query(getTweetById1, [id]);
+
+    if (tweetQueryResult.rows.length === 0) {
       return res.status(404).send("Tweet not found.");
-    if (results.rows[0].user_id !== user_id)
+    }
+
+    const tweetUserId = tweetQueryResult.rows[0].user_id;
+
+    if (tweetUserId !== user_id) {
       return res
         .status(401)
         .send("You are not authorized to delete this tweet.");
-    pool.query(deleteTweet, [id], (error, results) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).send("Error deleting the tweet.");
-      }
-      return res.status(200).send("Tweet deleted successfully.");
-    });
-  });
+    }
+
+    await pool.query("BEGIN");
+    await pool.query("DELETE FROM retweets WHERE tweet_id = $1", [tweetId]);
+    await pool.query("DELETE FROM likes WHERE tweet_id = $1", [tweetId]);
+    await pool.query("DELETE FROM tweets WHERE id = $1", [tweetId]);
+    await pool.query("COMMIT");
+
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error) {
+    await pool.query("ROLLBACK");
+    console.error(error);
+    res.status(500).json({ message: "Error deleting post" });
+  }
 };
 
 export const paginationProcess = async (req, res) => {

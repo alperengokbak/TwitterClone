@@ -1,5 +1,6 @@
 import React from "react";
 import { Avatar, Stack, Typography, Paper, Grid } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -37,6 +38,7 @@ function ProfilePost({
   userRetweetedUsername,
   retweeter_username,
 }) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -86,12 +88,12 @@ function ProfilePost({
         <Grid container spacing={1.3}>
           <Grid item>
             <Avatar
-              onClick={() => {
-                navigate(`/${username}`);
-              }}
               className="Profile Image"
               alt="Profile Image"
               src={profile_picture}
+              onClick={() => {
+                navigate(`/${username}`);
+              }}
             />
           </Grid>
           <Grid item xs>
