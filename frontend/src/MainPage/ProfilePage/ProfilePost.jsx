@@ -12,7 +12,8 @@ import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "../Home/CurrentDateFormat";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { Link } from "react-router-dom";
+
+// TODO - When I hover the firstname and lastname, it should be underlined
 
 function ProfilePost({
   firstName,
@@ -33,6 +34,8 @@ function ProfilePost({
   handleUnlikePost,
   handleRetweet,
   handleRemoveRetweet,
+  userRetweetedUsername,
+  retweeter_username,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -51,7 +54,35 @@ function ProfilePost({
         borderBottom: "1px solid #e6ecf0",
       }}
     >
-      <Paper style={{ padding: "16px 0px 16px 16px" }}>
+      <Paper
+        style={{
+          padding: isRetweeted ? "8px 0px 16px 16px" : "16px 0px 16px 16px",
+        }}
+      >
+        {isRetweeted ? (
+          <Stack flexDirection="row" ml={3} mb={1} alignItems="center">
+            <RepeatIcon
+              sx={{
+                width: "16px",
+                height: "16px",
+                cursor: "pointer",
+                marginRight: "12px",
+              }}
+            />
+            <Typography
+              variant="body2"
+              component="span"
+              sx={{
+                color: "gray",
+                fontWeight: "bold",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              {userRetweetedUsername} {retweeter_username} Retweeted
+            </Typography>
+          </Stack>
+        ) : null}
         <Grid container spacing={1.3}>
           <Grid item>
             <Avatar
@@ -76,6 +107,9 @@ function ProfilePost({
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
+                        "&:hover": {
+                          textDecoration: "underline",
+                        },
                       }}
                     >
                       {firstName} {lastName}

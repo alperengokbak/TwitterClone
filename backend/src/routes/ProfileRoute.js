@@ -5,6 +5,8 @@ import {
   displayLikedPost,
   followUser,
   unfollowUser,
+  displayImagePost,
+  displayRetweetedPosts,
 } from "../controllers/ProfileController.js";
 import { isAuthorized } from "../middleware.js";
 
@@ -13,7 +15,9 @@ router.use(isAuthorized);
 
 router.get("/:username", getUserInformation);
 router.get("/:username/posts", getUserPosts);
+router.get("/:username/media", displayImagePost);
 router.get("/:username/liked", displayLikedPost);
+router.get("/:username/retweeted", displayRetweetedPosts);
 router.post("/follow", followUser);
 router.delete("/unfollow", unfollowUser);
 

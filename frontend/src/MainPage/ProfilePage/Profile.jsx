@@ -14,20 +14,23 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import Verified from "@mui/icons-material/Verified";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
-import { Link, useParams } from "react-router-dom";
+import { Link, json, useParams } from "react-router-dom";
 import NavTabs from "./NavTabs";
 import axios from "axios";
-import ProfilePost from "./ProfilePost";
 import { EditProfile } from "./EditProfile";
 import { Unfollow } from "./Unfollow";
 
 // TODO - Add edit profile functionality
+// TODO - Add replies tabs
 
 export const Profile = () => {
   let { username } = useParams();
   const [userInformation, setUserInformation] = React.useState([]);
   const [userPosts, setUserPosts] = React.useState([]);
   const [userLikes, setUserLikes] = React.useState([]);
+  const [userMedia, setUserMedia] = React.useState([]);
+  const [userRetweet, setUserRetweet] = React.useState([]);
+  const [userRetweetedUsername, setUserRetweetedUsername] = React.useState([]);
   const [userPostsCount, setUserPostsCount] = React.useState(0);
   const [isHovering, setIsHovering] = React.useState(false);
   const { user } = React.useContext(AuthContext);
@@ -48,6 +51,8 @@ export const Profile = () => {
     handleUserPosts();
     handleUserInformation();
     handleLikedPosts();
+    handleImagePost();
+    handleRetweetedPosts();
   }, []);
 
   const handleFollow = async (followed_user_id) => {
@@ -103,6 +108,25 @@ export const Profile = () => {
     }
   };
 
+  const handleRetweetedPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/profile/${username}/retweeted`
+      );
+      if (response.status === 200) {
+        setUserRetweet((prevPosts) => [...prevPosts, ...response.data.items]);
+        setUserRetweetedUsername((prevPosts) => [
+          ...prevPosts,
+          ...response.data.username,
+        ]);
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
   const handleLikedPosts = async () => {
     try {
       const response = await axios.get(
@@ -110,6 +134,21 @@ export const Profile = () => {
       );
       if (response.status === 200) {
         setUserLikes((prevPosts) => [...prevPosts, ...response.data]);
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
+  const handleImagePost = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/profile/${username}/media`
+      );
+      if (response.status === 200) {
+        setUserMedia((prevPosts) => [...prevPosts, ...response.data]);
       } else {
         console.error("Failed to fetch data");
       }
@@ -469,31 +508,34 @@ export const Profile = () => {
                     @{userInformation.username}
                   </Typography>
                   <Typography variant="body1" fontSize="15px" mb={1}>
-                    Yasar University / Software Engineering
+                    {userInformation.bio}
                   </Typography>
                   <Stack flexDirection="row" alignItems="center">
-                    <Stack
-                      flexDirection="row"
-                      alignItems="center"
-                      mr={1}
-                      mb={1}
-                    >
-                      <FmdGoodOutlinedIcon
-                        sx={{
-                          fontSize: "17px",
-                          color: "#808080",
-                          mr: 0.5,
-                        }}
-                      />
+                    <Stack flexDirection="row" alignItems="center" mb={1}>
+                      {userInformation.location ? (
+                        <FmdGoodOutlinedIcon
+                          sx={{
+                            fontSize: "17px",
+                            color: "#808080",
+                            mr: 0.5,
+                          }}
+                        />
+                      ) : null}
+
                       <Typography
                         variant="body1"
                         fontSize="15px"
                         alignItems="center"
                       >
-                        Florida, USA
+                        {userInformation.location}
                       </Typography>
                     </Stack>
-                    <Stack flexDirection="row" alignItems="center" mb={1}>
+                    <Stack
+                      flexDirection="row"
+                      alignItems="center"
+                      mb={1}
+                      ml={userInformation.location ? 1 : 0}
+                    >
                       <CalendarMonthIcon
                         sx={{
                           fontSize: "15px",
@@ -545,8 +587,11 @@ export const Profile = () => {
           <Grid item xs={12}>
             {/*NavBar*/}
             <NavTabs
+              userMedia={userMedia}
               userPosts={userPosts}
               userLikes={userLikes}
+              userRetweet={userRetweet}
+              userRetweetedUsername={userRetweetedUsername}
               handleDeletePost={handleDeletePost}
               handleLikes={handleLikes}
               handleUnlike={handleUnlike}

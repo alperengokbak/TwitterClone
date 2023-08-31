@@ -35,9 +35,17 @@ export const PostComponentIcon = ({
       <SvgIcon
         onClick={text === "Like" ? handleLikePost : handleRetweet}
         sx={{
-          color: text === "Like" ? "red" : "gray",
+          color: () => {
+            if (text === "Retweet") {
+              return "green";
+            } else if (text === "Like") {
+              return "red";
+            } else {
+              return "gray";
+            }
+          },
           "&:hover": {
-            color: text === "Retweet" ? "#17BF63" : "red",
+            color: text === "Retweet" ? "green" : "red",
           },
         }}
         aria-label={text}

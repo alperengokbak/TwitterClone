@@ -11,6 +11,8 @@ import {
   followUp,
   unfollowUp,
   checkFollow,
+  imagePost,
+  retweetedPost,
 } from "../queries/ProfileQuery.js";
 
 export const getUserInformation = async (req, res) => {
@@ -92,11 +94,19 @@ export const getUserPosts = async (req, res) => {
 };
 
 export const displayLikedPost = async (req, res) => {
-  const user_id = req.user.id;
+  const { username } = req.params;
+  const current_user_id = req.user.id;
+
+  const user = await pool.query(checkUsername, [username]);
+  if (user.rows.length === 0) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  const id = user.rows[0].id;
+
   try {
-    const tweets = await pool.query(likedPost, [user_id]);
-    const likedTweets = await pool.query(checkLike, [user_id]);
-    const retweetedTweets = await pool.query(checkRetweet2, [user_id]);
+    const tweets = await pool.query(likedPost, [id]);
+    const likedTweets = await pool.query(checkLike, [current_user_id]);
+    const retweetedTweets = await pool.query(checkRetweet2, [current_user_id]);
 
     tweets.rows.map((tweet) => {
       if (likedTweets.rows.length) {
@@ -115,6 +125,93 @@ export const displayLikedPost = async (req, res) => {
       }
     });
     return res.json(tweets.rows);
+  } catch (error) {
+    console.error("Error fetching tweets:", error);
+    res.status(500).json({ error: "An error occurred while fetching tweets" });
+  }
+};
+
+export const displayImagePost = async (req, res) => {
+  const { username } = req.params;
+  const current_user_id = req.user.id;
+
+  const user = await pool.query(checkUsername, [username]);
+  if (user.rows.length === 0) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  const id = user.rows[0].id;
+
+  try {
+    const tweets = await pool.query(imagePost, [id]);
+    const likedTweets = await pool.query(checkLike, [current_user_id]);
+    const retweetedTweets = await pool.query(checkRetweet2, [current_user_id]);
+
+    tweets.rows.map((tweet) => {
+      if (likedTweets.rows.length) {
+        tweet.liked = likedTweets.rows.some(
+          (likedTweet) => likedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.liked = false;
+      }
+      if (retweetedTweets.rows.length) {
+        tweet.retweeted = retweetedTweets.rows.some(
+          (retweetedTweet) => retweetedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.retweeted = false;
+      }
+    });
+    return res.json(tweets.rows);
+  } catch (error) {
+    console.error("Error fetching tweets:", error);
+    res.status(500).json({ error: "An error occurred while fetching tweets" });
+  }
+};
+
+export const displayRetweetedPosts = async (req, res) => {
+  const { username } = req.params;
+  const current_user_id = req.user.id;
+  const displayUsername =
+    "SELECT u.username FROM users u JOIN retweets r ON u.id = r.user_id WHERE r.user_id = $1";
+
+  const user = await pool.query(checkUsername, [username]);
+  if (user.rows.length === 0) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  const id = user.rows[0].id;
+
+  const displayRetweetedUsername = await pool.query(displayUsername, [id]);
+  if (displayRetweetedUsername.rows.length === 0) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  const usernameRetweeted = displayRetweetedUsername.rows[0].username;
+
+  try {
+    const tweets = await pool.query(retweetedPost, [id]);
+    const likedTweets = await pool.query(checkLike, [current_user_id]);
+    const retweetedTweets = await pool.query(checkRetweet2, [current_user_id]);
+
+    tweets.rows.map((tweet) => {
+      if (likedTweets.rows.length) {
+        tweet.liked = likedTweets.rows.some(
+          (likedTweet) => likedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.liked = false;
+      }
+      if (retweetedTweets.rows.length) {
+        tweet.retweeted = retweetedTweets.rows.some(
+          (retweetedTweet) => retweetedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.retweeted = false;
+      }
+    });
+    return res.json({
+      items: tweets.rows,
+      username: usernameRetweeted,
+    });
   } catch (error) {
     console.error("Error fetching tweets:", error);
     res.status(500).json({ error: "An error occurred while fetching tweets" });
