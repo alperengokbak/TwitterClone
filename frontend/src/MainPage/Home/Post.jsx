@@ -56,6 +56,9 @@ function Post({
         }}
       />
       <Paper
+        onClick={() => {
+          navigate(`/${username}/status/${id}`);
+        }}
         sx={{
           padding: "16px 0px 16px 16px",
           cursor: "pointer",

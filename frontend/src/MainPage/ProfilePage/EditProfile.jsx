@@ -3,27 +3,166 @@ import { Button, Grid, Stack, Avatar, TextField } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import axios from "axios";
 
-export const EditProfile = ({ handleClose }) => {
+// TODO - Profile picture ve profile wallpaper için cloudinary'e request atıp url'i alıyoruz. Ama dönerken database'e boş küme gönderiyor.
+
+export const EditProfile = ({ handleClose, userInformation }) => {
   const fileInputRef = React.useRef(null);
-  const [imageUrl, setImageUrl] = React.useState("");
+  const fileInputRef2 = React.useRef(null);
 
-  const handleFileUpload = () => {
+  const [profileWallpaper, setProfileWallpaper] = React.useState(null);
+  const [profilePicture, setProfilePicture] = React.useState(null);
+  const [firstname, setFirstname] = React.useState(
+    userInformation.firstname || ""
+  );
+  const [lastname, setLastname] = React.useState(
+    userInformation.lastname || ""
+  );
+  const [bio, setBio] = React.useState(userInformation.bio || "");
+  const [location, setLocation] = React.useState(
+    userInformation.location || ""
+  );
+  const [previewWallpaper, setPreviewWallpaper] = React.useState(
+    userInformation.profile_wallpaper || null
+  );
+  const [previewProfilePicture, setPreviewProfilePicture] = React.useState(
+    userInformation.profile_picture || null
+  );
+
+  const handleFileUploadProfilePicture = () => {
     fileInputRef.current.click();
   };
-  const handleClearImage = () => {
-    fileInputRef.current.value = "";
-    setImageUrl("");
-  };
-  const handleBackgroundSelected = (event) => {
-    const selectedFile = event.target.files[0];
-    selectedFile && setImageUrl(URL.createObjectURL(selectedFile));
+  const handleFileUploadProfileBackground = () => {
+    fileInputRef2.current.click();
   };
 
-  const handleAvatarFileSelected = (event) => {
+  /* const handleAvatarFileSelected = (event) => {
     const selectedFile = event.target.files[0];
-    selectedFile && setImageUrl(URL.createObjectURL(selectedFile));
+    if (selectedFile) {
+      const objectUrl = URL.createObjectURL(selectedFile);
+      setPreviewProfilePicture(objectUrl);
+    }
+  }; */
+
+  /* const handleBackgroundSelected = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const objectUrl = URL.createObjectURL(selectedFile);
+      setPreviewWallpaper(objectUrl);
+    }
+  }; */
+
+  const handleSendCloudinaryBackgroundRequest = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", profileWallpaper);
+      formData.append("upload_preset", "rdasu5f6");
+
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dsruzqnhp/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const uploadedImageUrl = data.secure_url;
+        return uploadedImageUrl;
+      } else {
+        console.error(
+          "Cloudinary background upload failed:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Cloudinary background upload error:", error);
+    }
   };
+
+  const handleSendCloudinaryAvatarRequest = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", profilePicture);
+      formData.append("upload_preset", "rdasu5f6");
+
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dsruzqnhp/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const uploadedImageUrl = data.secure_url;
+        return uploadedImageUrl;
+      } else {
+        console.error("Cloudinary avatar upload failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Cloudinary avatar upload error:", error);
+    }
+  };
+
+  const handleClearImage = () => {
+    fileInputRef.current.value = "";
+    fileInputRef2.current.value = "";
+    setProfileWallpaper("");
+    setProfilePicture("");
+    setPreviewWallpaper(null);
+    setPreviewProfilePicture(null);
+  };
+
+  const handleEditProfile = async () => {
+    let profileImage = previewProfilePicture;
+    let backgroundImage = previewWallpaper;
+    if (profilePicture) {
+      profileImage = await handleSendCloudinaryAvatarRequest();
+    }
+    if (profileWallpaper) {
+      backgroundImage = await handleSendCloudinaryBackgroundRequest();
+    }
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/profile/${userInformation.username}`,
+        {
+          profile_picture: profileImage,
+          profile_wallpaper: backgroundImage,
+          firstname: firstname,
+          lastname: lastname,
+          bio: bio,
+          location: location,
+        }
+      );
+      if (response.status === 200) {
+      } else {
+        console.log("Edit Profile Error:", response.status);
+      }
+    } catch (error) {
+      console.log("Edit Profile Error:", error.response);
+    }
+
+    handleClearImage();
+    handleClose();
+  };
+
+  React.useEffect(() => {
+    if (profileWallpaper) {
+      setPreviewWallpaper(URL.createObjectURL(profileWallpaper));
+      URL.revokeObjectURL(profileWallpaper);
+    }
+  }, [profileWallpaper]);
+
+  React.useEffect(() => {
+    if (profilePicture) {
+      setPreviewProfilePicture(URL.createObjectURL(profilePicture));
+      URL.revokeObjectURL(profilePicture);
+    }
+  }, [profilePicture]);
 
   return (
     <Grid
@@ -98,8 +237,7 @@ export const EditProfile = ({ handleClose }) => {
                 },
               }}
               onClick={() => {
-                handleClearImage();
-                handleClose();
+                handleEditProfile();
               }}
               variant="contained"
             >
@@ -112,12 +250,16 @@ export const EditProfile = ({ handleClose }) => {
         <Stack>
           <input
             type="file"
-            ref={fileInputRef}
+            ref={fileInputRef2}
             style={{ display: "none" }}
-            onChange={handleBackgroundSelected}
+            onChange={(event) => {
+              if (event.target.files && event.target.files[0]) {
+                setProfileWallpaper(event.target.files[0]);
+              }
+            }}
           />
           <img
-            src={"gray.png"}
+            src={previewWallpaper || "gray.png"}
             alt="background"
             style={{
               backgroundColor: "#000",
@@ -146,7 +288,7 @@ export const EditProfile = ({ handleClose }) => {
                 height: "30px",
                 width: "22px",
               }}
-              onClick={handleFileUpload}
+              onClick={handleFileUploadProfileBackground}
             />
           </Button>
         </Stack>
@@ -168,10 +310,15 @@ export const EditProfile = ({ handleClose }) => {
               type="file"
               ref={fileInputRef}
               style={{ display: "none" }}
-              onChange={handleAvatarFileSelected}
+              onChange={(event) => {
+                if (event.target.files && event.target.files[0]) {
+                  setProfilePicture(event.target.files[0]);
+                }
+              }}
             />
             <Avatar
               alt="Alperen Gokbak"
+              src={previewProfilePicture || "gray.png"}
               sx={{
                 transform: "translateX(-50%) translateY(-50%)",
                 top: "-15px",
@@ -206,7 +353,7 @@ export const EditProfile = ({ handleClose }) => {
                   height: "30px",
                   width: "22px",
                 }}
-                onClick={handleFileUpload}
+                onClick={handleFileUploadProfilePicture}
               />
             </Button>
           </Stack>
@@ -220,8 +367,20 @@ export const EditProfile = ({ handleClose }) => {
           >
             <TextField
               fullWidth
-              label="Name"
-              placeholder="Name"
+              label="Firstname"
+              placeholder="Firstname"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+              sx={{
+                marginBottom: "25px",
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Lastname"
+              placeholder="Lastname"
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)}
               sx={{
                 marginBottom: "25px",
               }}
@@ -230,6 +389,8 @@ export const EditProfile = ({ handleClose }) => {
               fullWidth
               label="Bio"
               placeholder="Bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
               multiline
               rows={4}
               sx={{
@@ -240,6 +401,8 @@ export const EditProfile = ({ handleClose }) => {
               fullWidth
               label="Location"
               placeholder="Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               sx={{
                 marginBottom: "25px",
               }}

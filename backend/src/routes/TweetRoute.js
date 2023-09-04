@@ -14,6 +14,7 @@ const router = Router();
 router.use(isAuthorized);
 
 router.get("/", paginationProcess);
+router.get("/:username/status/:id");
 router.post("/", postTweets);
 router.post("/like", likeTweet);
 router.delete("/unlike", unlikeTweet);

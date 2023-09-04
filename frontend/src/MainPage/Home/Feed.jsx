@@ -163,7 +163,7 @@ function Feed() {
             if (post.id === id) {
               return {
                 ...post,
-                retweets: res.data.likes,
+                retweets: res.data.retweets,
                 retweeted: false,
               };
             }

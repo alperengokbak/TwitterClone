@@ -48,10 +48,14 @@ export const Profile = () => {
   React.useEffect(() => {
     handleUserPosts();
     handleUserInformation();
-    handleLikedPosts();
     handleImagePost();
-    handleRetweetedPosts();
   }, []);
+  React.useEffect(() => {
+    handleLikedPosts();
+  }, [userPosts.liked]);
+  React.useEffect(() => {
+    handleRetweetedPosts();
+  }, [userPosts.retweeted]);
 
   const handleFollow = async (followed_user_id) => {
     const response = await axios.post(`http://localhost:3000/profile/follow`, {
@@ -176,6 +180,12 @@ export const Profile = () => {
       const response = await axios.delete(`http://localhost:3000/tweet/${id}/`);
       if (response.status === 200) {
         setUserPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+        setUserRetweet((prevPosts) =>
+          prevPosts.filter((post) => post.id !== id)
+        );
+        setUserLikes((prevPosts) => prevPosts.filter((post) => post.id !== id));
+        setUserMedia((prevPosts) => prevPosts.filter((post) => post.id !== id));
+        setUserPostsCount((prevPosts) => prevPosts - 1);
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -190,6 +200,42 @@ export const Profile = () => {
       })
       .then((res) => {
         setUserPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: true,
+              };
+            }
+            return post;
+          })
+        );
+        setUserRetweet((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: true,
+              };
+            }
+            return post;
+          })
+        );
+        setUserMedia((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: true,
+              };
+            }
+            return post;
+          })
+        );
+        setUserLikes((prevPosts) =>
           prevPosts.map((post) => {
             if (post.id === id) {
               return {
@@ -228,6 +274,42 @@ export const Profile = () => {
             return post;
           })
         );
+        setUserRetweet((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: false,
+              };
+            }
+            return post;
+          })
+        );
+        setUserMedia((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: false,
+              };
+            }
+            return post;
+          })
+        );
+        setUserLikes((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                likes: res.data.likes,
+                liked: false,
+              };
+            }
+            return post;
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -242,6 +324,42 @@ export const Profile = () => {
       })
       .then((res) => {
         setUserPosts((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.retweets,
+                retweeted: true,
+              };
+            }
+            return post;
+          })
+        );
+        setUserRetweet((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.retweets,
+                retweeted: true,
+              };
+            }
+            return post;
+          })
+        );
+        setUserMedia((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.retweets,
+                retweeted: true,
+              };
+            }
+            return post;
+          })
+        );
+        setUserLikes((prevPosts) =>
           prevPosts.map((post) => {
             if (post.id === id) {
               return {
@@ -272,7 +390,43 @@ export const Profile = () => {
             if (post.id === id) {
               return {
                 ...post,
-                retweets: res.data.likes,
+                retweets: res.data.retweets,
+                retweeted: false,
+              };
+            }
+            return post;
+          })
+        );
+        setUserRetweet((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.retweets,
+                retweeted: false,
+              };
+            }
+            return post;
+          })
+        );
+        setUserMedia((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.retweets,
+                retweeted: false,
+              };
+            }
+            return post;
+          })
+        );
+        setUserLikes((prevPosts) =>
+          prevPosts.map((post) => {
+            if (post.id === id) {
+              return {
+                ...post,
+                retweets: res.data.retweets,
                 retweeted: false,
               };
             }
@@ -299,7 +453,7 @@ export const Profile = () => {
         scrollbarWidth: "none",
       }}
     >
-      <Grid item>
+      <Grid item position="sticky" mt={1}>
         {/*Header Section*/}
         <Stack flexDirection="row" alignItems="center">
           <SvgIcon
@@ -332,7 +486,17 @@ export const Profile = () => {
           </Stack>
         </Stack>
       </Grid>
-      <Grid item>
+      <Grid
+        item
+        xs={12}
+        maxHeight="calc(100vh - 58px)"
+        sx={{
+          overflow: "scroll",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
         <Grid container>
           <Grid item xs={12}>
             {/*Upside Navbar(Background Image + Details)*/}
@@ -612,7 +776,10 @@ export const Profile = () => {
             boxShadow: 24,
           }}
         >
-          <EditProfile handleClose={handleClose} />
+          <EditProfile
+            userInformation={userInformation}
+            handleClose={handleClose}
+          />
         </Box>
       </Modal>
       <Modal open={openUnfollowModal} onClose={handleCloseUnfollowModal}>

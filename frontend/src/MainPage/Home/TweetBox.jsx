@@ -18,9 +18,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { TweetBoxIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
+// TODO - Add image upload functionality
+
 function TweetBox({ postTweet }) {
   const [tweetMessage, setTweetMessage] = React.useState("");
   const [imageUrl, setImageUrl] = React.useState("");
+  const [previewImage, setPreviewImage] = React.useState(null);
   const { user } = React.useContext(AuthContext);
   const fileInputRef = React.useRef(null);
 
@@ -28,9 +31,13 @@ function TweetBox({ postTweet }) {
     fileInputRef.current.click();
   };
 
-  const handleFileSelected = async (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
+  const handleAvatarFileSelected = (event) => {
+    const selectedFile = event.target.files[0];
+    selectedFile && setPreviewImage(URL.createObjectURL(event.target.files[0]));
+  };
+
+  const handleFileSelected = async () => {
+    if (previewImage) {
       const formData = new FormData();
       formData.append("file", selectedFile);
       formData.append("upload_preset", "rdasu5f6");
@@ -59,6 +66,7 @@ function TweetBox({ postTweet }) {
     e.preventDefault();
 
     if (imageUrl) {
+      await handleFileSelected();
       postTweet(imageUrl, tweetMessage);
       setTweetMessage("");
       setImageUrl("");
@@ -101,7 +109,7 @@ function TweetBox({ postTweet }) {
                 fontSize: "20px",
               }}
             />
-            {imageUrl ? (
+            {previewImage ? (
               <Stack
                 position={"relative"}
                 display={"inline-block"}
@@ -116,7 +124,7 @@ function TweetBox({ postTweet }) {
                 >
                   <CardMedia
                     component="img"
-                    src={imageUrl}
+                    src={previewImage}
                     alt="Image"
                     sx={{
                       cursor: "pointer",
@@ -175,7 +183,7 @@ function TweetBox({ postTweet }) {
           type="file"
           ref={fileInputRef}
           style={{ display: "none" }}
-          onChange={handleFileSelected}
+          onChange={handleAvatarFileSelected}
         />
       </form>
     </Stack>

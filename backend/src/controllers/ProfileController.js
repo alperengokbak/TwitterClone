@@ -13,6 +13,7 @@ import {
   checkFollow,
   imagePost,
   retweetedPost,
+  updateUserProfile,
 } from "../queries/ProfileQuery.js";
 
 export const getUserInformation = async (req, res) => {
@@ -263,4 +264,31 @@ export const unfollowUser = (req, res) => {
       }
     }
   );
+};
+
+export const updateProfile = async (req, res) => {
+  const {
+    firstname,
+    lastname,
+    profile_picture,
+    profile_wallpaper,
+    bio,
+    location,
+  } = req.body;
+  const { username } = req.params;
+  try {
+    const updateProfileQuery = await pool.query(updateUserProfile, [
+      firstname,
+      lastname,
+      profile_picture,
+      profile_wallpaper,
+      bio,
+      location,
+      username,
+    ]);
+    return res.status(200).send(updateProfileQuery.rows);
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ error: "An error occurred while updating profile" });
+  }
 };

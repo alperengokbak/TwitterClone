@@ -12,6 +12,7 @@ import { AuthContext } from "./AuthenticationSystem/AuthenticationSystem";
 import { Layouts } from "./Layouts";
 import Feed from "./MainPage/Home/Feed";
 import { Profile } from "./MainPage/ProfilePage/Profile";
+import { CommentScreen } from "./MainPage/CommentScreen/CommentScreen";
 
 export const App = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -60,6 +61,14 @@ export const App = () => {
           element={
             <Layouts>
               <Profile />
+            </Layouts>
+          }
+        />
+        <Route
+          path="/:username/status/:id"
+          element={
+            <Layouts>
+              <CommentScreen />
             </Layouts>
           }
         />

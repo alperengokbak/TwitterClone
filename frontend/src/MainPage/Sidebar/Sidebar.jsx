@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack } from "@mui/material";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import HomeIcon from "@mui/icons-material/Home";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -47,7 +47,7 @@ export const Sidebar = () => {
             marginBottom: "10px",
           }}
         />
-        <SidebarOptions Icon={HomeIcon} text="Home" link="/home" />
+        <SidebarOptions Icon={HomeOutlinedIcon} text="Home" link="/home" />
         <SidebarOptions Icon={SearchIcon} text="Explore" link="#" />
         <SidebarOptions
           Icon={NotificationsNoneIcon}

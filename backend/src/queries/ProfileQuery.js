@@ -2,14 +2,9 @@ export const userInformations =
   "SELECT id, firstname, lastname, username, profile_picture, birthday, is_verified, profile_wallpaper, bio, location FROM users WHERE username = $1";
 export const checkUsername =
   "SELECT id, username FROM users WHERE username = $1";
-export const updateProfile =
-  "UPDATE users SET firstname = $1, lastname = $2, username = $3, email = $4, profile_picture = $5, birthday = $6 WHERE id = $7";
+export const updateUserProfile =
+  "UPDATE users SET firstname = $1, lastname = $2, profile_picture = $3, profile_wallpaper = $4, bio = $5, location = $6 WHERE username = $7";
 export const updatePassword = "UPDATE users SET password = $1 WHERE id = $2";
-export const updateProfilePicture =
-  "UPDATE users SET profile_picture = $1 WHERE id = $2";
-export const updateCoverPicture =
-  "UPDATE users SET cover_picture = $1 WHERE id = $2";
-
 export const getFollowedCount =
   "SELECT COUNT(*) FROM followers WHERE follower_user_id = $1";
 export const getFollowersCount =
