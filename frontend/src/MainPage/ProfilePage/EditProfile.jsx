@@ -5,8 +5,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import axios from "axios";
 
-// TODO - Profile picture ve profile wallpaper için cloudinary'e request atıp url'i alıyoruz. Ama dönerken database'e boş küme gönderiyor.
-
 export const EditProfile = ({ handleClose, userInformation }) => {
   const fileInputRef = React.useRef(null);
   const fileInputRef2 = React.useRef(null);
@@ -36,22 +34,6 @@ export const EditProfile = ({ handleClose, userInformation }) => {
   const handleFileUploadProfileBackground = () => {
     fileInputRef2.current.click();
   };
-
-  /* const handleAvatarFileSelected = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const objectUrl = URL.createObjectURL(selectedFile);
-      setPreviewProfilePicture(objectUrl);
-    }
-  }; */
-
-  /* const handleBackgroundSelected = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const objectUrl = URL.createObjectURL(selectedFile);
-      setPreviewWallpaper(objectUrl);
-    }
-  }; */
 
   const handleSendCloudinaryBackgroundRequest = async () => {
     try {

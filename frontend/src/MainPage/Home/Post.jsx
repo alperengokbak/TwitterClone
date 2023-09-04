@@ -73,7 +73,8 @@ function Post({
               className="Profile Image"
               alt="Profile Image"
               src={profile_picture}
-              onClick={() => {
+              onClick={(event) => {
+                event.stopPropagation();
                 navigate(`/${username}`);
               }}
             />
@@ -92,7 +93,8 @@ function Post({
                         display: "flex",
                         alignItems: "center",
                       }}
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
                         navigate(`/${username}`);
                       }}
                     >
@@ -121,7 +123,8 @@ function Post({
                         marginLeft: is_verified ? "1px" : "5px",
                         marginRight: "1vw",
                       }}
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
                         navigate(`/${username}`);
                       }}
                     >
