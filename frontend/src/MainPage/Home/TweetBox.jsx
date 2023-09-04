@@ -22,24 +22,20 @@ import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 function TweetBox({ postTweet }) {
   const [tweetMessage, setTweetMessage] = React.useState("");
-  const [imageUrl, setImageUrl] = React.useState("");
+  const [imageUrl, setImageUrl] = React.useState(null);
   const [previewImage, setPreviewImage] = React.useState(null);
   const { user } = React.useContext(AuthContext);
+
   const fileInputRef = React.useRef(null);
 
   const handleFileUpload = () => {
     fileInputRef.current.click();
   };
 
-  const handleAvatarFileSelected = (event) => {
-    const selectedFile = event.target.files[0];
-    selectedFile && setPreviewImage(URL.createObjectURL(event.target.files[0]));
-  };
-
   const handleFileSelected = async () => {
-    if (previewImage) {
+    try {
       const formData = new FormData();
-      formData.append("file", selectedFile);
+      formData.append("file", imageUrl);
       formData.append("upload_preset", "rdasu5f6");
 
       const response = await fetch(
@@ -50,31 +46,46 @@ function TweetBox({ postTweet }) {
         }
       );
 
-      const data = await response.json();
-      const uploadedImageUrl = data.secure_url;
-
-      setImageUrl(uploadedImageUrl);
+      if (response.ok) {
+        const data = await response.json();
+        const uploadedImageUrl = data.secure_url;
+        return uploadedImageUrl;
+      } else {
+        console.error(
+          "Cloudinary background upload failed:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Cloudinary background upload error:", error);
     }
   };
 
   const handleClearImage = () => {
     fileInputRef.current.value = "";
     setImageUrl("");
+    setPreviewImage(null);
   };
 
   const handlePostTweet = async (e) => {
     e.preventDefault();
+    let uploadCloudinaryUrl = await handleFileSelected();
 
     if (imageUrl) {
-      await handleFileSelected();
-      postTweet(imageUrl, tweetMessage);
-      setTweetMessage("");
-      setImageUrl("");
+      postTweet(uploadCloudinaryUrl, tweetMessage);
+      handleClearImage();
     } else {
       postTweet(null, tweetMessage);
-      setTweetMessage("");
+      handleClearImage();
     }
   };
+
+  React.useEffect(() => {
+    if (imageUrl) {
+      setPreviewImage(URL.createObjectURL(imageUrl));
+      URL.revokeObjectURL(imageUrl);
+    }
+  }, [imageUrl]);
 
   return (
     <Stack padding={1}>
@@ -124,7 +135,7 @@ function TweetBox({ postTweet }) {
                 >
                   <CardMedia
                     component="img"
-                    src={previewImage}
+                    src={previewImage || ""}
                     alt="Image"
                     sx={{
                       cursor: "pointer",
@@ -183,7 +194,11 @@ function TweetBox({ postTweet }) {
           type="file"
           ref={fileInputRef}
           style={{ display: "none" }}
-          onChange={handleAvatarFileSelected}
+          onChange={(event) => {
+            if (event.target.files && event.target.files[0]) {
+              setImageUrl(event.target.files[0]);
+            }
+          }}
         />
       </form>
     </Stack>
