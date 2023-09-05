@@ -18,8 +18,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { TweetBoxIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
-// TODO - Add image upload functionality
-
 function TweetBox({ postTweet }) {
   const [tweetMessage, setTweetMessage] = React.useState("");
   const [imageUrl, setImageUrl] = React.useState(null);
@@ -63,6 +61,7 @@ function TweetBox({ postTweet }) {
 
   const handleClearImage = () => {
     fileInputRef.current.value = "";
+    setTweetMessage("");
     setImageUrl("");
     setPreviewImage(null);
   };
@@ -75,7 +74,7 @@ function TweetBox({ postTweet }) {
       postTweet(uploadCloudinaryUrl, tweetMessage);
       handleClearImage();
     } else {
-      postTweet(null, tweetMessage);
+      postTweet("", tweetMessage);
       handleClearImage();
     }
   };

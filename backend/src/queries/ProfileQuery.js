@@ -22,15 +22,15 @@ export const checkFollow =
 export const checkLike = "SELECT * FROM likes WHERE user_id = $1";
 
 export const displayUserPost =
-  "SELECT u.username, u.firstName, u.lastName, u.profile_picture, u.is_verified,t.id ,t.content,t.image_url,t.creation_date ,t.likes,t.retweets,ru.username AS retweeter_username FROM tweets t JOIN users u ON t.user_id = u.id LEFT JOIN retweets r ON t.id = r.tweet_id AND r.user_id = $1 LEFT JOIN users ru ON r.user_id = ru.id WHERE t.user_id = $1 OR r.user_id = $1 ORDER BY t.creation_date DESC";
+  "SELECT u.username, u.firstName, u.lastName, u.profile_picture, u.is_verified,t.id ,t.content,t.image_url,t.creation_date ,t.likes,t.retweets,ru.username AS retweeter_username FROM tweets t JOIN users u ON t.user_id = u.id LEFT JOIN retweets r ON t.id = r.tweet_id AND r.user_id = $1 LEFT JOIN users ru ON r.user_id = ru.id WHERE t.mother_tweet_id IS NULL AND t.user_id = $1 OR r.user_id = $1 ORDER BY t.creation_date DESC";
 
 export const checkRetweet2 = "SELECT tweet_id FROM retweets WHERE user_id = $1";
 
 export const likedPost =
-  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM likes l JOIN tweets t ON t.id = l.tweet_id JOIN users u ON t.user_id = u.id WHERE l.user_id = $1 ORDER BY creation_date DESC";
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM likes l JOIN tweets t ON t.id = l.tweet_id JOIN users u ON t.user_id = u.id WHERE t.mother_tweet_id IS NULL AND l.user_id = $1 ORDER BY creation_date DESC";
 
 export const imagePost =
-  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM users u JOIN tweets t ON u.id = t.user_id WHERE t.image_url IS NOT NULL AND u.id = $1 ORDER BY creation_date DESC";
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM users u JOIN tweets t ON u.id = t.user_id WHERE t.mother_tweet_id IS NULL AND t.image_url IS NOT NULL AND u.id = $1 ORDER BY creation_date DESC";
 
 export const retweetedPost =
-  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM users u JOIN tweets t ON u.id = t.user_id JOIN retweets r ON t.id = r.tweet_id WHERE r.user_id = $1 ORDER BY r.creation_date DESC";
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM users u JOIN tweets t ON u.id = t.user_id JOIN retweets r ON t.id = r.tweet_id WHERE t.mother_tweet_id IS NULL AND r.user_id = $1 ORDER BY r.creation_date DESC";

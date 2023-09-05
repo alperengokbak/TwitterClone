@@ -47,7 +47,7 @@ export const SidebarTheme = createTheme({
           style: {
             cursor: "pointer",
             color: "#808080",
-            fontSize: "17px",
+            fontSize: "22px",
             "&:hover": {
               backgroundColor: "#E8F5FE",
               borderRadius: "20px",

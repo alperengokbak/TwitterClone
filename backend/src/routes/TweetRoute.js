@@ -7,6 +7,8 @@ import {
   unlikeTweet,
   handleRetweets,
   deleteRetweets,
+  displayComments,
+  postComments,
 } from "../controllers/TweetController.js";
 import { isAuthorized } from "../middleware.js";
 
@@ -14,8 +16,9 @@ const router = Router();
 router.use(isAuthorized);
 
 router.get("/", paginationProcess);
-router.get("/:username/status/:id");
+router.get("/comment/:mother_tweet_id", displayComments);
 router.post("/", postTweets);
+router.post("/comment", postComments);
 router.post("/like", likeTweet);
 router.delete("/unlike", unlikeTweet);
 router.post("/retweet", handleRetweets);

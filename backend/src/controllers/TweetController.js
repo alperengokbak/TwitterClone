@@ -1,9 +1,11 @@
 import { pool } from "../../database.js";
 import {
   getTweetById1,
-  getTweetByIdWithUsername,
+  getMainTweetByIdForComment,
+  getTweetByIdForComments,
   displayUserPost,
   postTweet,
+  postComment,
   getTweetCount,
   checkLike,
   checkLike2,
@@ -64,9 +66,50 @@ export const paginationProcess = async (req, res) => {
   }
 };
 
+// TODO - Add null check
 export const displayComments = async (req, res) => {
-  const { username } = req.params;
-  pool.query(getTweetByIdWithUsername, [username], (error, results) => {});
+  const motherTweetId = parseInt(req.params.mother_tweet_id);
+  const currentUserId = req.user.id;
+
+  const mainTweet = await pool.query(getMainTweetByIdForComment, [
+    motherTweetId,
+  ]);
+  const comment = await pool.query(getTweetByIdForComments, [motherTweetId]);
+  try {
+    const likedTweets = await pool.query(checkLike, [currentUserId]);
+    const retweetedTweets = await pool.query(checkRetweet2, [currentUserId]);
+
+    if (likedTweets.rows.length) {
+      comment.rows[0].liked = likedTweets.rows.some(
+        (likedTweet) => likedTweet.tweet_id === comment.rows[0].id
+      );
+      mainTweet.rows[0].liked = likedTweets.rows.some(
+        (likedTweet) => likedTweet.tweet_id === mainTweet.rows[0].id
+      );
+    } else {
+      comment.rows[0].liked = false;
+      mainTweet.rows[0].liked = false;
+    }
+    if (retweetedTweets.rows.length) {
+      comment.rows[0].retweeted = retweetedTweets.rows.some(
+        (retweetedTweet) => retweetedTweet.tweet_id === comment.rows[0].id
+      );
+      mainTweet.rows[0].retweeted = retweetedTweets.rows.some(
+        (retweetedTweet) => retweetedTweet.tweet_id === mainTweet.rows[0].id
+      );
+    } else {
+      comment.rows[0].retweeted = false;
+      mainTweet.rows[0].retweeted = false;
+    }
+
+    return res.status(200).json({
+      mainTweet: mainTweet.rows[0],
+      comments: comment.rows,
+    });
+  } catch (error) {
+    console.error("Error fetching tweets:", error);
+    res.status(500).json({ error: "An error occurred while fetching tweets" });
+  }
 };
 
 export const deleteTweets = async (req, res) => {
@@ -128,6 +171,38 @@ export const postTweets = (req, res) => {
     });
   });
 };
+
+export const postComments = (req, res) => {
+  const { firstname, lastname, username, profile_picture, is_verified } =
+    req.user;
+  const { user_id, content, image_url, mother_tweet_id } = req.body;
+  pool.query(
+    postComment,
+    [user_id, content, image_url, mother_tweet_id],
+    (error, results) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send("Internal Server Error!");
+      }
+      return res.status(201).json({
+        id: results.rows[0].id,
+        user_id: results.rows[0].user_id,
+        content: results.rows[0].content,
+        image_url: results.rows[0].image_url,
+        creation_date: results.rows[0].creation_date,
+        likes: results.rows[0].likes,
+        retweets: results.rows[0].retweets,
+        mother_tweet_id: results.rows[0].mother_tweet_id,
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        profile_picture: profile_picture,
+        is_verified: is_verified,
+      });
+    }
+  );
+};
+
 export const likeTweet = (req, res) => {
   const { user_id, tweet_id } = req.body;
   pool.query(checkLike2, [user_id, tweet_id], (error, results) => {

@@ -1,12 +1,17 @@
 export const getTweet = "SELECT * FROM tweets";
 export const getTweetById1 = "SELECT * FROM tweets WHERE id = $1";
-export const getTweetByIdWithUsername =
-  "u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id WHERE u.username = $1";
+export const getMainTweetByIdForComment =
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.* FROM tweets t JOIN users u ON u.id = t.user_id WHERE t.id = $1";
+export const getTweetByIdForComments =
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.* FROM tweets t JOIN users u ON u.id = t.user_id WHERE mother_tweet_id = $1 ORDER BY creation_date DESC";
 export const postTweet =
   "INSERT INTO tweets (user_id , content, image_url) VALUES ($1, $2, $3) RETURNING *";
 
+export const postComment =
+  "INSERT INTO tweets (user_id , content, image_url, mother_tweet_id) VALUES ($1, $2, $3, $4) RETURNING *";
+
 export const displayUserPost =
-  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id  ORDER BY creation_date DESC LIMIT $1 OFFSET $2";
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.id, t.content, t.image_url, t.creation_date, t.likes, t.retweets FROM tweets t JOIN users u ON u.id = t.user_id WHERE t.mother_tweet_id IS NULL ORDER BY creation_date DESC LIMIT $1 OFFSET $2";
 
 export const getTweetCount = "SELECT COUNT(*) FROM tweets";
 

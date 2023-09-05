@@ -92,6 +92,9 @@ function Post({
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
+                        "&:hover": {
+                          textDecoration: "underline",
+                        },
                       }}
                       onClick={(event) => {
                         event.stopPropagation();
@@ -135,6 +138,7 @@ function Post({
                     <MoreHorizIcon
                       className="more_postScreen"
                       onClick={(event) => {
+                        event.stopPropagation();
                         handleClick(event);
                       }}
                     />
@@ -181,7 +185,8 @@ function Post({
                     text="Retweet"
                     Icon={RepeatIcon}
                     retweets={retweets}
-                    handleRetweet={() => {
+                    handleRetweet={(event) => {
+                      event.stopPropagation();
                       if (isRetweeted) {
                         handleRemoveRetweet(id);
                       } else {
@@ -193,7 +198,8 @@ function Post({
                     text="Like"
                     Icon={isLiked ? FavoriteIcon : FavoriteBorderIcon}
                     likes={likes}
-                    handleLikePost={() => {
+                    handleLikePost={(event) => {
+                      event.stopPropagation();
                       if (isLiked) {
                         handleUnlikePost(id);
                       } else {

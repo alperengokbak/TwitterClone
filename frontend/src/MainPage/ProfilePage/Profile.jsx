@@ -20,7 +20,6 @@ import axios from "axios";
 import { EditProfile } from "./EditProfile";
 import { Unfollow } from "./Unfollow";
 
-// TODO - Add edit profile functionality
 export const Profile = () => {
   let { username } = useParams();
   const [userInformation, setUserInformation] = React.useState([]);
@@ -682,7 +681,6 @@ export const Profile = () => {
                           }}
                         />
                       ) : null}
-
                       <Typography
                         variant="body1"
                         fontSize="15px"
