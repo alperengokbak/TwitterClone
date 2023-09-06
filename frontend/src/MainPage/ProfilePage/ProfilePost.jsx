@@ -19,6 +19,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "../Home/CurrentDateFormat";
+import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 function ProfilePost({
   firstName,
@@ -43,6 +44,7 @@ function ProfilePost({
   retweeter_username,
 }) {
   const navigate = useNavigate();
+  const { user } = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -61,7 +63,11 @@ function ProfilePost({
       }}
     >
       <Paper
-        style={{
+        onClick={() => {
+          navigate(`/${username}/status/${id}`);
+        }}
+        sx={{
+          cursor: "pointer",
           padding: isRetweeted ? "8px 0px 16px 16px" : "16px 0px 16px 16px",
         }}
       >
@@ -95,7 +101,8 @@ function ProfilePost({
               className="Profile Image"
               alt="Profile Image"
               src={profile_picture}
-              onClick={() => {
+              onClick={(event) => {
+                event.stopPropagation();
                 navigate(`/${username}`);
               }}
             />
@@ -116,6 +123,10 @@ function ProfilePost({
                         "&:hover": {
                           textDecoration: "underline",
                         },
+                      }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        navigate(`/${username}`);
                       }}
                     >
                       {firstName} {lastName}
@@ -143,6 +154,10 @@ function ProfilePost({
                         marginLeft: is_verified ? "1px" : "5px",
                         marginRight: "1vw",
                       }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        navigate(`/${username}`);
+                      }}
                     >
                       @{username} · {CurrentDateFormat(creation_date)}
                     </Typography>
@@ -154,6 +169,7 @@ function ProfilePost({
                       }}
                       className="more_postScreen"
                       onClick={(event) => {
+                        event.stopPropagation();
                         handleClick(event);
                       }}
                     />
@@ -229,14 +245,18 @@ function ProfilePost({
         </Grid>
       </Paper>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem
-          onClick={() => {
-            handleDeletePost(id);
-            handleClose();
-          }}
-        >
-          Delete this post
-        </MenuItem>
+        {user.username !== username ? (
+          <MenuItem onClick={handleClose}>Not interested in this post</MenuItem>
+        ) : (
+          <MenuItem
+            onClick={() => {
+              handleDeletePost(id);
+              handleClose();
+            }}
+          >
+            Delete this post
+          </MenuItem>
+        )}
       </Menu>
     </Stack>
   );

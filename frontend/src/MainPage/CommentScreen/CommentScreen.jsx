@@ -481,55 +481,59 @@ export const CommentScreen = () => {
                 cursor: "pointer",
               }}
             />
-            <Stack ml={1.5}>
-              <Typography
-                variant="body1"
-                fontWeight="bold"
-                onClick={() => {
-                  navigate(`/${username}`);
-                }}
-                sx={{
-                  cursor: "pointer",
-                }}
-              >
-                {post.firstname} {post.lastname}
-                {post.is_verified ? (
-                  <Verified
-                    sx={{
-                      marginLeft: "5px",
-                      color: "#1DA1F2",
-                      width: "15px",
-                      height: "15px",
-                      cursor: "pointer",
-                    }}
-                  />
-                ) : null}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="gray"
-                onClick={() => {
-                  navigate(`/${username}`);
-                }}
-                sx={{
-                  cursor: "pointer",
-                }}
-              >
-                @{post.username}
-              </Typography>
-            </Stack>
             <Stack
               flexDirection="row"
+              justifyContent="space-between"
               width="100%"
-              maxWidth="393px"
-              justifyContent="flex-end"
+              sx={{
+                mr: 2,
+              }}
             >
-              <MoreHorizIcon
-                className="more_postScreen"
-                onClick={(event) => {
-                  handleClick(event);
-                }}
-              />
+              <Stack ml={1.5}>
+                <Typography
+                  variant="body1"
+                  fontWeight="bold"
+                  onClick={() => {
+                    navigate(`/${username}`);
+                  }}
+                  sx={{
+                    cursor: "pointer",
+                  }}
+                >
+                  {post.firstname} {post.lastname}
+                  {post.is_verified ? (
+                    <Verified
+                      sx={{
+                        marginLeft: "5px",
+                        color: "#1DA1F2",
+                        width: "15px",
+                        height: "15px",
+                        cursor: "pointer",
+                      }}
+                    />
+                  ) : null}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="gray"
+                  onClick={() => {
+                    navigate(`/${username}`);
+                  }}
+                  sx={{
+                    cursor: "pointer",
+                  }}
+                >
+                  @{post.username}
+                </Typography>
+              </Stack>
+              <Stack>
+                <MoreHorizIcon
+                  className="more_postScreen"
+                  onClick={(event) => {
+                    handleClick(event);
+                  }}
+                />
+              </Stack>
             </Stack>
           </Stack>
           <Stack mt={2}>
