@@ -40,9 +40,6 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "token"
 )}`;
 
-// TODO - Delete post diyince hata veriyor.
-// TODO - Retweet ve like sayıları güncellenmiyor.
-
 export const CommentScreen = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -82,9 +79,7 @@ export const CommentScreen = () => {
   };
 
   const handleCommentScreen = async () => {
-    const response = await axios.get(
-      `http://localhost:3000/tweet/comment/${id}`
-    );
+    const response = await axios.get(`http://localhost:3000/tweet/${id}`);
     if (response.status === 200) {
       const jsonData = await response.data;
       setComments(jsonData.comments);
@@ -135,7 +130,18 @@ export const CommentScreen = () => {
     try {
       const response = await axios.delete(`http://localhost:3000/tweet/${id}/`);
       if (response.status === 200) {
-        setPost((post) => post.id !== id);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
+  const handleDeleteComment = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/tweet/${id}/`);
+      if (response.status === 200) {
+        setComments((prevPosts) => prevPosts.filter((post) => post.id !== id));
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -149,16 +155,41 @@ export const CommentScreen = () => {
         tweet_id: id,
       })
       .then((res) => {
-        setPost((posts) => {
-          if (posts.id === id) {
+        setPost((tweet) => {
+          if (tweet.id === id) {
             return {
-              ...posts,
+              ...tweet,
               likes: res.data.likes,
               liked: true,
             };
           }
-          return posts;
+          return tweet;
         });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleLikeComment = async (id) => {
+    await axios
+      .post(`http://localhost:3000/tweet/like`, {
+        user_id: user.id,
+        tweet_id: id,
+      })
+      .then((res) => {
+        setComments((prevPosts) =>
+          prevPosts.map((comment) => {
+            if (comment.id === id) {
+              return {
+                ...comment,
+                likes: res.data.likes,
+                liked: true,
+              };
+            }
+            return comment;
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -190,6 +221,33 @@ export const CommentScreen = () => {
       });
   };
 
+  const handleUnlikeComment = async (id) => {
+    await axios
+      .delete(`http://localhost:3000/tweet/unlike`, {
+        data: {
+          user_id: user.id,
+          tweet_id: id,
+        },
+      })
+      .then((res) => {
+        setComments((prevPosts) =>
+          prevPosts.map((comment) => {
+            if (comment.id === id) {
+              return {
+                ...comment,
+                likes: res.data.likes,
+                liked: false,
+              };
+            }
+            return comment;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleRetweet = async (id) => {
     await axios
       .post(`http://localhost:3000/tweet/retweet`, {
@@ -197,21 +255,47 @@ export const CommentScreen = () => {
         tweet_id: id,
       })
       .then((res) => {
-        setPost((posts) => {
-          if (posts.id === id) {
+        setPost((tweet) => {
+          if (tweet.id === id) {
             return {
-              ...posts,
+              ...tweet,
               retweets: res.data.retweets,
               retweeted: true,
             };
           }
-          return posts;
+          return tweet;
         });
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  const handleRetweetComment = async (id) => {
+    await axios
+      .post(`http://localhost:3000/tweet/retweet`, {
+        user_id: user.id,
+        tweet_id: id,
+      })
+      .then((res) => {
+        setComments((prevPosts) =>
+          prevPosts.map((comment) => {
+            if (comment.id === id) {
+              return {
+                ...comment,
+                retweets: res.data.retweets,
+                retweeted: true,
+              };
+            }
+            return comment;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleRemoveRetweet = async (id) => {
     await axios
       .delete(`http://localhost:3000/tweet/undoretweet`, {
@@ -231,6 +315,33 @@ export const CommentScreen = () => {
           }
           return posts;
         });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleRemoveRetweetComment = async (id) => {
+    await axios
+      .delete(`http://localhost:3000/tweet/undoretweet`, {
+        data: {
+          user_id: user.id,
+          tweet_id: id,
+        },
+      })
+      .then((res) => {
+        setComments((prevPosts) =>
+          prevPosts.map((comment) => {
+            if (comment.id === id) {
+              return {
+                ...comment,
+                retweets: res.data.retweets,
+                retweeted: false,
+              };
+            }
+            return comment;
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -531,8 +642,7 @@ export const CommentScreen = () => {
             <PostComponentIcon
               text="Retweet"
               Icon={RepeatIcon}
-              handleRetweet={(event) => {
-                event.stopPropagation();
+              handleRetweet={() => {
                 if (post.retweeted) {
                   handleRemoveRetweet(post.id);
                 } else {
@@ -543,8 +653,7 @@ export const CommentScreen = () => {
             <PostComponentIcon
               text="Like"
               Icon={post.liked ? FavoriteIcon : FavoriteBorderIcon}
-              handleLikePost={(event) => {
-                event.stopPropagation();
+              handleLikePost={() => {
                 if (post.liked) {
                   handleUnlike(post.id);
                 } else {
@@ -577,8 +686,7 @@ export const CommentScreen = () => {
           <Stack flexDirection="row" width="100%" maxWidth="575px">
             <Avatar
               src={user.profile_picture}
-              onClick={(event) => {
-                event.stopPropagation();
+              onClick={() => {
                 navigate(`/${user.username}`);
               }}
               sx={{
@@ -710,11 +818,15 @@ export const CommentScreen = () => {
                 id={comment.id}
                 isLiked={comment.liked}
                 isRetweeted={comment.retweeted}
-                handleDeletePost={handleDeletePost}
-                handleLikePost={handleLike}
-                handleUnlikePost={handleUnlike}
-                handleRetweet={handleRetweet}
-                handleRemoveRetweet={handleRemoveRetweet}
+                handleDeleteComment={handleDeleteComment}
+                handleLikeComment={handleLikeComment}
+                handleUnlikeComment={handleUnlikeComment}
+                handleRetweetComment={handleRetweetComment}
+                handleRemoveRetweetComment={handleRemoveRetweetComment}
+                handleFollow={handleFollow}
+                handleUnfollow={handleUnfollow}
+                followInformation={followInformation}
+                followed_user_id={followed_user_id}
               />
             ))}
           </Stack>

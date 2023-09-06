@@ -16,7 +16,7 @@ const router = Router();
 router.use(isAuthorized);
 
 router.get("/", paginationProcess);
-router.get("/comment/:mother_tweet_id", displayComments);
+router.get("/:id", displayComments);
 router.post("/", postTweets);
 router.post("/comment", postComments);
 router.post("/like", likeTweet);

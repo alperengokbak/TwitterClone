@@ -68,7 +68,7 @@ export const paginationProcess = async (req, res) => {
 
 // TODO - Add null check
 export const displayComments = async (req, res) => {
-  const motherTweetId = parseInt(req.params.mother_tweet_id);
+  const motherTweetId = parseInt(req.params.id);
   const currentUserId = req.user.id;
 
   const mainTweet = await pool.query(getMainTweetByIdForComment, [
@@ -80,23 +80,27 @@ export const displayComments = async (req, res) => {
     const retweetedTweets = await pool.query(checkRetweet2, [currentUserId]);
 
     if (likedTweets.rows.length) {
-      comment.rows[0].liked = likedTweets.rows.some(
-        (likedTweet) => likedTweet.tweet_id === comment.rows[0].id
-      );
       mainTweet.rows[0].liked = likedTweets.rows.some(
         (likedTweet) => likedTweet.tweet_id === mainTweet.rows[0].id
       );
+      comment.rows.map((tweet) => {
+        tweet.liked = likedTweets.rows.some(
+          (likedTweet) => likedTweet.tweet_id === tweet.id
+        );
+      });
     } else {
       comment.rows[0].liked = false;
       mainTweet.rows[0].liked = false;
     }
     if (retweetedTweets.rows.length) {
-      comment.rows[0].retweeted = retweetedTweets.rows.some(
-        (retweetedTweet) => retweetedTweet.tweet_id === comment.rows[0].id
-      );
       mainTweet.rows[0].retweeted = retweetedTweets.rows.some(
         (retweetedTweet) => retweetedTweet.tweet_id === mainTweet.rows[0].id
       );
+      comment.rows.map((tweet) => {
+        tweet.retweeted = retweetedTweets.rows.some(
+          (retweetedTweet) => retweetedTweet.tweet_id === tweet.id
+        );
+      });
     } else {
       comment.rows[0].retweeted = false;
       mainTweet.rows[0].retweeted = false;

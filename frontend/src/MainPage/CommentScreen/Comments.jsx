@@ -8,7 +8,7 @@ import Verified from "@mui/icons-material/Verified";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import UploadIcon from "@mui/icons-material/Upload";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
+import { CommentComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "../Home/CurrentDateFormat";
 import { useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
@@ -29,11 +29,15 @@ function Comments({
   id,
   isLiked,
   isRetweeted,
-  handleDeletePost,
-  handleLikePost,
-  handleUnlikePost,
-  handleRetweet,
-  handleRemoveRetweet,
+  handleLikeComment,
+  handleUnlikeComment,
+  handleRetweetComment,
+  handleRemoveRetweetComment,
+  handleDeleteComment,
+  handleFollow,
+  handleUnfollow,
+  followInformation,
+  followed_user_id,
 }) {
   const navigate = useNavigate();
   const { user } = React.useContext(AuthContext);
@@ -172,38 +176,36 @@ function Comments({
                   paddingTop="10px"
                   width="100%"
                 >
-                  <PostComponentIcon
+                  <CommentComponentIcon
                     text="Reply"
                     Icon={ChatBubbleOutlineIcon}
                   />
-                  <PostComponentIcon
+                  <CommentComponentIcon
                     text="Retweet"
                     Icon={RepeatIcon}
                     retweets={retweets}
-                    handleRetweet={(event) => {
-                      event.stopPropagation();
+                    handleRetweetComment={() => {
                       if (isRetweeted) {
-                        handleRemoveRetweet(id);
+                        handleRemoveRetweetComment(id);
                       } else {
-                        handleRetweet(id);
+                        handleRetweetComment(id);
                       }
                     }}
                   />
-                  <PostComponentIcon
+                  <CommentComponentIcon
                     text="Like"
                     Icon={isLiked ? FavoriteIcon : FavoriteBorderIcon}
                     likes={likes}
-                    handleLikePost={(event) => {
-                      event.stopPropagation();
+                    handleLikeComment={() => {
                       if (isLiked) {
-                        handleUnlikePost(id);
+                        handleUnlikeComment(id);
                       } else {
-                        handleLikePost(id);
+                        handleLikeComment(id);
                       }
                     }}
                   />
-                  <PostComponentIcon text="View" Icon={BarChartIcon} />
-                  <PostComponentIcon text="Upload" Icon={UploadIcon} />
+                  <CommentComponentIcon text="View" Icon={BarChartIcon} />
+                  <CommentComponentIcon text="Upload" Icon={UploadIcon} />
                 </Stack>
               </Grid>
             </Grid>
@@ -216,12 +218,30 @@ function Comments({
             <MenuItem onClick={handleClose}>
               Not interested in this post
             </MenuItem>
-            <MenuItem onClick={handleClose}>Follow @{username}</MenuItem>
+            {!followInformation.following ? (
+              <MenuItem
+                onClick={() => {
+                  handleFollow(followed_user_id);
+                  handleClose();
+                }}
+              >
+                Follow @{user.username}
+              </MenuItem>
+            ) : (
+              <MenuItem
+                onClick={() => {
+                  handleUnfollow(followed_user_id);
+                  handleClose();
+                }}
+              >
+                Unfollow @{user.username}
+              </MenuItem>
+            )}
           </Stack>
         ) : (
           <MenuItem
             onClick={() => {
-              handleDeletePost(id);
+              handleDeleteComment(id);
               handleClose();
             }}
           >
