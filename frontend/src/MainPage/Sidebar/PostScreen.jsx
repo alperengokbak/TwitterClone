@@ -34,7 +34,7 @@ export const PostScreen = () => {
         aria-describedby="modal-modal-description"
       >
         <Box>
-          <TweetBoxForPostScreen />
+          <TweetBoxForPostScreen handleClose={handleClose} />
         </Box>
       </Modal>
     </Stack>

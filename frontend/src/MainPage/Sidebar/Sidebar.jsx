@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack } from "@mui/material";
+import { Stack, Modal, Box } from "@mui/material";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SearchIcon from "@mui/icons-material/Search";
@@ -14,8 +14,6 @@ import { SidebarOptions } from "./SidebarOption";
 import { BasicMenu, BasicMenuForMobile } from "./BasicMenu";
 import { PostScreen } from "./PostScreen";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
 import { Verified } from "./Verified";
 
 export const Sidebar = () => {

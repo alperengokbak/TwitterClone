@@ -20,35 +20,36 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
-export const TweetBoxForPostScreen = () => {
+export const TweetBoxForPostScreen = ({ handleClose }) => {
   const [posts, setPosts] = React.useState([]);
   const [tweetMessage, setTweetMessage] = React.useState("");
-  const [imageUrl, setImageUrl] = React.useState("");
+  const [imageUrl, setImageUrl] = React.useState(null);
+  const [previewImage, setPreviewImage] = React.useState(null);
   const { user } = React.useContext(AuthContext);
-  const fileInputRef = React.useRef(null);
 
   const style = {
     position: "absolute",
-    top: "30%",
+    top: imageUrl ? "50%" : "20%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "50vh",
-    height: imageUrl ? "45vh" : "20vh",
+    width: "40%",
+    height: imageUrl ? imageUrl.height : "15%",
     bgcolor: "background.paper",
-    border: "1px solid #000",
     boxShadow: 24,
+    borderRadius: 4,
     p: 2,
   };
+
+  const fileInputRef = React.useRef(null);
 
   const handleFileUpload = () => {
     fileInputRef.current.click();
   };
 
-  const handleFileSelected = async (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
+  const handleFileSelected = async () => {
+    try {
       const formData = new FormData();
-      formData.append("file", selectedFile);
+      formData.append("file", imageUrl);
       formData.append("upload_preset", "rdasu5f6");
 
       const response = await fetch(
@@ -59,24 +60,35 @@ export const TweetBoxForPostScreen = () => {
         }
       );
 
-      const data = await response.json();
-      const uploadedImageUrl = data.secure_url;
-
-      setImageUrl(uploadedImageUrl);
+      if (response.ok) {
+        const data = await response.json();
+        const uploadedImageUrl = data.secure_url;
+        return uploadedImageUrl;
+      } else {
+        console.error(
+          "Cloudinary background upload failed:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Cloudinary background upload error:", error);
     }
   };
 
   const handleClearImage = () => {
     fileInputRef.current.value = "";
+    setTweetMessage("");
     setImageUrl("");
+    setPreviewImage(null);
   };
 
-  const handlePostTweet = async (imageUrl, tweet) => {
+  const handlePostTweet = async () => {
+    let uploadCloudinaryUrl = await handleFileSelected();
     try {
       const response = await axios.post("http://localhost:3000/tweet", {
         user_id: user.id,
-        content: tweet,
-        image_url: imageUrl,
+        content: tweetMessage,
+        image_url: uploadCloudinaryUrl,
       });
       if (response.status === 201) {
         console.log("Tweet posted successfully!");
@@ -88,6 +100,13 @@ export const TweetBoxForPostScreen = () => {
       console.error("An error occurred:", error);
     }
   };
+
+  React.useEffect(() => {
+    if (imageUrl) {
+      setPreviewImage(URL.createObjectURL(imageUrl));
+      URL.revokeObjectURL(imageUrl);
+    }
+  }, [imageUrl]);
 
   return (
     <Box sx={style}>
@@ -105,7 +124,7 @@ export const TweetBoxForPostScreen = () => {
               alt="Alperen Gokbak"
               src={user.profile_picture}
             />
-            <Stack direction={"column"}>
+            <Stack direction={"column"} width="100%">
               <TextField
                 variant="standard"
                 InputProps={{
@@ -116,12 +135,14 @@ export const TweetBoxForPostScreen = () => {
                 onChange={(e) => setTweetMessage(e.target.value)}
                 rows={2}
                 multiline
+                fullWidth
                 sx={{
-                  marginLeft: 3,
+                  marginLeft: 2,
+                  marginRight: 3,
                   fontSize: "20px",
                 }}
               />
-              {imageUrl ? (
+              {previewImage ? (
                 <Stack
                   position={"relative"}
                   display={"inline-block"}
@@ -136,16 +157,13 @@ export const TweetBoxForPostScreen = () => {
                   >
                     <CardMedia
                       component="img"
-                      src={imageUrl}
+                      src={previewImage || ""}
                       alt="Image"
                       sx={{
                         cursor: "pointer",
                       }}
                     />
-                    <IconButton
-                      aria-label="closeForPostScreen"
-                      onClick={handleClearImage}
-                    >
+                    <IconButton aria-label="close" onClick={handleClearImage}>
                       <CloseIcon
                         sx={{
                           height: "20px",
@@ -168,6 +186,7 @@ export const TweetBoxForPostScreen = () => {
           >
             <Grid item>
               <Grid
+                container
                 sx={{
                   justifyContent: "space-between",
                   marginLeft: 6.5,
@@ -190,7 +209,11 @@ export const TweetBoxForPostScreen = () => {
             <Grid item>
               <Button
                 variant="contained"
-                disabled={tweetMessage === "" && imageUrl === ""}
+                onClick={() => {
+                  handlePostTweet();
+                  handleClose();
+                }}
+                disabled={!tweetMessage && !imageUrl}
                 sx={{
                   marginRight: 0.5,
                 }}
@@ -203,7 +226,11 @@ export const TweetBoxForPostScreen = () => {
             type="file"
             ref={fileInputRef}
             style={{ display: "none" }}
-            onChange={handleFileSelected}
+            onChange={(event) => {
+              if (event.target.files && event.target.files[0]) {
+                setImageUrl(event.target.files[0]);
+              }
+            }}
           />
         </form>
       </Stack>
