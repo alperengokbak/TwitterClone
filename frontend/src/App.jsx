@@ -13,6 +13,7 @@ import { Layouts } from "./Layouts";
 import Feed from "./MainPage/Home/Feed";
 import { Profile } from "./MainPage/ProfilePage/Profile";
 import { CommentScreen } from "./MainPage/CommentScreen/CommentScreen";
+import { Communities } from "./MainPage/Sidebar/Communities";
 
 export const App = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -69,6 +70,14 @@ export const App = () => {
           element={
             <Layouts>
               <CommentScreen />
+            </Layouts>
+          }
+        />
+        <Route
+          path="/:username/communities"
+          element={
+            <Layouts>
+              <Communities />
             </Layouts>
           }
         />

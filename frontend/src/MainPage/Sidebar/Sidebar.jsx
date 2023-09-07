@@ -10,6 +10,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
+import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import { SidebarOptions } from "./SidebarOption";
 import { BasicMenu, BasicMenuForMobile } from "./BasicMenu";
 import { PostScreen } from "./PostScreen";
@@ -53,8 +54,13 @@ export const Sidebar = () => {
           link="#"
         />
         <SidebarOptions Icon={MailOutlineIcon} text="Messages" />
-        <SidebarOptions Icon={BookmarkBorderIcon} text="Bookmarks" link="#" />
         <SidebarOptions Icon={ListAltIcon} text="Lists" link="#" />
+        <SidebarOptions Icon={BookmarkBorderIcon} text="Bookmarks" link="#" />
+        <SidebarOptions
+          Icon={GroupOutlinedIcon}
+          text="Communities"
+          link={`/${user.username}/communities`}
+        />
         <SidebarOptions
           Icon={VerifiedOutlinedIcon}
           text="Verified"

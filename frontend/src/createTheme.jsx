@@ -107,19 +107,6 @@ export const SidebarTheme = createTheme({
       ],
     },
     MuiTypography: {
-      /* variants: [
-        {
-          props: { className: "retweet" },
-          style: {
-            color: "#808080",
-            cursor: "pointer",
-            ":&hover": {
-              backgroundColor: "#E8F5FE",
-              color: "#17BF63",
-            },
-          },
-        },
-      ], */
       styleOverrides: {
         subtitle1: {
           fontSize: "1.15rem",
@@ -250,6 +237,28 @@ export const SidebarTheme = createTheme({
             color: colors.secondary,
             borderRadius: "0px",
             fontWeight: "400",
+          },
+        },
+        {
+          props: { className: "subscribeToday" },
+          style: {
+            backgroundColor: "#000",
+            color: "#FFF",
+            marginBottom: "12px",
+            height: "50px",
+            "&:hover": {
+              backgroundColor: "#000",
+              opacity: "0.9",
+            },
+          },
+        },
+        {
+          props: { className: "noThanks" },
+          style: {
+            backgroundColor: "#FFF",
+            color: "#000",
+            border: "1px solid #D3D3D3",
+            height: "50px",
           },
         },
         {
