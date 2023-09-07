@@ -129,3 +129,59 @@ export const checkUser = (req, res) => {
     });
   });
 };
+
+export const becomeVerifiedUser = (req, res) => {
+  const id = req.body.id;
+  pool.query(getUserById1, [id], (error, results) => {
+    if (error) {
+      res.status(500).send("Internal server error.");
+    } else {
+      if (results.rows.length) {
+        pool.query(
+          "UPDATE users SET is_verified = true WHERE id = $1 RETURNING *",
+          [id],
+          (error, results) => {
+            if (error) {
+              res.status(500).send("There Is Not Including The Defined User");
+            } else {
+              res.json({
+                success: results.rows[0].is_verified,
+                message: "You successfully verified your account!",
+              });
+            }
+          }
+        );
+      } else {
+        res.status(404).send("Not Found User Id!");
+      }
+    }
+  });
+};
+
+export const cancelVerifiedUser = (req, res) => {
+  const id = req.body.id;
+  pool.query(getUserById1, [id], (error, results) => {
+    if (error) {
+      res.status(500).send("Internal server error.");
+    } else {
+      if (results.rows.length) {
+        pool.query(
+          "UPDATE users SET is_verified = false WHERE id = $1 RETURNING *",
+          [id],
+          (error, results) => {
+            if (error) {
+              res.status(500).send("There Is Not Including The Defined User");
+            } else {
+              res.json({
+                success: results.rows[0].is_verified,
+                message: "You successfully canceled your account!",
+              });
+            }
+          }
+        );
+      } else {
+        res.status(404).send("Not Found User Id!");
+      }
+    }
+  });
+};

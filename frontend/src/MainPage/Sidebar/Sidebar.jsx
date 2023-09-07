@@ -93,7 +93,7 @@ export const Sidebar = () => {
             boxShadow: 24,
           }}
         >
-          <Verified handleClose={handleClose} />
+          <Verified id={user.id} handleClose={handleClose} />
         </Box>
       </Modal>
     </Stack>

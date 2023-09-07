@@ -51,7 +51,11 @@ export const Communities = () => {
               Communities
             </Typography>
             <Stack flexDirection="row" alignItems="center" mr={2}>
-              <SvgIcon>
+              <SvgIcon
+                style={{
+                  cursor: "pointer",
+                }}
+              >
                 <SearchIcon />
               </SvgIcon>
               <SvgIcon

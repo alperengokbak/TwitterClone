@@ -2,8 +2,21 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import { Button, Grid, Stack } from "@mui/material";
+import axios from "axios";
 
-export const Verified = ({ handleClose }) => {
+export const Verified = ({ handleClose, id }) => {
+  const handleSubscribe = () => {
+    try {
+      const response = axios.put(
+        "http://localhost:3000/auth/becomeverifieduser",
+        {
+          id: id,
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Stack>
       <CloseIcon
@@ -155,6 +168,7 @@ export const Verified = ({ handleClose }) => {
             },
           }}
           onClick={() => {
+            handleSubscribe();
             alert("You have subscribed successfully");
             handleClose();
           }}
