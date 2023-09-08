@@ -7,7 +7,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import Verified from "@mui/icons-material/Verified";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import UploadIcon from "@mui/icons-material/Upload";
-import BarChartIcon from "@mui/icons-material/BarChart";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { CommentComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "../Home/CurrentDateFormat";
 import { useNavigate } from "react-router-dom";
@@ -204,7 +204,10 @@ function Comments({
                       }
                     }}
                   />
-                  <CommentComponentIcon text="View" Icon={BarChartIcon} />
+                  <CommentComponentIcon
+                    text="Bookmark"
+                    Icon={BookmarkBorderIcon}
+                  />
                   <CommentComponentIcon text="Upload" Icon={UploadIcon} />
                 </Stack>
               </Grid>

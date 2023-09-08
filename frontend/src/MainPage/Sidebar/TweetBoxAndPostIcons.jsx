@@ -1,6 +1,51 @@
 import { Stack, SvgIcon, Typography } from "@mui/material";
 import React from "react";
 
+const colorPicker = (text, retweeted, type, retweets, bookmarked) => {
+  if (type === "default") {
+    if (text === "Retweet") {
+      if (retweeted) {
+        return "green";
+      } else {
+        return "gray";
+      }
+    } else if (text === "Like") {
+      return "red";
+    } else if (text === "Bookmark") {
+      if (bookmarked) {
+        return "rgba(29, 155, 240)";
+      } else {
+        return "gray";
+      }
+    } else {
+      return "gray";
+    }
+  }
+  if (type === "hover") {
+    if (text === "Retweet") {
+      if (retweets > 0) {
+        return "green";
+      }
+      return "rgb(0, 186, 124)";
+    } else if (text === "Like") {
+      return "red";
+    } else {
+      return "rgb(29, 155, 240)";
+    }
+  }
+  if (type === "background") {
+    if (text === "Retweet") {
+      if (retweets > 0) {
+        return "rgb(0, 186, 124)";
+      }
+      return "#f1f8e9";
+    } else if (text === "Like") {
+      return "rgba(224, 36, 94, 0.1)";
+    } else {
+      return "rgba(29, 155, 240, 0.1)";
+    }
+  }
+};
 export const TweetBoxForPostIcon = ({ text, Icon }) => {
   return (
     <SvgIcon edge="end" aria-label={text} className="TweetBoxForPostIcon">
@@ -29,30 +74,31 @@ export const PostComponentIcon = ({
   retweets,
   handleLikePost,
   handleRetweet,
+  handleBookmark,
+  retweeted,
+  bookmarked,
 }) => {
   return (
     <Stack flexDirection="row">
       <SvgIcon
         onClick={(event) => {
-          event.stopPropagation();
           if (text === "Retweet") {
             handleRetweet();
-          } else {
+          }
+          if (text === "Like") {
             handleLikePost();
           }
+          if (text === "Bookmark") {
+            handleBookmark();
+          }
+          event.stopPropagation();
         }}
         sx={{
-          color: () => {
-            if (text === "Retweet") {
-              return "green";
-            } else if (text === "Like") {
-              return "red";
-            } else {
-              return "gray";
-            }
-          },
+          color: colorPicker(text, retweeted, "default", retweets, bookmarked),
           "&:hover": {
-            color: text === "Retweet" ? "green" : "red",
+            color: colorPicker(text, retweeted, "hover", retweets),
+            backgroundColor: colorPicker(text, retweeted, "background"),
+            borderRadius: "50%",
           },
         }}
         aria-label={text}

@@ -1,3 +1,4 @@
+export const getTweetById = "SELECT * FROM tweets WHERE id = $1";
 export const getTweet = "SELECT * FROM tweets";
 export const getTweetById1 = "SELECT * FROM tweets WHERE id = $1";
 export const getMainTweetByIdForComment =
@@ -32,6 +33,12 @@ export const checkLike = "SELECT tweet_id FROM likes WHERE user_id = $1 ";
 export const checkLike2 =
   "SELECT tweet_id FROM likes WHERE user_id = $1 AND tweet_id = $2";
 
+export const checkBookmark =
+  "SELECT tweet_id FROM bookmarks WHERE user_id = $1";
+
+export const checkBookmark2 =
+  "SELECT tweet_id FROM bookmarks WHERE user_id = $1 AND tweet_id = $2";
+
 export const checkRetweet2 = "SELECT tweet_id FROM retweets WHERE user_id = $1";
 
 export const checkRetweet =
@@ -48,3 +55,15 @@ export const retweetIncrease =
 
 export const retweetDecrease =
   "UPDATE tweets SET retweets = retweets - 1 WHERE id = $1 RETURNING *";
+
+export const addTweetToBookmark =
+  "INSERT INTO bookmarks (user_id, tweet_id) VALUES ($1, $2)";
+
+export const removeTweetFromBookmark =
+  "DELETE FROM bookmarks WHERE user_id = $1 AND tweet_id = $2";
+
+export const increaseBookmarkCount =
+  "UPDATE tweets SET bookmarkscount = bookmarkscount + 1 WHERE id = $1 RETURNING *";
+
+export const decreaseBookmarkCount =
+  "UPDATE tweets SET bookmarkscount = bookmarkscount - 1 WHERE id = $1 RETURNING *";

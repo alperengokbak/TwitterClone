@@ -4,8 +4,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { CommunitiesGetVerified } from "./CommunitiesGetVerified";
+import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 export const Communities = () => {
+  const { user } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -109,7 +111,7 @@ export const Communities = () => {
             boxShadow: 24,
           }}
         >
-          <CommunitiesGetVerified handleClose={handleClose} />
+          <CommunitiesGetVerified id={user.id} handleClose={handleClose} />
         </Box>
       </Modal>
     </Grid>

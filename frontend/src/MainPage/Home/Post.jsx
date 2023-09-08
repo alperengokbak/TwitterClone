@@ -185,8 +185,7 @@ function Post({
                     text="Retweet"
                     Icon={RepeatIcon}
                     retweets={retweets}
-                    handleRetweet={(event) => {
-                      event.stopPropagation();
+                    handleRetweet={() => {
                       if (isRetweeted) {
                         handleRemoveRetweet(id);
                       } else {
@@ -198,8 +197,7 @@ function Post({
                     text="Like"
                     Icon={isLiked ? FavoriteIcon : FavoriteBorderIcon}
                     likes={likes}
-                    handleLikePost={(event) => {
-                      event.stopPropagation();
+                    handleLikePost={() => {
                       if (isLiked) {
                         handleUnlikePost(id);
                       } else {

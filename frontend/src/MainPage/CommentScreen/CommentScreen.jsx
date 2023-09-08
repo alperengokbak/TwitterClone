@@ -22,7 +22,8 @@ import Verified from "@mui/icons-material/Verified";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import UploadIcon from "@mui/icons-material/Upload";
-import BarChartIcon from "@mui/icons-material/BarChart";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CloseIcon from "@mui/icons-material/Close";
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import GifIcon from "@mui/icons-material/Gif";
@@ -124,6 +125,54 @@ export const CommentScreen = () => {
     } else {
       console.log("Error");
     }
+  };
+
+  const handleAddBookmark = async () => {
+    await axios
+      .post(`http://localhost:3000/tweet/addbookmark`, {
+        user_id: user.id,
+        tweet_id: post.id,
+      })
+      .then((res) => {
+        setPost((tweet) => {
+          if (tweet.id === post.id) {
+            return {
+              ...tweet,
+              bookmarkscount: res.data.bookmarkscount,
+              bookmarked: true,
+            };
+          }
+          return tweet;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleDeleteBookmark = async () => {
+    await axios
+      .delete(`http://localhost:3000/tweet/deletebookmark`, {
+        data: {
+          user_id: user.id,
+          tweet_id: post.id,
+        },
+      })
+      .then((res) => {
+        setPost((tweet) => {
+          if (tweet.id === post.id) {
+            return {
+              ...tweet,
+              bookmarkscount: res.data.bookmarkscount,
+              bookmarked: false,
+            };
+          }
+          return tweet;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleDeletePost = async (id) => {
@@ -618,6 +667,7 @@ export const CommentScreen = () => {
               <Typography
                 variant="body2"
                 color="gray"
+                mr={1}
                 sx={{
                   cursor: "pointer",
                   "&:hover": {
@@ -626,6 +676,30 @@ export const CommentScreen = () => {
                 }}
               >
                 Likes
+              </Typography>
+            </Stack>
+            <Stack flexDirection="row">
+              <Typography
+                variant="body2"
+                mr={0.5}
+                color="#000"
+                sx={{
+                  cursor: "pointer",
+                }}
+              >
+                {post.bookmarkscount}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="gray"
+                sx={{
+                  cursor: "pointer",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                Bookmarks
               </Typography>
             </Stack>
           </Stack>
@@ -646,6 +720,7 @@ export const CommentScreen = () => {
             <PostComponentIcon
               text="Retweet"
               Icon={RepeatIcon}
+              retweeted={post.retweeted}
               handleRetweet={() => {
                 if (post.retweeted) {
                   handleRemoveRetweet(post.id);
@@ -665,7 +740,18 @@ export const CommentScreen = () => {
                 }
               }}
             />
-            <PostComponentIcon text="View" Icon={BarChartIcon} />
+            <PostComponentIcon
+              text="Bookmark"
+              Icon={post.bookmarked ? BookmarkIcon : BookmarkBorderIcon}
+              bookmarked={post.bookmarked}
+              handleBookmark={() => {
+                if (post.bookmarked) {
+                  handleDeleteBookmark();
+                } else {
+                  handleAddBookmark();
+                }
+              }}
+            />
             <PostComponentIcon text="Upload" Icon={UploadIcon} />
           </Stack>
           <Divider

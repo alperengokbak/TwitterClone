@@ -19,6 +19,12 @@ import {
   undoRetweet,
   retweetIncrease,
   retweetDecrease,
+  checkBookmark,
+  addTweetToBookmark,
+  removeTweetFromBookmark,
+  increaseBookmarkCount,
+  decreaseBookmarkCount,
+  checkBookmark2,
 } from "../queries/TweetQuery.js";
 
 export const paginationProcess = async (req, res) => {
@@ -66,7 +72,6 @@ export const paginationProcess = async (req, res) => {
   }
 };
 
-// TODO - Add null check
 export const displayComments = async (req, res) => {
   const motherTweetId = parseInt(req.params.id);
   const currentUserId = req.user.id;
@@ -78,6 +83,7 @@ export const displayComments = async (req, res) => {
   try {
     const likedTweets = await pool.query(checkLike, [currentUserId]);
     const retweetedTweets = await pool.query(checkRetweet2, [currentUserId]);
+    const bookmarkedTweets = await pool.query(checkBookmark, [currentUserId]);
 
     if (likedTweets.rows.length) {
       mainTweet.rows[0].liked = likedTweets.rows.some(
@@ -104,6 +110,13 @@ export const displayComments = async (req, res) => {
     } else {
       comment.rows[0].retweeted = false;
       mainTweet.rows[0].retweeted = false;
+    }
+    if (bookmarkedTweets.rows.length) {
+      mainTweet.rows[0].bookmarked = bookmarkedTweets.rows.some(
+        (bookmarkedTweet) => bookmarkedTweet.tweet_id === mainTweet.rows[0].id
+      );
+    } else {
+      mainTweet.rows[0].bookmarked = false;
     }
 
     return res.status(200).json({
@@ -287,6 +300,52 @@ export const deleteRetweets = (req, res) => {
       });
     } else {
       return res.status(200).send(`Tweet already retweeted `);
+    }
+  });
+};
+
+export const addBookmark = (req, res) => {
+  const { user_id, tweet_id } = req.body;
+  pool.query(checkBookmark2, [user_id, tweet_id], (error, results) => {
+    if (error) return res.status(500).send("There is an error!");
+    if (results.rowCount === 0) {
+      pool.query(addTweetToBookmark, [user_id, tweet_id], (error, results) => {
+        if (error) return res.status(500).send("Won't add bookmark!");
+        if (results.rowCount === 1) {
+          pool.query(increaseBookmarkCount, [tweet_id], (error, results) => {
+            if (error) return res.status(500).send("Can't increase bookmark!");
+            res.status(200).json(results.rows[0]);
+          });
+        }
+      });
+    } else {
+      res.status(200).send(`Tweet already added to bookmark `);
+    }
+  });
+};
+
+export const deleteBookmark = (req, res) => {
+  const { user_id, tweet_id } = req.body;
+  pool.query(checkBookmark2, [user_id, tweet_id], (error, results) => {
+    if (error) return res.status(500).send("Internal Server Error!");
+    if (results.rowCount !== 0) {
+      pool.query(
+        removeTweetFromBookmark,
+        [user_id, tweet_id],
+        (error, results) => {
+          if (error) return res.status(500).send("Internal Server Error!");
+          if (results.rowCount === 1) {
+            pool.query(decreaseBookmarkCount, [tweet_id], (error, results) => {
+              if (error) return res.status(500).send("Internal Server Error!");
+              res.status(200).json(results.rows[0]);
+            });
+          } else if (results.rowCount === 0) {
+            return res.status(404).json({ status: "Tweet not found" });
+          }
+        }
+      );
+    } else {
+      res.status(200).send(`Tweet already deleted from bookmark `);
     }
   });
 };

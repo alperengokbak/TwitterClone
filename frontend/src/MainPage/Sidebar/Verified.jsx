@@ -3,16 +3,22 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import { Button, Grid, Stack } from "@mui/material";
 import axios from "axios";
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+  "token"
+)}`;
 
 export const Verified = ({ handleClose, id }) => {
   const handleSubscribe = () => {
     try {
       const response = axios.put(
-        "http://localhost:3000/auth/becomeverifieduser",
+        "http://localhost:3000/userProcess/becomeverifieduser",
         {
           id: id,
         }
       );
+      if (response.status === 200) {
+        console.log("Successfully subscribed!!");
+      }
     } catch (err) {
       console.log(err);
     }

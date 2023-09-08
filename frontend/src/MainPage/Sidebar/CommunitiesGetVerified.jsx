@@ -4,9 +4,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Button, Stack, Modal, Box } from "@mui/material";
 import { Verified } from "./Verified";
 
-export const CommunitiesGetVerified = ({ handleClose }) => {
+export const CommunitiesGetVerified = ({ handleClose, id }) => {
   const [open, setOpen] = React.useState(false);
-  const handleOpenModal = () => setOpen(true);
+  const handleOpenModal = async () => setOpen(true);
   const handleCloseModal = () => setOpen(false);
   return (
     <Stack>
@@ -37,7 +37,12 @@ export const CommunitiesGetVerified = ({ handleClose }) => {
         </Typography>
       </Stack>
       <Stack maxWidth="432px" ml={2.5}>
-        <Button className="subscribeToday" onClick={handleOpenModal}>
+        <Button
+          className="subscribeToday"
+          onClick={() => {
+            handleOpenModal();
+          }}
+        >
           Subscribe Today
         </Button>
         <Button className="noThanks" onClick={handleClose}>
@@ -59,7 +64,7 @@ export const CommunitiesGetVerified = ({ handleClose }) => {
             boxShadow: 24,
           }}
         >
-          <Verified handleClose={handleCloseModal} />
+          <Verified id={id} handleClose={handleCloseModal} />
         </Box>
       </Modal>
     </Stack>
