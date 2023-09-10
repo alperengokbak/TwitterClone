@@ -43,8 +43,13 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
 
 export const CommentScreen = () => {
   const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const [anchorElUpload, setAnchorElUpload] = React.useState(null);
+  const openUpload = Boolean(anchorElUpload);
+
   const { id, username } = useParams();
   const { user } = React.useContext(AuthContext);
   const [post, setPost] = React.useState([]);
@@ -405,6 +410,14 @@ export const CommentScreen = () => {
     setAnchorEl(null);
   };
 
+  const handleClickUpload = (event) => {
+    setAnchorElUpload(event.currentTarget);
+  };
+
+  const handleCloseUpload = () => {
+    setAnchorElUpload(null);
+  };
+
   const handleFileUpload = () => {
     fileInputRef.current.click();
   };
@@ -752,7 +765,13 @@ export const CommentScreen = () => {
                 }
               }}
             />
-            <PostComponentIcon text="Upload" Icon={UploadIcon} />
+            <PostComponentIcon
+              handleClickUpload={(event) => {
+                handleClickUpload(event);
+              }}
+              text="Upload"
+              Icon={UploadIcon}
+            />
           </Stack>
           <Divider
             sx={{
@@ -958,6 +977,20 @@ export const CommentScreen = () => {
             Delete this post
           </MenuItem>
         )}
+      </Menu>
+      <Menu
+        anchorEl={anchorElUpload}
+        open={openUpload}
+        onClose={handleCloseUpload}
+      >
+        <MenuItem
+          onClick={() => {
+            navigator.clipboard.writeText(window.location.href);
+            handleCloseUpload();
+          }}
+        >
+          Copy Link
+        </MenuItem>
       </Menu>
     </Grid>
   );

@@ -56,6 +56,9 @@ export const retweetIncrease =
 export const retweetDecrease =
   "UPDATE tweets SET retweets = retweets - 1 WHERE id = $1 RETURNING *";
 
+export const displayBookmarks =
+  "SELECT u.firstName, u.lastName, u.username, u.profile_picture, u.is_verified, t.* FROM users u JOIN ( SELECT DISTINCT t1.* FROM tweets t1 JOIN bookmarks b ON t1.id = b.tweet_id WHERE b.user_id = $1 ) AS t ON u.id = t.user_id ORDER BY t.creation_date DESC";
+
 export const addTweetToBookmark =
   "INSERT INTO bookmarks (user_id, tweet_id) VALUES ($1, $2)";
 
@@ -67,3 +70,7 @@ export const increaseBookmarkCount =
 
 export const decreaseBookmarkCount =
   "UPDATE tweets SET bookmarkscount = bookmarkscount - 1 WHERE id = $1 RETURNING *";
+
+export const clearAllBookmark = "DELETE FROM bookmarks WHERE user_id = $1";
+
+export const clearAllBookmarkCount = "UPDATE tweets SET bookmarkscount = 0";

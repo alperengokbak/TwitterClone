@@ -8,14 +8,14 @@ import Verified from "@mui/icons-material/Verified";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import UploadIcon from "@mui/icons-material/Upload";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import { CommentComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
+import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "../Home/CurrentDateFormat";
 import { useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
-function Comments({
+function BookmarksTweets({
   firstName,
   lastName,
   username,
@@ -29,15 +29,11 @@ function Comments({
   id,
   isLiked,
   isRetweeted,
-  handleLikeComment,
-  handleUnlikeComment,
-  handleRetweetComment,
-  handleRemoveRetweetComment,
-  handleDeleteComment,
-  handleFollow,
-  handleUnfollow,
-  followInformation,
-  followed_user_id,
+  handleDeletePost,
+  handleLikePost,
+  handleUnlikePost,
+  handleRetweet,
+  handleRemoveRetweet,
 }) {
   const navigate = useNavigate();
   const { user } = React.useContext(AuthContext);
@@ -54,6 +50,11 @@ function Comments({
 
   return (
     <Stack>
+      <Divider
+        sx={{
+          color: "gray",
+        }}
+      />
       <Paper
         onClick={() => {
           navigate(`/${username}/status/${id}`);
@@ -176,36 +177,36 @@ function Comments({
                   paddingTop="10px"
                   width="100%"
                 >
-                  <CommentComponentIcon
+                  <PostComponentIcon
                     text="Reply"
                     Icon={ChatBubbleOutlineIcon}
                   />
-                  <CommentComponentIcon
+                  <PostComponentIcon
                     text="Retweet"
                     Icon={RepeatIcon}
                     retweets={retweets}
-                    handleRetweetComment={() => {
+                    handleRetweet={() => {
                       if (isRetweeted) {
-                        handleRemoveRetweetComment(id);
+                        handleRemoveRetweet(id);
                       } else {
-                        handleRetweetComment(id);
+                        handleRetweet(id);
                       }
                     }}
                   />
-                  <CommentComponentIcon
+                  <PostComponentIcon
                     text="Like"
                     Icon={isLiked ? FavoriteIcon : FavoriteBorderIcon}
                     likes={likes}
-                    handleLikeComment={() => {
+                    handleLikePost={() => {
                       if (isLiked) {
-                        handleUnlikeComment(id);
+                        handleUnlikePost(id);
                       } else {
-                        handleLikeComment(id);
+                        handleLikePost(id);
                       }
                     }}
                   />
-                  <CommentComponentIcon text="View" Icon={BarChartIcon} />
-                  <CommentComponentIcon text="Upload" Icon={UploadIcon} />
+                  <PostComponentIcon text="View" Icon={BarChartIcon} />
+                  <PostComponentIcon text="Upload" Icon={UploadIcon} />
                 </Stack>
               </Grid>
             </Grid>
@@ -218,30 +219,12 @@ function Comments({
             <MenuItem onClick={handleClose}>
               Not interested in this post
             </MenuItem>
-            {!followInformation.following ? (
-              <MenuItem
-                onClick={() => {
-                  handleFollow(followed_user_id);
-                  handleClose();
-                }}
-              >
-                Follow @{user.username}
-              </MenuItem>
-            ) : (
-              <MenuItem
-                onClick={() => {
-                  handleUnfollow(followed_user_id);
-                  handleClose();
-                }}
-              >
-                Unfollow @{user.username}
-              </MenuItem>
-            )}
+            <MenuItem onClick={handleClose}>Follow @{username}</MenuItem>
           </Stack>
         ) : (
           <MenuItem
             onClick={() => {
-              handleDeleteComment(id);
+              handleDeletePost(id);
               handleClose();
             }}
           >
@@ -253,4 +236,4 @@ function Comments({
   );
 }
 
-export default Comments;
+export default BookmarksTweets;

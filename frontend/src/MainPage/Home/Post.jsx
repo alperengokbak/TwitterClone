@@ -40,12 +40,23 @@ function Post({
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
+  const [anchorElUpload, setAnchorElUpload] = React.useState(null);
+  const openUpload = Boolean(anchorElUpload);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClickUpload = (event) => {
+    setAnchorElUpload(event.currentTarget);
+  };
+
+  const handleCloseUpload = () => {
+    setAnchorElUpload(null);
   };
 
   return (
@@ -206,7 +217,11 @@ function Post({
                     }}
                   />
                   <PostComponentIcon text="View" Icon={BarChartIcon} />
-                  <PostComponentIcon text="Upload" Icon={UploadIcon} />
+                  <PostComponentIcon
+                    handleClickUpload={handleClickUpload}
+                    text="Upload"
+                    Icon={UploadIcon}
+                  />
                 </Stack>
               </Grid>
             </Grid>
@@ -231,6 +246,20 @@ function Post({
             Delete this post
           </MenuItem>
         )}
+      </Menu>
+      <Menu
+        anchorEl={anchorElUpload}
+        open={openUpload}
+        onClose={handleCloseUpload}
+      >
+        <MenuItem
+          onClick={() => {
+            navigator.clipboard.writeText(window.location.href);
+            handleCloseUpload();
+          }}
+        >
+          Copy Link
+        </MenuItem>
       </Menu>
     </Stack>
   );

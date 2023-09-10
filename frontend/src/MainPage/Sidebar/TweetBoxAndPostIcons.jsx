@@ -75,6 +75,7 @@ export const PostComponentIcon = ({
   handleLikePost,
   handleRetweet,
   handleBookmark,
+  handleClickUpload,
   retweeted,
   bookmarked,
 }) => {
@@ -90,6 +91,9 @@ export const PostComponentIcon = ({
           }
           if (text === "Bookmark") {
             handleBookmark();
+          }
+          if (text === "Upload") {
+            handleClickUpload(event);
           }
           event.stopPropagation();
         }}
@@ -153,12 +157,14 @@ export const CommentComponentIcon = ({
     <Stack flexDirection="row">
       <SvgIcon
         onClick={(event) => {
-          event.stopPropagation();
           if (text === "Retweet") {
             handleRetweetComment();
-          } else {
+          } else if (text === "Like") {
             handleLikeComment();
+          } else if (text === "Bookmark") {
+          } else if (text === "Upload") {
           }
+          event.stopPropagation();
         }}
         sx={{
           color: () => {

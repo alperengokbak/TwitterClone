@@ -25,6 +25,9 @@ import {
   increaseBookmarkCount,
   decreaseBookmarkCount,
   checkBookmark2,
+  clearAllBookmark,
+  displayBookmarks,
+  clearAllBookmarkCount,
 } from "../queries/TweetQuery.js";
 
 export const paginationProcess = async (req, res) => {
@@ -348,4 +351,52 @@ export const deleteBookmark = (req, res) => {
       res.status(200).send(`Tweet already deleted from bookmark `);
     }
   });
+};
+
+// TODO - Delete bookmarks count
+// TODO - Frontend Line --> POST 221
+export const clearAllBookmarks = async (req, res) => {
+  const { id } = req.user;
+  try {
+    pool.query(clearAllBookmark, [id], (error, results) => {
+      if (error) return res.status(500).send("Internal Server Error!");
+      pool.query(clearAllBookmarkCount, [id], (error, results) => {
+        if (error) return res.status(500).send("Internal Server Error!");
+        res.status(200).json({ message: "Deleted All Bookmarks!" });
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error deleting post" });
+  }
+};
+
+export const getBookmarks = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const bookmarks = await pool.query(displayBookmarks, [id]);
+    const likedTweets = await pool.query(checkLike, [id]);
+    const retweetedTweets = await pool.query(checkRetweet2, [id]);
+
+    bookmarks.rows.map((tweet) => {
+      if (likedTweets.rows.length) {
+        tweet.liked = likedTweets.rows.some(
+          (likedTweet) => likedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.liked = false;
+      }
+      if (retweetedTweets.rows.length) {
+        tweet.retweeted = retweetedTweets.rows.some(
+          (retweetedTweet) => retweetedTweet.tweet_id === tweet.id
+        );
+      } else {
+        tweet.retweeted = false;
+      }
+    });
+    res.status(200).json({ status: "success", bookmarks: bookmarks.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error displaying post" });
+  }
 };
