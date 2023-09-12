@@ -354,7 +354,7 @@ export const deleteBookmark = (req, res) => {
 };
 
 // TODO - Delete bookmarks count
-// TODO - Frontend Line --> POST 221
+// TODO - Fix Frontend Line --> POST file line: 221 --> I couldn't true copy url.
 export const clearAllBookmarks = async (req, res) => {
   const { id } = req.user;
   try {

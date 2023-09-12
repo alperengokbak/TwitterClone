@@ -47,7 +47,7 @@ export const Sidebar = () => {
           }}
         />
         <SidebarOptions Icon={HomeOutlinedIcon} text="Home" link="/home" />
-        <SidebarOptions Icon={SearchIcon} text="Explore" link="#" />
+        <SidebarOptions Icon={SearchIcon} text="Explore" link="/explore" />
         <SidebarOptions
           Icon={NotificationsNoneIcon}
           text="Notifications"

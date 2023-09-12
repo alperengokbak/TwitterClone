@@ -1,5 +1,14 @@
 import * as React from "react";
-import { Avatar, Stack, Typography, Paper, Grid, Divider } from "@mui/material";
+import {
+  Avatar,
+  Stack,
+  Typography,
+  Paper,
+  Grid,
+  Divider,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -11,8 +20,6 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "./CurrentDateFormat";
 import { useNavigate } from "react-router-dom";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 function Post({

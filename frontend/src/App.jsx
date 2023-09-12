@@ -15,6 +15,7 @@ import { Profile } from "./MainPage/ProfilePage/Profile";
 import { CommentScreen } from "./MainPage/CommentScreen/CommentScreen";
 import { Communities } from "./MainPage/Sidebar/Communities";
 import { Bookmarks } from "./MainPage/Sidebar/Bookmarks";
+import { Explore } from "./MainPage/Explore/Explore";
 
 export const App = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -87,6 +88,14 @@ export const App = () => {
           element={
             <Layouts>
               <Bookmarks />
+            </Layouts>
+          }
+        />
+        <Route
+          path="/explore"
+          element={
+            <Layouts>
+              <Explore />
             </Layouts>
           }
         />
