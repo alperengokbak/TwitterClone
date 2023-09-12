@@ -42,8 +42,16 @@ export const Sidebar = () => {
           sx={{
             color: "#1DA1F2",
             fontSize: "30px",
-            marginLeft: "8px",
-            marginBottom: "10px",
+            marginLeft: "14px",
+            marginBottom: "8px",
+            cursor: "pointer",
+            "&:hover": {
+              backgroundColor: "#E8F5FE",
+              borderRadius: "50%",
+            },
+          }}
+          onClick={() => {
+            window.location.href = "/home";
           }}
         />
         <SidebarOptions Icon={HomeOutlinedIcon} text="Home" link="/home" />

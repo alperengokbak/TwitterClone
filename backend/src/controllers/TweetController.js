@@ -353,17 +353,27 @@ export const deleteBookmark = (req, res) => {
   });
 };
 
-// TODO - Delete bookmarks count
-// TODO - Fix Frontend Line --> POST file line: 221 --> I couldn't true copy url.
 export const clearAllBookmarks = async (req, res) => {
   const { id } = req.user;
+
+  const tweetIds = await pool.query(
+    `SELECT tweet_id FROM bookmarks WHERE user_id = ${id}`
+  );
+
+  if (tweetIds.rows.length === 0)
+    return res.status(404).json({ message: "No bookmarks found" });
+
   try {
     pool.query(clearAllBookmark, [id], (error, results) => {
       if (error) return res.status(500).send("Internal Server Error!");
-      pool.query(clearAllBookmarkCount, [id], (error, results) => {
-        if (error) return res.status(500).send("Internal Server Error!");
-        res.status(200).json({ message: "Deleted All Bookmarks!" });
-      });
+      pool.query(
+        clearAllBookmarkCount,
+        [tweetIds.rows.map((tweet) => parseInt(tweet.tweet_id))],
+        (error, results) => {
+          if (error) return res.status(500).send("Internal Server Error!");
+          res.status(200).json({ message: "Deleted All Bookmarks!" });
+        }
+      );
     });
   } catch (error) {
     console.error(error);

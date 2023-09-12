@@ -19,7 +19,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import { PostComponentIcon } from "../Sidebar/TweetBoxAndPostIcons";
 import { CurrentDateFormat } from "./CurrentDateFormat";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthenticationSystem/AuthenticationSystem";
 
 function Post({
@@ -43,6 +43,7 @@ function Post({
   handleRemoveRetweet,
 }) {
   const navigate = useNavigate();
+
   const { user } = React.useContext(AuthContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -261,7 +262,15 @@ function Post({
       >
         <MenuItem
           onClick={() => {
-            navigator.clipboard.writeText(window.location.href);
+            navigator.clipboard.writeText(
+              location.protocol +
+                "//" +
+                location.host +
+                "/" +
+                username +
+                "/status/" +
+                id
+            );
             handleCloseUpload();
           }}
         >

@@ -71,6 +71,8 @@ export const increaseBookmarkCount =
 export const decreaseBookmarkCount =
   "UPDATE tweets SET bookmarkscount = bookmarkscount - 1 WHERE id = $1 RETURNING *";
 
-export const clearAllBookmark = "DELETE FROM bookmarks WHERE user_id = $1";
+export const clearAllBookmark =
+  "DELETE FROM bookmarks WHERE user_id = $1 RETURNING *";
 
-export const clearAllBookmarkCount = "UPDATE tweets SET bookmarkscount = 0";
+export const clearAllBookmarkCount =
+  "UPDATE tweets SET bookmarkscount = bookmarkscount - 1 WHERE id = ANY($1::int[])";
