@@ -7,12 +7,30 @@ import {
   Paper,
   Typography,
   Box,
+  Popover,
+  useMediaQuery,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import { PopoverScreen } from "./PopoverScreen";
+
+// TODO - Resim üstündeki yazıya bak.
 
 export const Explore = () => {
+  const [textValue, setTextValue] = React.useState("");
   const [data, setData] = React.useState([]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
   const handleTrend = async () => {
     try {
@@ -68,6 +86,13 @@ export const Explore = () => {
             borderRadius: "50px",
             width: "90%",
           }}
+          value={textValue}
+          onClick={(e) => {
+            handleClick(e);
+          }}
+          onChange={(e) => {
+            setTextValue(e.target.value);
+          }}
         />
         <SettingsOutlinedIcon
           sx={{
@@ -90,8 +115,12 @@ export const Explore = () => {
           position="absolute"
           sx={{
             color: "#FFFF00",
-            transform: "translateX(23%) translateY(100%)",
-            top: "59%",
+            transform: useMediaQuery((theme) => theme.breakpoints.up("lg"))
+              ? "translateX(23%) translateY(100%)"
+              : "translateX(23%) translateY(100%)",
+            top: useMediaQuery((theme) => theme.breakpoints.up("lg"))
+              ? "58%"
+              : "64%",
           }}
         >
           Event · LIVE
@@ -104,7 +133,9 @@ export const Explore = () => {
           sx={{
             color: "#FFFF00",
             transform: "translateX(4%) translateY(100%)",
-            top: "59%",
+            top: useMediaQuery((theme) => theme.breakpoints.up("lg"))
+              ? "58%"
+              : "64%",
           }}
         >
           Name a Web3 project you'll always believe in 🌊
@@ -187,6 +218,29 @@ export const Explore = () => {
           </Paper>
         </Grid>
       </Stack>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        disableAutoFocus
+        disableEnforceFocus
+        slotProps={{
+          paper: {
+            style: {
+              width: "530px",
+            },
+          },
+        }}
+      >
+        <Typography sx={{ p: 2 }}>
+          <PopoverScreen />
+        </Typography>
+      </Popover>
     </Stack>
   );
 };

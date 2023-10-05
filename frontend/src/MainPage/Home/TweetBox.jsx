@@ -178,11 +178,13 @@ function TweetBox({ postTweet }) {
           </Grid>
           <Grid item>
             <Button
+              className="TweetButton"
               variant="contained"
               onClick={handlePostTweet}
               disabled={!tweetMessage && !imageUrl}
               sx={{
                 marginRight: 0.5,
+                backgroundColor: "#1DA1F2",
               }}
             >
               Post

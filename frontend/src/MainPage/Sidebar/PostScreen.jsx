@@ -19,7 +19,12 @@ export const PostScreen = () => {
       marginLeft={isDesktop ? "0px" : "4px"}
     >
       {isDesktop ? (
-        <Button variant="contained" fullWidth onClick={handleOpen}>
+        <Button
+          className="postScreen"
+          variant="contained"
+          fullWidth
+          onClick={handleOpen}
+        >
           Post
         </Button>
       ) : (

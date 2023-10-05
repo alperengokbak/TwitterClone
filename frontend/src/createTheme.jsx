@@ -3,6 +3,7 @@ import { createTheme } from "@mui/material/styles";
 const colors = {
   primary: "#000000",
   secondary: "#1DA1F2",
+  third: "#FFFFFF",
 };
 export const SidebarTheme = createTheme({
   palette: {
@@ -11,6 +12,9 @@ export const SidebarTheme = createTheme({
     },
     secondary: {
       main: colors.secondary,
+    },
+    third: {
+      main: colors.third,
     },
   },
   components: {
@@ -232,6 +236,20 @@ export const SidebarTheme = createTheme({
     MuiButton: {
       variants: [
         {
+          props: { className: "popoverButton" },
+          style: {
+            color: colors.secondary,
+            backgroundColor: colors.third,
+            fontWeight: "400",
+            border: "none",
+            boxShadow: "none",
+            height: "20px",
+            "&:hover": {
+              backgroundColor: colors.third,
+            },
+          },
+        },
+        {
           props: { className: "showMoreButton" },
           style: {
             color: colors.secondary,
@@ -262,13 +280,13 @@ export const SidebarTheme = createTheme({
           },
         },
         {
-          props: { variant: "contained" },
+          props: { className: "postScreen" },
           style: {
-            backgroundColor: "#1DA1F2",
             borderRadius: "20px",
+            backgroundColor: colors.secondary,
             "&:hover": {
-              backgroundColor: "#FFFFFF",
-              color: colors.primary,
+              backgroundColor: colors.secondary,
+              color: colors.third,
             },
           },
         },
@@ -278,8 +296,8 @@ export const SidebarTheme = createTheme({
             height: "50px",
             width: "230px",
             "&:hover": {
-              backgroundColor: "#FFFFFF",
-              color: colors.primary,
+              backgroundColor: colors.secondary,
+              color: colors.third,
             },
           },
         },
