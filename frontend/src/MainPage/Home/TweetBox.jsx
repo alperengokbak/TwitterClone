@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Button,
-  Stack,
-  Avatar,
-  TextField,
-  Grid,
-  IconButton,
-  Card,
-  CardMedia,
-} from "@mui/material";
+import { Button, Stack, Avatar, TextField, Grid, IconButton, Card, CardMedia } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import GifIcon from "@mui/icons-material/Gif";
 import PollIcon from "@mui/icons-material/Poll";
@@ -36,23 +27,17 @@ function TweetBox({ postTweet }) {
       formData.append("file", imageUrl);
       formData.append("upload_preset", "rdasu5f6");
 
-      const response = await fetch(
-        "https://api.cloudinary.com/v1_1/dsruzqnhp/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch("https://api.cloudinary.com/v1_1/dsruzqnhp/image/upload", {
+        method: "POST",
+        body: formData,
+      });
 
       if (response.ok) {
         const data = await response.json();
         const uploadedImageUrl = data.secure_url;
         return uploadedImageUrl;
       } else {
-        console.error(
-          "Cloudinary background upload failed:",
-          response.statusText
-        );
+        console.error("Cloudinary background upload failed:", response.statusText);
       }
     } catch (error) {
       console.error("Cloudinary background upload error:", error);
@@ -96,11 +81,7 @@ function TweetBox({ postTweet }) {
         }}
       >
         <Stack padding="16px 8px 16px 8px" flexDirection="row">
-          <Avatar
-            className="Profile Image"
-            alt="Alperen Gokbak"
-            src={user.profile_picture}
-          />
+          <Avatar className="Profile Image" alt="Alperen Gokbak" src={user.profile_picture} />
           <Stack direction={"column"} width="100%">
             <TextField
               variant="standard"
@@ -120,12 +101,7 @@ function TweetBox({ postTweet }) {
               }}
             />
             {previewImage ? (
-              <Stack
-                position={"relative"}
-                display={"inline-block"}
-                alignItems="flex-start"
-                marginLeft={1}
-              >
+              <Stack position={"relative"} display={"inline-block"} alignItems="flex-start" marginLeft={1}>
                 <Card
                   sx={{
                     borderRadius: 4,
@@ -165,11 +141,7 @@ function TweetBox({ postTweet }) {
                 marginLeft: 6.5,
               }}
             >
-              <TweetBoxIcon
-                handleOpen={handleFileUpload}
-                text="ImageIcon"
-                Icon={ImageIcon}
-              />
+              <TweetBoxIcon handleOpen={handleFileUpload} text="ImageIcon" Icon={ImageIcon} />
               <TweetBoxIcon text="GifIcon" Icon={GifIcon} />
               <TweetBoxIcon text="PollIcon" Icon={PollIcon} />
               <TweetBoxIcon text="EmojiEmotionsIcon" Icon={EmojiEmotionsIcon} />
